@@ -14,8 +14,6 @@ export class serviciousuario{
     private valorusuario:modelousuario;
     private listausuario:modelousuario[]=[];
     private cadenahttp:string;
-    valorpar:modelousuario;
-
     constructor(private http: HttpClient){
         this.listausuario= [];
         console.log(this.listausuario.toString());
@@ -25,36 +23,15 @@ export class serviciousuario{
 
         
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/Login?P_NoLogi="+usuario+"&P_Pass="+password
-        return this.http.post<any>(this.cadenahttp,null).pipe(map((datos) => {
-            var resp:modelousuario=null;
+        return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
+            var resp=null;
             if (datos.isOk=="S"){
-                return datos;
-                
+            resp = this.getusuario(1);
             }
-            else{
-                return datos;
-            }
-            
+            return resp;
           }));
          
 
-    }
-    private traerusuariologin(login:string,cbtu){
-        this.valorpar=null;
-
-        this.getusuarios().subscribe(datos=>{
-            datos.forEach(element=>{
-                if(element.login==login)
-                    this.valorpar = new modelousuario(element.id,element.login,element.nombre,
-                        element.apellido,element.telefono,element.correo,
-                        element.estado,element.primeravez,element.fecharegistro,
-                        element.usuarioregistra,element.fechamodificacion,
-                        element.usuariomodifica);
-            })
-            console.log(this.valorpar);
-            cbtu();
-        })
-        
     }
     getusuario(id:number){
         

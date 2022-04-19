@@ -14,6 +14,7 @@ import { serviciousuarioperfil } from '../../../services/serviciousuarioperfil';
 import { modelousuarioperfil } from '../../../model/modusuarioperfil';
 import { ToastrService } from 'ngx-toastr';
 import { serviciopermiso } from '../../../services/serviciopermiso';
+import { servicioautenticacion } from './../../../services/servicioautenticacion';
 
 @Component({
   selector: 'app-borrareditarusuario',
@@ -32,7 +33,12 @@ export class AUsuarioPanelComponent {
   
   _usuario:modelousuario;
 
-  constructor(private mensajes:ToastrService, private dialogRefBE: MatDialogRef<AUsuarioPanelComponent>,private servpermisos:serviciopermiso,private servperperf:servicioperfilpermiso,private _servusuperf:serviciousuarioperfil,private _serviciousuario:serviciousuario,private fb: FormBuilder,private servperfil:servicioperfil,private dialogRef: MatDialogRef<AUsuarioPanelComponent>) { 
+  constructor(private mensajes:ToastrService, private dialogRefBE: MatDialogRef<AUsuarioPanelComponent>,
+    private servpermisos:serviciopermiso,private servperperf:servicioperfilpermiso,
+    private _servusuperf:serviciousuarioperfil,private _serviciousuario:serviciousuario,
+    private fb: FormBuilder,private servperfil:servicioperfil,
+    private servauten:servicioautenticacion,
+    private dialogRef: MatDialogRef<AUsuarioPanelComponent>) { 
     this.listapermisos.length=0;
     this.listapermisos=[];
     this.enviado=false;
@@ -149,7 +155,7 @@ export class AUsuarioPanelComponent {
     var _usuperf:modelousuarioperfil;
     var eliminar:boolean;
     this.enviado=true;
-    _usuautenticado=JSON.parse(localStorage.getItem('usuario'));
+    _usuautenticado=this.servauten.userValue;
     if (this.form.valid) {
       this._usuario.usuarioregistra=_usuautenticado.id;
       this._usuario.login=this.form.value.usuario;

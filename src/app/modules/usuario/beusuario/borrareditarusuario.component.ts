@@ -16,6 +16,7 @@ import { modpermiso } from '../../../model/modpermiso';
 import { servicioperfilpermiso } from '../../../services/servicioperfilpermiso';
 import { ToastrService } from 'ngx-toastr';
 import { serviciopermiso } from '../../../services/serviciopermiso';
+import { servicioautenticacion } from './../../../services/servicioautenticacion';
 
 @Component({
   selector: 'app-borrareditarusuario',
@@ -34,7 +35,11 @@ export class BEUsuarioPanelComponent {
   _usuario:modelousuario;
   enviado=false;
 
-  constructor(private mensajes:ToastrService,private servperperf:servicioperfilpermiso,private servpermisos:serviciopermiso,private _servusuperf:serviciousuarioperfil,private _serviciousuario:serviciousuario,private fb: FormBuilder,private servperfil:servicioperfil, private dialogRefBE: MatDialogRef<BEUsuarioPanelComponent>, private dialog: MatDialog,@Inject(MAT_DIALOG_DATA) {id,login,nombre,apellido,telefono,correo,estado,primeravez,fechamodificacion,usuariomodifica,fecharegistro,usuarioregistra}:modelousuario) { 
+  constructor(private mensajes:ToastrService,private servperperf:servicioperfilpermiso,
+    private servpermisos:serviciopermiso,private _servusuperf:serviciousuarioperfil,
+    private _serviciousuario:serviciousuario,private fb: FormBuilder,
+    private servauten:servicioautenticacion,
+    private servperfil:servicioperfil, private dialogRefBE: MatDialogRef<BEUsuarioPanelComponent>, private dialog: MatDialog,@Inject(MAT_DIALOG_DATA) {id,login,nombre,apellido,telefono,correo,estado,primeravez,fechamodificacion,usuariomodifica,fecharegistro,usuarioregistra}:modelousuario) { 
     this.listapermisos.length=0;
     this.listapermisos=[];
     this.enviado=false;
@@ -196,7 +201,7 @@ export class BEUsuarioPanelComponent {
     var _usuperf:modelousuarioperfil;
     var eliminar:boolean;
     this.enviado=true;
-    _usuautenticado=JSON.parse(localStorage.getItem('usuario'));
+    _usuautenticado=this.servauten.userValue;
     if (this.form.valid) {
       
       this._usuario.login=this.form.value.usuario;

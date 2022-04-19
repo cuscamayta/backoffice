@@ -1,4 +1,4 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, ElementRef, OnInit} from '@angular/core';
 import {animate, AUTO_STYLE, state, style, transition, trigger} from '@angular/animations';
 import {MenuItems} from '../../shared/menu-items/menu-items';
 import { Router } from '@angular/router';
@@ -7,6 +7,8 @@ import { modelousuario } from '../../../app/model/modusuario';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { ChangePassComponent } from '../../../app/modules/auth/changepass/changepass.component';
 import { ToastrService } from 'ngx-toastr';
+import { modmenu } from '../../../app/model/modmenu';
+
 
 @Component({
   selector: 'app-admin',
@@ -62,6 +64,7 @@ import { ToastrService } from 'ngx-toastr';
   ]
 })
 export class AdminComponent implements OnInit {
+  
   navType: string; /* st1, st2(default), st3, st4 */
   themeLayout: string; /* vertical(default) */
   layoutType: string; /* dark, light */
@@ -103,12 +106,16 @@ export class AdminComponent implements OnInit {
   isSidebarChecked: boolean;
   isHeaderChecked: boolean;
 
-  @ViewChild('searchFriends', /* TODO: add static flag */ {static: false}) search_friends: ElementRef;
-
+  
+  
   public config: any;
-  user: modelousuario;
+  
+  admenu:modmenu[];
+  
 
-  constructor(private mensajes:ToastrService,public menuItems: MenuItems, private router: Router, private dialog: MatDialog,
+  constructor(private mensajes:ToastrService,
+    
+      public menuItems: MenuItems, private router: Router, private dialog: MatDialog,
     private _servicioautenticacion: servicioautenticacion) {
     this.navType = 'st5';
     this.themeLayout = 'vertical';
@@ -150,25 +157,30 @@ export class AdminComponent implements OnInit {
     this.innerHeight = scrollHeight + 'px';
     this.windowWidth = window.innerWidth;
     this.setMenuAttributes(this.windowWidth);
-    this._servicioautenticacion.user.subscribe(x => this.user = x);
-
-    // dark
-    /*this.setLayoutType('dark');
-    this.headerTheme = 'theme5';
-    this.logoTheme = 'theme5';*/
-
-    // light-dark
-    /*this.setLayoutType('dark');
-    this.setNavBarTheme('themelight1');
-    this.navType = 'st2';*/
-
-    // dark-light
-    // this.setNavBarTheme('theme1');
-    // this.navType = 'st3';
-
+    
+    console.log(localStorage.length);
+    console.log(this.admenu);
+    
+    
+      
+    
+    
+    
+    
+    
+    
+    
+    
   }
 
+  
+
   ngOnInit() {
+    this.admenu=JSON.parse(localStorage.getItem('menu'));
+    this._servicioautenticacion.menues.subscribe(menus=>{this.admenu=menus;
+    
+    });
+    console.log(this.admenu);
     
   }
   
@@ -202,9 +214,9 @@ export class AdminComponent implements OnInit {
     this.windowWidth = event.target.innerWidth;
     let reSizeFlag = true;
     if (this.deviceType === 'tablet' && this.windowWidth >= 768 && this.windowWidth <= 1024) {
-      reSizeFlag = false;
+      reSizeFlag = true;
     } else if (this.deviceType === 'mobile' && this.windowWidth < 768) {
-      reSizeFlag = false;
+      reSizeFlag = true;
     }
     /* for check device */
     if (reSizeFlag) {
@@ -258,23 +270,7 @@ export class AdminComponent implements OnInit {
     this.chatInnerToggleInverse = this.chatInnerToggleInverse === 'off' ? 'on' : 'off';
   }
 
-  searchFriendList(e: Event) {
-    const search = (this.search_friends.nativeElement.value).toLowerCase();
-    let search_input: string;
-    let search_parent: any;
-    const friendList = document.querySelectorAll('.userlist-box .media-body .chat-header');
-    Array.prototype.forEach.call(friendList, function(elements, index) {
-      search_input = (elements.innerHTML).toLowerCase();
-      search_parent = (elements.parentNode).parentNode;
-      if (search_input.indexOf(search) !== -1) {
-        search_parent.classList.add('show');
-        search_parent.classList.remove('hide');
-      } else {
-        search_parent.classList.add('hide');
-        search_parent.classList.remove('show');
-      }
-    });
-  }
+  
 
   toggleOpenedSidebar() {
     this.isCollapsedSideBar = this.isCollapsedSideBar === 'yes-block' ? 'no-block' : 'yes-block';

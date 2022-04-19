@@ -14,6 +14,7 @@ import { modpermiso } from './../../../model/modpermiso';
 import { serviciopermiso } from './../../../services/serviciopermiso';
 import { ToastrService } from 'ngx-toastr';
 import { modelousuario } from './../../../model/modusuario';
+import { servicioautenticacion } from './../../../services/servicioautenticacion';
 
 
 @Component({
@@ -32,7 +33,10 @@ export class BEPerfilPanelComponent implements OnInit{
   listapermisos:modpermiso[]=[];
   listapermisossel:modpermiso[]=[];
 
-  constructor(private mensajes:ToastrService,private servpermisos:serviciopermiso,private _servicioperfilpermiso:servicioperfilpermiso,private _servicioperfil:servicioperfil,private fb: FormBuilder,private dialogrefp:MatDialogRef<BEPerfilPanelComponent>,@Inject(MAT_DIALOG_DATA) {idperfil,nombreperfil,descripcionperfil,estadoperfil,fecharegistro,usuarioregistra,fechamodificacion,usuariomodificacion}:modeloperfil) { 
+  constructor(private mensajes:ToastrService,private servpermisos:serviciopermiso,
+    private _servicioperfilpermiso:servicioperfilpermiso,private _servicioperfil:servicioperfil,
+    private servauten:servicioautenticacion,
+    private fb: FormBuilder,private dialogrefp:MatDialogRef<BEPerfilPanelComponent>,@Inject(MAT_DIALOG_DATA) {idperfil,nombreperfil,descripcionperfil,estadoperfil,fecharegistro,usuarioregistra,fechamodificacion,usuariomodificacion}:modeloperfil) { 
     this.enviado=false;
     this.idperfil=idperfil;
     this.listapermisos.length=0;
@@ -119,7 +123,7 @@ export class BEPerfilPanelComponent implements OnInit{
   public grabar(cbgrabar){
     var _usuautenticado:modelousuario;
     this.enviado=true;
-    _usuautenticado=JSON.parse(localStorage.getItem('usuario'));
+    _usuautenticado=this.servauten.userValue;
     if (this.form.valid) {
       this._perfil.descripcionperfil=this.form.value.descripcion;
       this._perfil.nombreperfil=this.form.value.nombre;

@@ -34,7 +34,7 @@ export class serviciopermiso{
 
      }
 
-     getpermisos():Observable<any>{
+     getpermisos(){
         
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaPermisos"
         return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {

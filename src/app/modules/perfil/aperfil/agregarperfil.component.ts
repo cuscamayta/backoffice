@@ -10,6 +10,7 @@ import { modpermiso } from './../../../model/modpermiso';
 import { serviciopermiso } from './../../../services/serviciopermiso';
 import { ToastrService } from 'ngx-toastr';
 import { modelousuario } from './../../../model/modusuario';
+import { servicioautenticacion } from './../../../services/servicioautenticacion';
 
 @Component({
   selector: 'app-agregarperfil',
@@ -27,7 +28,10 @@ export class APerfilPanelComponent{
   
   
 
-  constructor(private mensajes:ToastrService,private servpermisos:serviciopermiso, private _servicioperfilpermiso:servicioperfilpermiso,private _servicioperfil:servicioperfil,private fb: FormBuilder,private dialogRef: MatDialogRef<APerfilPanelComponent>) { 
+  constructor(private mensajes:ToastrService,private servpermisos:serviciopermiso, 
+    private _servicioperfilpermiso:servicioperfilpermiso,private _servicioperfil:servicioperfil,
+    private servauten:servicioautenticacion,
+    private fb: FormBuilder,private dialogRef: MatDialogRef<APerfilPanelComponent>) { 
     this.enviado=false;
     this._perfil=new modeloperfil(0,"","","","",0,"",0);
     this.form = fb.group({
@@ -78,7 +82,7 @@ export class APerfilPanelComponent{
   public grabar(cbgrabar){
     var _usuautenticado:modelousuario;
     this.enviado=true;
-    _usuautenticado=JSON.parse(localStorage.getItem('usuario'));
+    _usuautenticado=this.servauten.userValue;
     if (this.form.valid) {
       this._perfil.descripcionperfil=this.form.value.descripcion;
       this._perfil.nombreperfil=this.form.value.nombre;

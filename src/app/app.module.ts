@@ -24,7 +24,7 @@ import {HttpClientModule} from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { ChangePassComponent } from './modules/auth/changepass/changepass.component';
-
+import 'rxjs/add/operator/mergeMap';
 
 
 @NgModule({

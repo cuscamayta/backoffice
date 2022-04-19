@@ -4,16 +4,17 @@
       <div class="page-title-modal" style="text-align: center;color:green">Bienvenido al Sistema</div>
       <div class="llc">
         <div></div>
-        <div class="flex-container wrap regulation-tiles-container">
-          <div class="flex-item" [routerLink]="['/perfil']">
+        <div class="flex-container wrap regulation-tiles-container" >
+          <div *ngFor="let item of acceso2">
+          <div  class="flex-item" [routerLink]="item.ruta">
             <div class="box">
-              <div class="imageContainer"><img alt="Perfiles"
-                  src="assets/images/all-regulations.svg"
+              <div class="imageContainer"><img [alt]="item.nombre"
+                  [src]="item.imagen"
                   class="library-icon"></div>
-              <div class="imageTitle">Perfiles</div>
+              <div class="imageTitle">{{item.descripcion}}</div>
             </div>
           </div>
-          <div class="flex-item" [routerLink]="['/usuario']">
+          <!-- <div   class="flex-item" [routerLink]="['/usuario']">
             <div class="box"> 
               <div class="imageContainer"><img alt="Usuarios"
                   src="assets/images/usuario.svg"
@@ -21,7 +22,7 @@
               <div class="imageTitle">Usuarios</div>
             </div>
           </div>
-          <div class="flex-item" [routerLink]="['/servicio']">
+          <div   class="flex-item" [routerLink]="['/servicio']">
             <div class="box">
               <div class="imageContainer"><img alt="Servicios"
                   src="assets/images/services.svg"
@@ -29,7 +30,7 @@
               <div class="imageTitle">Servicios</div>
             </div>
           </div>
-          <div class="flex-item"  [routerLink]="['/puntoayp']">
+          <div   class="flex-item"  [routerLink]="['/puntoayp']">
             <div class="box">
               <div class="imageContainer"><img alt="Atención"
                   src="assets/images/point.svg"
@@ -37,13 +38,14 @@
               <div class="imageTitle">Atención</div>
             </div>
           </div>
-          <div class="flex-item" [routerLink]="['/parametro']">
+          <div  class="flex-item" [routerLink]="['/parametro']">
             <div class="box">
               <div class="imageContainer"><img alt="Parametros"
                   src="assets/images/parameter.svg"
                   class="library-icon"></div>
               <div class="imageTitle">Parametros</div>
             </div>
+          </div> -->
           </div>
         </div>
       </div>

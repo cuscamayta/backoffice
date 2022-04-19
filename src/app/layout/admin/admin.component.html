@@ -23,42 +23,54 @@
               <img src="assets/images/logo_cabecera.png" class="logo" width="50px" height="50px">
             </div>
           </div>
-          <div>
-            <ul><a>
-                <li [routerLink]="['/perfil']">
-                  <div>Gestión de Seguridad</div>
-                </li>
-              </a></ul>
-            <ul class="sub-menu-item"><a  >
-                <li  [routerLink]="['/perfil']" [routerLinkActive]="['selected-menu']">
-                  <div>Perfiles</div>
-                </li>
-              </a><a >
-                <li [routerLink]="['/usuario']" [routerLinkActive]="['selected-menu']">
-                  <div>Usuarios</div>
-                </li>
-              </a></ul>
-          </div>
-          <div>
-            <ul><a >
-                <li [routerLink]="['/servicio']" [routerLinkActive]="['selected-menu']">
-                  <div>Requisitos de Servicio</div>
-                </li>
-              </a></ul>
-          </div>
-          <div>
-            <ul><a >
-                <li [routerLink]="['/puntoayp']" [routerLinkActive]="['selected-menu']">
-                  <div>Puntos de Atención</div>
-                </li>
-              </a></ul>
-          </div>
-          <div>
-            <ul><a >
-                <li [routerLink]="['/parametro']" [routerLinkActive]="['selected-menu']">
-                  <div>Parametros</div>
-                </li>
-              </a></ul>
+          <div *ngFor="let itemmenu of admenu">
+            <div >
+              <ul [ngClass]="{'sub-menu-item':itemmenu.especial!=''}"><a>
+                  <li [routerLink]="itemmenu.ruta" [routerLinkActive]="['selected-menu']">
+                    <div>{{itemmenu.descripcion}}</div>
+                  </li>
+                </a>
+              </ul>
+            </div>
+            <!-- <div >
+              <ul  class="sub-menu-item">
+                <a  >
+                  <li [routerLink]="['/perfil']" [routerLinkActive]="['selected-menu']">
+                    <div>Perfiles</div>
+                  </li>
+                </a>
+              </ul>
+            </div> 
+            <div >
+              <ul class="sub-menu-item">
+                <a >
+                  <li  [routerLink]="['/usuario']" [routerLinkActive]="['selected-menu']">
+                    <div>Usuarios</div>
+                  </li>
+                </a>
+              </ul>
+            </div>
+            <div >
+              <ul><a >
+                  <li [routerLink]="['/servicio']" [routerLinkActive]="['selected-menu']">
+                    <div>Requisitos de Servicio</div>
+                  </li>
+                </a></ul>
+            </div>
+            <div >
+              <ul><a >
+                  <li [routerLink]="['/puntoayp']" [routerLinkActive]="['selected-menu']">
+                    <div>Puntos de Atención</div>
+                  </li>
+                </a></ul>
+            </div>
+            <div *ngIf="ver7">
+              <ul><a >
+                  <li [routerLink]="['/parametro']" [routerLinkActive]="['selected-menu']">
+                    <div>Parametros</div>
+                  </li>
+                </a></ul>
+            </div>  -->
           </div>
         </div>
         <div class="content-panel">
@@ -75,7 +87,7 @@
                     <div class="hovered-nav-icon-background"></div>
                   </div>
                 </div>
-                <div>
+                <div >
                   <div class="top-rail-icon-container" data-toggle="tooltip" data-placement="bottom"
                   title="Cambiar Contraseña" (click)="openChangePass()"><img
                       src="assets/images/cambiarcontrasena.svg" alt="data explorer">

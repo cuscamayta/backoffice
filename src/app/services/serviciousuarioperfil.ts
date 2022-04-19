@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from "../../environments/environment.prod";
 import { modelousuarioperfil} from "../model/modusuarioperfil";
 import { map } from "rxjs/operators";
+import { of } from "rxjs";
 
 @Injectable({
     providedIn: 'root'
@@ -11,7 +12,7 @@ import { map } from "rxjs/operators";
 export class serviciousuarioperfil{
     private cadenahttp:string;
     private valorusuarioperfil:modelousuarioperfil;
-    private listausuarioperfil:modelousuarioperfil[]=new Array<modelousuarioperfil>();
+    private listausuarioperfil:modelousuarioperfil[]=[];
      
     constructor(private http: HttpClient){
         console.log("entro al constructor");
@@ -24,21 +25,17 @@ export class serviciousuarioperfil{
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaPerfilesDeUnUusario?IdUsuario="+vidusuario
         console.log(this.cadenahttp);
         this.listausuarioperfil.length=0;
+        this.listausuarioperfil=[];
         return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
             
-            console.log(this.listausuarioperfil);
-            console.log(datos);
-            
-            console.log(datos.perfilusuario);
-            
-            console.log(this.listausuarioperfil);
-            datos.perfilusuario.forEach(element => {this.listausuarioperfil.push(new modelousuarioperfil(element.idusuario,element.idperfil)); 
-                
-                console.log(this.listausuarioperfil);console.log(element);});
+            datos.perfilusuario.forEach(element => this.listausuarioperfil.push(new modelousuarioperfil(element.idusuario,element.idperfil)));
+            console.log(this.listausuarioperfil.length);
             return this.listausuarioperfil;
           }));
        
      }
+
+     
 
     
      agregar(usuarioperfil:modelousuarioperfil){
