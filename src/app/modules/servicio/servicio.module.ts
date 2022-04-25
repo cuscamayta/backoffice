@@ -4,6 +4,8 @@ import { ServicioComponent } from './servicio.component';
 import {SharedModule} from '../../shared/shared.module';
 import { SidePanelOverlayModule } from '../../shared/side-panel/side-panel-overlay.module';
 import { BEServicioPanelModule } from './beservicio/borrareditarservicio.module';
+import { AServicioPanelModule } from './agservicio/agregarservicio.module';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   imports: [
@@ -11,7 +13,8 @@ import { BEServicioPanelModule } from './beservicio/borrareditarservicio.module'
     SharedModule,
     SidePanelOverlayModule,
     BEServicioPanelModule,
-    
+    AServicioPanelModule,
+    FormsModule,
 
   ],
   declarations: [ServicioComponent]

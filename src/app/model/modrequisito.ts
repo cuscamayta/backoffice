@@ -7,12 +7,18 @@ export class modelorequisito{
     idrequisito:number;
     nombrerequisito:string;
     estadorequisito:string;
-    fecharegistro?:string;
     usuarioregistra?:number;
-    fechamodificacion?:string;
+    fecharegistro?:string;
     usuariomodifica?:number;
+    fechamodificacion?:string;
+    idimagen:number;
+    nombreimagen:string;
+    imagenfisica:string;
+    ancho:number;
+    alto:number;
     
-    constructor(vid:number,vlogin:string,vnombre:string,vapellido:string,vtelefono:string,vcorreo:string,vestado:string,vprivez:string,vfechareg:string,vusureg:number,vfecmod:string,vusumod:number){
+    constructor(vid:number,vnombre:string,vestado:string,vfechareg:string,vusureg:number,
+      vfecmod:string,vusumod:number,vidimg:number,vnomimg:string,vimagen:string,vancho:number,valto:number){
         this.idrequisito=vid;
         this.nombrerequisito=vnombre;
         this.estadorequisito=vestado;
@@ -20,34 +26,72 @@ export class modelorequisito{
         this.usuarioregistra=vusureg;
         this.fechamodificacion=vfecmod;
         this.usuariomodifica=vusumod;
+        this.idimagen=vidimg;
+        this.nombreimagen=vnomimg;
+        this.imagenfisica=vimagen;
+        this.ancho=vancho;
+        this.alto=valto;
     }
 
     
 }
 
-export class modelousuarioactualizar{
+export class modeloimagen{
+  pipe(arg0: OperatorFunction<unknown, unknown>) {
+    throw new Error('Method not implemented.');
+  }
+  idimagen:number;
+  nombreimagen:string;
+  imagenfisica:string;
+  ancho:number;
+  alto:number;
+ 
+  
+  
+  constructor(vid:number,vnombre:string,vimagen:string,vancho:number,valto:number){
+      this.idimagen=vid;
+      this.nombreimagen=vnombre;
+      this.imagenfisica=vimagen;
+      this.ancho=vancho;
+      this.alto=valto;
+  }
+}
 
-  IDUSUA:number;
-  DSUSUALOGI:string;
-  DSUSUAPASS:string;
-  DSNOMB:string;
-  DSAPEL:string;
-  DSTELE:string;
-  DSMAIL:string;
-  OPESTA:string;
-  OPPRIM:string;
+
+export class modeloimagenTotal{
+  pipe(arg0: OperatorFunction<unknown, unknown>) {
+    throw new Error('Method not implemented.');
+  }
+  idimagen:number;
+  nombreimagen:string;
+  imagenfisica:string;
+  ancho:number;
+  alto:number;
+  tipo:number;
+  idrequisito:number;
+  
+  
+  constructor(vid:number,vnombre:string,vimagen:string,vancho:number,valto:number,vtipo:number,vidreq:number){
+      this.idimagen=vid;
+      this.nombreimagen=vnombre;
+      this.imagenfisica=vimagen;
+      this.ancho=vancho;
+      this.alto=valto;
+      this.tipo=vtipo;
+      this.idrequisito=vidreq;
+  }
+}
+
+export class modelorequisitoactualizar{
+  IDREQUSERV:number;
+  NOREQUSERV:string;
+  STREQUSERV:string;
   IDUSUAMODI:number;
   
-  constructor(id,login,pass,nombre,apellido,telefono,correo,estado,privez,usumod){
-      this.IDUSUA=id;
-      this.DSUSUALOGI=login;
-      this.DSUSUAPASS=pass;
-      this.DSNOMB=nombre;
-      this.DSAPEL=apellido;
-      this.DSTELE=telefono;
-      this.DSMAIL=correo;
-      this.OPESTA=estado;
-      this.OPPRIM=privez;
+  constructor(id,nombre,estado,usumod){
+      this.IDREQUSERV=id;
+      this.NOREQUSERV=nombre;
+      this.STREQUSERV=estado;
       this.IDUSUAMODI=usumod;
       
       
@@ -56,32 +100,18 @@ export class modelousuarioactualizar{
   
 }
 
-export class modelousuarioinsertar{
-
-  
-  DSUSUALOGI:string;
-  DSUSUAPASS:string;
-  DSNOMB:string;
-  DSAPEL:string;
-  DSTELE:string;
-  DSMAIL:string;
-  OPESTA:string;
-  OPPRIM:string;
+export class modelorequisitoinsertar{
+  NOREQUSERV:string;
+  STREQUSERV:string;
   IDUSUAREGI:number;
   
-  constructor(login,pass,nombre,apellido,telefono,correo,estado,privez,usureg){
-      this.DSUSUALOGI=login;
-      this.DSUSUAPASS=pass;
-      this.DSNOMB=nombre;
-      this.DSAPEL=apellido;
-      this.DSTELE=telefono;
-      this.DSMAIL=correo;
-      this.OPESTA=estado;
-      this.OPPRIM=privez;
+  constructor(nombre,estado,usureg){
+
+      this.NOREQUSERV=nombre;
+      this.STREQUSERV=estado;
       this.IDUSUAREGI=usureg;
       
       
   }
-
   
 }

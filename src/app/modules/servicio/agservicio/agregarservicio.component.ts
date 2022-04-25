@@ -10,15 +10,16 @@ import { serviciousuario } from '../../../../app/services/serviciousuario';
 import { servicioautenticacion } from '../../../../app/services/servicioautenticacion';
 import { modelousuario } from 'src/app/model/modusuario';
 @Component({
-  selector: 'app-borrareditarservicio',
-  templateUrl: './borrareditarservicio.component.html',
-  styleUrls: ['./borrareditarservicio.component.scss']
+  selector: 'app-agregarservicio',
+  templateUrl: './agregarservicio.component.html',
+  styleUrls: ['./agregarservicio.component.scss']
 })
-export class BEServicioPanelComponent implements OnInit{
+export class AServicioPanelComponent implements OnInit{
   estado='Habilitado';
   configurar='Configurar Enlaces';  
   form: FormGroup;
   enviado:boolean=false;
+  _usuautenticado:modelousuario;
   public listadetalleimagen:modeloimagen[]=[new modeloimagen(0,"","",0,0),new modeloimagen(0,"","",0,0),
                                 new modeloimagen(0,"","",0,0),new modeloimagen(0,"","",0,0)];
   public listadetalleimagenrec:modeloimagen[]=[];
@@ -28,28 +29,19 @@ export class BEServicioPanelComponent implements OnInit{
   constructor(private mensajes:ToastrService,private servreq:serviciorequisito,
     private servaut:servicioautenticacion,
     private fb: FormBuilder,
-    private dialogRef: MatDialogRef<BEServicioPanelComponent>, private dialog: MatDialog,@Inject(MAT_DIALOG_DATA) 
-    {idrequisito,nombrerequisito,estadorequisito,usuarioregistra
-    ,fecharegistro,usuariomodifica,fechamodificacion,idimagen
-    ,nombreimagen,imagenfisica,ancho,alto}:modelorequisito) { 
+    private dialogRef: MatDialogRef<AServicioPanelComponent>) { 
       this.form = fb.group({
         
-        nombre: [nombrerequisito, Validators.required],
-        idimagen: [idimagen,],
-        estado: [estadorequisito, ],
+        nombre: ['', Validators.required],
+        idimagen: ['0',],
+        estado: [0, ],
         
        });
-      this._requisito=new modelorequisito(idrequisito,nombrerequisito,estadorequisito
-        ,fecharegistro,usuarioregistra,fechamodificacion,usuariomodifica,idimagen
-        ,nombreimagen,imagenfisica,ancho,alto);
-        this.getdetalleimagen(this._requisito.idrequisito,()=>{
-          var i=0;
-          this.listadetalleimagenrec.forEach(elemento=>{
-              this.listadetalleimagen[i]=elemento;
-              console.log(this.listadetalleimagen[i]);
-              i=i+1;
-          })
-        });
+       this._usuautenticado=this.servaut.userValue;
+      this._requisito=new modelorequisito(0,"",""
+        ,"",this._usuautenticado.id,"",this._usuautenticado.id,0
+        ,"","",0,0);
+        
     }
 
 
@@ -100,8 +92,8 @@ export class BEServicioPanelComponent implements OnInit{
   }
 
 
-  getdetalleimagen(idrequisito:number,cbdetimg){
-    this.servreq.getdetallerequisitos(idrequisito).subscribe(datos =>{
+  getdetalleimagen(id:number,cbdetimg){
+    this.servreq.getdetallerequisitos(id).subscribe(datos =>{
       console.log(datos);
       this.listadetalleimagenrec.length=0;
       datos.forEach(element => this.listadetalleimagenrec.push(element))
@@ -110,7 +102,7 @@ export class BEServicioPanelComponent implements OnInit{
   }
 
   get f() { return this.form.controls; }
-
+  
   public close(valor):void {
     
     this.dialogRef.close(valor);
@@ -119,18 +111,18 @@ export class BEServicioPanelComponent implements OnInit{
     this.grabar(()=>{this.close(this._requisito)})
   }
   public grabar(callback){
-    var _usuautenticado:modelousuario;
+    
     var _imagencomp:modeloimagenTotal;
     var eliminar:boolean;
     this.enviado=true;
-    _usuautenticado=this.servaut.userValue;
+    
     if (this.form.valid) {
       
       
       this._requisito.nombrerequisito=this.form.value.nombre;
       this._requisito.estadorequisito=this.form.value.estado;
-      this._requisito.usuariomodifica=_usuautenticado.id;
-      this.servreq.actualizar(this._requisito).subscribe(datos=>
+      this._requisito.usuariomodifica=this._usuautenticado.id;
+      this.servreq.agregar(this._requisito).subscribe(datos=>
       {
         if (datos.isOk=="N"){
           this.mensajes.error(datos.dsMens)

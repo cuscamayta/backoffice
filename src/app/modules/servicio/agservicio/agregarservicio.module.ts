@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BEServicioPanelComponent} from './borrareditarservicio.component';
+import { AServicioPanelComponent} from './agregarservicio.component';
 import { DragDropModule} from '@angular/cdk/drag-drop';
 import {SharedModule} from '../../../shared/shared.module';
 import { MatSlideToggleModule } from '@angular/material';
@@ -17,12 +17,12 @@ import {MatDividerModule,MatGridListModule,MatCheckboxModule,MatToolbarModule,Ma
     FormsModule,
     ReactiveFormsModule
   ],
-  declarations: [BEServicioPanelComponent
+  declarations: [AServicioPanelComponent
     
     ],
-  exports: [BEServicioPanelComponent
+  exports: [AServicioPanelComponent
     
     ],
-  entryComponents:[BEServicioPanelComponent],
+  entryComponents:[AServicioPanelComponent],
 })
-export class BEServicioPanelModule { }
+export class AServicioPanelModule { }
