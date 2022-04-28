@@ -8,7 +8,7 @@ import {FormBuilder, Validators, FormGroup, FormArray, FormControl} from "@angul
 import { modeloimagen, modeloimagenTotal, modelorequisito } from '../../../model/modrequisito';
 import { serviciousuario } from '../../../../app/services/serviciousuario';
 import { servicioautenticacion } from '../../../../app/services/servicioautenticacion';
-import { modelousuario } from 'src/app/model/modusuario';
+import { modelousuario } from '../../../../app/model/modusuario';
 @Component({
   selector: 'app-borrareditarservicio',
   templateUrl: './borrareditarservicio.component.html',
@@ -57,6 +57,10 @@ export class BEServicioPanelComponent implements OnInit{
     
   }
 
+  Borrar(id:number){
+    this.listadetalleimagen[id]=new modeloimagen(0,"","",0,0);
+  }
+
   imagen(id:number){
     const fileUplodad=document.getElementById('File'+id.toString()) as HTMLInputElement;
     console.log(this.listadetalleimagen[id]);
@@ -72,6 +76,13 @@ export class BEServicioPanelComponent implements OnInit{
               
           }
           reader.readAsDataURL(file);
+          const Img = new Image();
+          Img.src = URL.createObjectURL(file);
+
+          Img.onload = (e: any) => {
+            this.listadetalleimagen[id].alto = e.path[0].height;
+            this.listadetalleimagen[id].ancho = e.path[0].width;
+          }
           
     }
 
@@ -93,7 +104,13 @@ export class BEServicioPanelComponent implements OnInit{
               
           }
           reader.readAsDataURL(file);
-          
+          const Img = new Image();
+          Img.src = URL.createObjectURL(file);
+
+          Img.onload = (e: any) => {
+            this._requisito.alto = e.path[0].height;
+            this._requisito.ancho = e.path[0].width;
+          }
     }
 
     fileUplodad.click();

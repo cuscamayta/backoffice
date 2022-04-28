@@ -18,6 +18,7 @@ import { AServicioPanelComponent } from './agservicio/agregarservicio.component'
   providers: [NgbModal]
 })
 export class ServicioComponent implements OnInit{
+  public query: any = '';
   requisitoactual:modelorequisito;
   listaservicio:modelorequisito[]=[];
   constructor(private mensajes:ToastrService,private servreq:serviciorequisito,
@@ -34,7 +35,8 @@ export class ServicioComponent implements OnInit{
     this.servreq.getrequisitos().subscribe(datos =>{
       console.log(datos);
       this.listaservicio.length=0;
-      datos.forEach(element => this.listaservicio.push(element))
+      datos.forEach(element =>{ this.listaservicio.push(element);
+      console.log(element);})
       cbRequisitos();
     });  
        

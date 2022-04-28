@@ -21,7 +21,7 @@
     <div class="form-group">
       <div class="row text-center">
         
-        <ng-container ngSwitch="idimagen">
+        <ng-container ngSwitch="_requisito.idimagen">
           <div class="col-sm-3" *ngSwitchCase="0">
             <span>Portada</span><br>
             <input id="imagenportada" type="file" class="fileClass detalle" style="display: none;" accept=".png,.jpg,jpeg,.bmp,.gif" >
@@ -29,6 +29,7 @@
               <br>
               <span>Tamaño de imagen: 640 x 322 px.</span>
             </div>
+          
           <div class="col-sm-3" *ngSwitchDefault>
             <span>Portada</span><br>
             <input id="imagenportada" type="file" class="fileClass detalle" style="display: none;" accept=".png,.jpg,jpeg,.bmp,.gif" >
@@ -51,7 +52,7 @@
                   <input [id]="'File'+i" type="file" class="fileClass detalle" style="display: none;" accept=".png,.jpg,jpeg,.bmp,.gif">
                     <img id="item.idimagen" style="width:226px; height:124px;margin-right:2.5px;cursor:pointer;" [src]="'data:image/gif;base64,'+item.imagenfisica"  (click)="imagen(i);">
                     <div class="eliminar" >
-                        <img title="Borrar" src="assets/images/eliminar_img.jpg" onclick="Borrar(i)">
+                        <img title="Borrar" src="assets/images/eliminar_img.jpg" (click)="Borrar(i)">
                     </div>
                 </div>
               </ng-container>

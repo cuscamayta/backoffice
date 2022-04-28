@@ -8,7 +8,7 @@ import {FormBuilder, Validators, FormGroup, FormArray, FormControl} from "@angul
 import { modeloimagen, modeloimagenTotal, modelorequisito } from '../../../model/modrequisito';
 import { serviciousuario } from '../../../../app/services/serviciousuario';
 import { servicioautenticacion } from '../../../../app/services/servicioautenticacion';
-import { modelousuario } from 'src/app/model/modusuario';
+import { modelousuario } from '../../../../app/model/modusuario';
 @Component({
   selector: 'app-agregarservicio',
   templateUrl: './agregarservicio.component.html',
@@ -25,22 +25,25 @@ export class AServicioPanelComponent implements OnInit{
   public listadetalleimagenrec:modeloimagen[]=[];
   
   
-  _requisito:modelorequisito;
+  _requisito:modelorequisito=new modelorequisito(0,"",""
+  ,"",0,"",0,0
+  ,"","",0,0);;
   constructor(private mensajes:ToastrService,private servreq:serviciorequisito,
     private servaut:servicioautenticacion,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AServicioPanelComponent>) { 
+      this._usuautenticado=this.servaut.userValue;
+      this._requisito.usuariomodifica=this._usuautenticado.id;
+      this._requisito.usuarioregistra=this._usuautenticado.id;
       this.form = fb.group({
         
-        nombre: ['', Validators.required],
-        idimagen: ['0',],
-        estado: [0, ],
+        nombre: [this._requisito.nombrerequisito, Validators.required],
+        idimagen: [this._requisito.idimagen,],
+        estado: [this._requisito.estadorequisito, ],
         
        });
-       this._usuautenticado=this.servaut.userValue;
-      this._requisito=new modelorequisito(0,"",""
-        ,"",this._usuautenticado.id,"",this._usuautenticado.id,0
-        ,"","",0,0);
+       console.log(this.form.value.idimage);
+      
         
     }
 
@@ -49,6 +52,10 @@ export class AServicioPanelComponent implements OnInit{
     
   }
 
+  Borrar(id:number){
+    this.listadetalleimagen[id]=new modeloimagen(0,"","",0,0);
+  }
+  
   imagen(id:number){
     const fileUplodad=document.getElementById('File'+id.toString()) as HTMLInputElement;
     console.log(this.listadetalleimagen[id]);
@@ -56,7 +63,7 @@ export class AServicioPanelComponent implements OnInit{
       const file=fileUplodad.files[0];
           var reader = new FileReader();
           reader.onload = (event:any) => {
-            if(this.listadetalleimagen[id].idimagen==0){
+            if(this.listadetalleimagen[id].idimagen==0||this.listadetalleimagen[id].idimagen==undefined){
               this.listadetalleimagen[id].idimagen=-1;
             }
             this.listadetalleimagen[id].imagenfisica=event.target.result.toString().slice(23,event.target.result.toString().length);
@@ -64,7 +71,13 @@ export class AServicioPanelComponent implements OnInit{
               
           }
           reader.readAsDataURL(file);
-          
+          const Img = new Image();
+          Img.src = URL.createObjectURL(file);
+
+          Img.onload = (e: any) => {
+            this.listadetalleimagen[id].alto = e.path[0].height;
+            this.listadetalleimagen[id].ancho = e.path[0].width;
+          }
     }
 
     fileUplodad.click();
@@ -77,7 +90,7 @@ export class AServicioPanelComponent implements OnInit{
       const file=fileUplodad.files[0];
           var reader = new FileReader();
           reader.onload = (event:any) => {
-            if(this._requisito.idimagen==0){
+            if(this._requisito.idimagen==0||this._requisito.idimagen==undefined){
               this._requisito.idimagen=-1;
             }
             this._requisito.imagenfisica=event.target.result.toString().slice(23,event.target.result.toString().length);
@@ -85,6 +98,13 @@ export class AServicioPanelComponent implements OnInit{
               
           }
           reader.readAsDataURL(file);
+          const Img = new Image();
+          Img.src = URL.createObjectURL(file);
+
+          Img.onload = (e: any) => {
+            this._requisito.alto = e.path[0].height;
+            this._requisito.ancho = e.path[0].width;
+          }
           
     }
 
@@ -116,7 +136,7 @@ export class AServicioPanelComponent implements OnInit{
     var eliminar:boolean;
     this.enviado=true;
     
-    if (this.form.valid) {
+    if (this.form.valid && this._requisito.idimagen!=0) {
       
       
       this._requisito.nombrerequisito=this.form.value.nombre;
@@ -133,24 +153,22 @@ export class AServicioPanelComponent implements OnInit{
           
           this._requisito.nombrerequisito=datos.requisito[0].nombrerequisito;
           this._requisito.estadorequisito=datos.requisito[0].estadorequisito;
+          this._requisito.idrequisito=datos.requisito[0].idrequisito;
           
           _imagencomp=new modeloimagenTotal(this._requisito.idimagen,this._requisito.nombreimagen,
                         this._requisito.imagenfisica,this._requisito.alto,this._requisito.ancho,1,this._requisito.idrequisito);
-          this.servreq.eliminarimagen(_imagencomp.idimagen).subscribe(resultado=>{
-            if(resultado.isOk=="S"){
+          
               this.servreq.agregarimagen(_imagencomp).subscribe(resap=>{
-                this.listadetalleimagenrec.forEach(elemento=>{
-                  this.servreq.eliminarimagen(elemento.idimagen)
-                })
                 this.listadetalleimagen.forEach(elemento=>{
+                  if (elemento.idimagen!=0){
                   _imagencomp=new modeloimagenTotal(elemento.idimagen,elemento.nombreimagen,
                     elemento.imagenfisica,elemento.ancho,elemento.alto,2,this._requisito.idrequisito);
                     this.servreq.agregarimagen(_imagencomp);
+                  }
                 })
               })
               callback();
-            }
-          })
+          
         }
       })
     }

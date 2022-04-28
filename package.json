@@ -33,6 +33,7 @@
     "angular-messages": "^1.7.2",
     "angular2-chartjs": "^0.5.1",
     "angular2-notifications": "^0.7.4",
+    "Buffer": "^0.0.0",
     "c3": "^0.4.21",
     "core-js": "^2.4.1",
     "css-animator": "^2.3.0",

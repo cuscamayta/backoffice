@@ -2,8 +2,9 @@ import { Injectable } from "@angular/core";
 import { modeloimagen, modeloimagenTotal, modelorequisito, modelorequisitoactualizar, modelorequisitoinsertar } from "../model/modrequisito";
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from "../../environments/environment.prod";
-import { map } from "rxjs/operators";
+import { buffer, map } from "rxjs/operators";
 import { Observable } from "rxjs";
+import * as Buffer from "Buffer";
 
 
 @Injectable({
@@ -44,7 +45,11 @@ export class serviciorequisito{
 
      actualizar(requisito:modelorequisito){
          var reqact:modelorequisitoactualizar;
-         reqact=new modelorequisitoactualizar(requisito.idrequisito,requisito.nombrerequisito,requisito.estadorequisito
+         if(requisito.estadorequisito)
+            reqact=new modelorequisitoactualizar(requisito.idrequisito,requisito.nombrerequisito,"1"
+            ,requisito.usuariomodifica);
+        else
+            reqact=new modelorequisitoactualizar(requisito.idrequisito,requisito.nombrerequisito,"0"
             ,requisito.usuariomodifica);
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaRequisito"
         const headers = { 'content-type': 'application/json'}  
@@ -60,7 +65,11 @@ export class serviciorequisito{
      }  
      agregar(requisito:modelorequisito){
         var reqag:modelorequisitoinsertar;
-         reqag=new modelorequisitoinsertar(requisito.nombrerequisito,requisito.estadorequisito
+        if (requisito.estadorequisito)
+            reqag=new modelorequisitoinsertar(requisito.nombrerequisito,"1"
+            ,requisito.usuarioregistra);
+        else
+            reqag=new modelorequisitoinsertar(requisito.nombrerequisito,"0"
             ,requisito.usuarioregistra);
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaRequisito"
         const headers = { 'content-type': 'application/json'}  
@@ -81,7 +90,7 @@ export class serviciorequisito{
             .set('Tipo',servicio.tipo.toString())
             .set('idRequisito',servicio.idrequisito.toString());
        
-       const body=servicio.imagenfisica;
+       const body=this.base64ToArrayBuffer(servicio.imagenfisica);
        console.log(body);
        return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
 
@@ -110,4 +119,14 @@ export class serviciorequisito{
             return this.listadetallereq;
           }));
      }
+
+     base64ToArrayBuffer(base64) {
+        var binary_string = window.atob(base64);
+        var len = binary_string.length;
+        var bytes = new Uint8Array(len);
+        for (var i = 0; i < len; i++) {
+            bytes[i] = binary_string.charCodeAt(i);
+        }
+        return bytes.buffer;
+    }
 }
