@@ -39,23 +39,7 @@ export class serviciousuario{
          
 
     }
-    private traerusuariologin(login:string,cbtu){
-        this.valorpar=null;
-
-        this.getusuarios().subscribe(datos=>{
-            datos.forEach(element=>{
-                if(element.login==login)
-                    this.valorpar = new modelousuario(element.id,element.login,element.nombre,
-                        element.apellido,element.telefono,element.correo,
-                        element.estado,element.primeravez,element.fecharegistro,
-                        element.usuarioregistra,element.fechamodificacion,
-                        element.usuariomodifica);
-            })
-            console.log(this.valorpar);
-            cbtu();
-        })
-        
-    }
+    
     getusuario(id:number){
         
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaUsuario?idusuario="+id
@@ -90,22 +74,76 @@ export class serviciousuario{
           }));
      }
 
+     getusuariosfiltro(IdPerfil:number):Observable<any>{
+        
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaUsuariosDeUnPerfil?IdPerfil="+IdPerfil
+        return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
+            console.log(datos);
+            this.listausuario.length=0;
+            this.listausuario=[];
+            datos.usuarios.forEach(element => {
+                this.listausuario.push(new modelousuario(element.id,element.login,element.nombre,element.apellido,element.telefono
+                    ,element.correo,element.estado,element.primeravez,element.fecharegistro,element.usuarioregistra
+                    ,element.fechamodificacion,element.usuariomodifica));
+            });
+                
+                
+            
+            console.log(this.listausuario);
+            return this.listausuario;
+          }));
+     }
+
      actualizar(usuario:modelousuario,contrasena:string){
          var usuact:modelousuarioactualizar;
          usuact=new modelousuarioactualizar(usuario.id,usuario.login,contrasena,usuario.nombre,usuario.apellido
             ,usuario.telefono,usuario.correo, usuario.estado, usuario.primeravez,usuario.usuariomodifica);
-        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaUsuario"
-        const headers = { 'content-type': 'application/json'}  
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaPassword?P_IdUsuario="+usuario.id+"&P_Password="+contrasena
+        /* const headers = { 'content-type': 'application/json'}  
         const body=JSON.stringify(usuact);
-        console.log(body)
-        return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
-        
+        console.log(body) 
+        return this.http.post<any>(this.cadenahttp , body,{'headers':headers});*/
+        return this.http.post<any>(this.cadenahttp , null);
     }
-      borrar(id:number){
+
+    cambiarpassword(id:number,contrasena:string){
         var resp=false;
-        
-        return true;
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaPassword?P_IdUsuario="+ id +"&P_Password='"+contrasena+"'"
+        return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+            if(datos.isOk="S"){
+                resp=true;
+            }
+            return resp;
+            
+          });
+    }
+
+    borrar(id:number){
+        var resp=false;
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/EliminarUsuario?IdUsuario="+ id 
+        return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+            if(datos.isOk="S"){
+                resp=true;
+            }
+            return resp;
+            
+          });
      }  
+
+     deshabilitar(idusuario:number){
+        var resp=false;
+       this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/DesHabilitarUsuario?IdUsuario="+idusuario
+       return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+           if (datos.isOk="S"){
+               resp=true;
+           }
+           
+           
+           return resp;
+         });
+       
+    }
+
 
      agregar(usuario:modelousuario){
         var usuag:modelousuarioinsertar;

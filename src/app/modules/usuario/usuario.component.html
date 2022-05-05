@@ -49,11 +49,17 @@
         </div>
         <div *ngFor="let usuario of listausuarios | searchFilter: query | paginate: config">
           <div class="documentRowStyle columns" *ngIf="usuario.login" (click)="openEditarUsuario(usuario)">
-            <div class="column is-4">{{usuario.login}}</div>
+            <div class="column is-2">{{usuario.login}}</div>
             <div class="column is-3">{{usuario.nombre}}</div>
             <div class="column is-3">{{usuario.apellido}}</div>
-            <div class="column is-2"><!-- <button class="ns-btn btn-danger --small" (click)="openBorrarUsuario(usuario.id,$event)" data-toggle="tooltip" data-placement="bottom"
-              title="Borra el Usuario Seleccionado">Eliminar</button> --></div>
+            <div class="column is-2"><button class="ns-btn btn-danger --small" (click)="openBorrarUsuario(usuario.id,$event)" data-toggle="tooltip" data-placement="bottom"
+              title="Borra el Usuario Seleccionado">Eliminar</button>
+            </div>
+            <div class="column is-2" (click)="$event.stopPropagation();">
+              <mat-slide-toggle [checked]="usuario.estado === null ? true : false"  (change)="HabDesUsuario( usuario.id, $event);" >
+                <span>{{usuario.estado===null?'Habilitado':'Deshabilitado'}}</span>
+              </mat-slide-toggle>
+          </div>
             <div class="column tag-row"></div>
           </div>
         </div>
@@ -187,10 +193,9 @@
 <ng-template #clickImgTemp>
 
   <div style="text-align: center;margin: 5px;color:#3A3D5F">Perfiles</div>
-  <select name="perfiles" id="perfiles">
-    <option value="1">administrador</option>
-    <option value="2">miguel</option>
-    <option value="3">perfil1</option>
+  <select name="perfiles" id="perfiles"(change)="filtroperfil($event)">
+    <option [value]="null" disabled>( Todos )</option>
+    <option *ngFor="let perf of listaperfiles" [value]="perf.idperfil">{{perf.nombreperfil}}</option>
   </select> 
 
 </ng-template>

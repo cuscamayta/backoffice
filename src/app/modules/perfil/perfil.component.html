@@ -46,12 +46,17 @@
           <div class="documentRowStyle columns" *ngIf="perfil.idperfil" (click)="openEditarPerfil(perfil)" >
             <div class="column is-3 documentName">{{perfil.nombreperfil}}</div>
             <div class="column is-5">{{perfil.descripcionperfil}}</div>
-            <div class="column is-2"></div>
-            <div class="column is-2"><!-- <button class="ns-btn btn-danger --small" (click)="openBorrarPerfil(perfil.idperfil,$event)" data-toggle="tooltip" data-placement="bottom"
-              title="Borra el Perfil Seleccionado">Eliminar</button> --></div>
+            
+            <div class="column is-2"><button class="ns-btn btn-danger --small" (click)="openBorrarPerfil(perfil.idperfil,$event)" data-toggle="tooltip" data-placement="bottom"
+              title="Borra el Perfil Seleccionado">Eliminar</button> 
+            </div>
+            <div class="column is-2" (click)="$event.stopPropagation();">
+                <mat-slide-toggle [checked]="perfil.estadoperfil === 'S' ? true : false"  (change)="HabDesPerfil( perfil.idperfil, $event);" >
+                  <span>{{perfil.estadoperfil==='S'?'Habilitado':'Deshabilitado'}}</span>
+                </mat-slide-toggle>
+            </div>
             <div class="column tag-row"></div>
           </div>
-          
         </div>
       </div>
     </div>
@@ -183,7 +188,11 @@
 </div>
 
 <ng-template #clickImgTemp>
-  <div >
+  <select name="permisos" id="permisos" (change)="filtropermiso($event)">
+    <option [value]="null" disabled>( Todos )</option>
+    <option *ngFor="let perm of listapermisos" [value]="perm.idpermiso">{{perm.nombrepermiso}}</option>
+  </select> 
+  <!-- <div >
     <div class='form-check' (click)="selectcheck(1)" >
       <input type='checkbox' class='form-check-input'>
       <label class='form-check-label' >Perfiles</label>
@@ -213,7 +222,7 @@
       <input type='checkbox' class='form-check-input' >
       <label class='form-check-label' >Parametros</label>
     </div>
-  </div>
+  </div> -->
 </ng-template>
 
 

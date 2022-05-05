@@ -78,13 +78,17 @@ export class servicioautenticacion {
         this.servusu.getusuariopassword(usuario,password).subscribe(datos => { 
             console.log(datos);
             if(datos.isOk=="S"){
-                this.listausuarios.forEach(element=>{
+                usuariotemp= new modelousuario(datos.usuario[0].id,datos.usuario[0].login,
+                    datos.usuario[0].nombre,datos.usuario[0].apellido,datos.usuario[0].telefono
+                    ,datos.usuario[0].correo,datos.usuario[0].habilitado,"","",0
+                    ,"",0); 
+                /* this.listausuarios.forEach(element=>{
                     if(datos.usuario[0].login==element.login)
                         usuariotemp= new modelousuario(element.id,element.login,element.nombre,element.apellido,element.telefono
                         ,element.correo,element.estado,element.primeravez,element.fecharegistro,element.usuarioregistra
                         ,element.fechamodificacion,element.usuariomodifica); 
                     
-                });
+                }); */
                 console.log(usuariotemp);
                 if (usuariotemp!=null){
                     this.menu=modmenu.cargarmenu();

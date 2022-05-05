@@ -14,6 +14,7 @@ import { modelousuario } from './../../model/modusuario';
 import {  Observable} from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { PaginationInstance } from 'ngx-pagination';
+import { modeloperfil } from './../../model/modperfil';
 
 
 
@@ -29,6 +30,7 @@ export class UsuarioComponent implements OnInit{
   
   public query: any = '';
   public listausuarios:modelousuario[]=[];
+  public listaperfiles:modeloperfil[]=[];
   public usuarioactual:modelousuario;
   private usuarios$:Observable<modelousuario[]>;
   inicio:number;
@@ -45,7 +47,7 @@ export class UsuarioComponent implements OnInit{
     this.inicio=1;
     this.fin=this.config.currentPage*1*this.config.itemsPerPage;
     this.config.currentPage=1;
-    
+    this.getPerfiles(()=>{})
   }
  ngOnInit(): void {
 
@@ -74,14 +76,40 @@ export class UsuarioComponent implements OnInit{
       datos.forEach(element => this.listausuarios.push(element))
       cbUsuarios();
     });  
-       
-        
+  }
+
+  getUsuariosfiltro(cbUsuarios,IdPerfil:number) {
+    this.usuarios$=this.servusuario.getusuariosfiltro(IdPerfil);
     
-    
-    
+    this.usuarios$.subscribe(datos =>{
+      console.log(datos);
+      this.listausuarios.length=0;
+      datos.forEach(element => this.listausuarios.push(element))
+      cbUsuarios();
+    });  
+  }
+
+  getPerfiles(cbperfiles) {
+    this.servperfil.getperfiles()
+      .subscribe(
+        res => {
+          this.listaperfiles = res;
+          console.log(this.listaperfiles);
+          cbperfiles();
+        });
+
     
   }
 
+  filtroperfil(eventofiltro){
+    if(eventofiltro.target.value!=null){
+      console.log(eventofiltro.target.value);
+      this.getUsuariosfiltro(()=>{this.totalreg=this.listaperfiles.length;},eventofiltro.target.value)
+    }
+    else
+      this.getUsuarios(()=>{this.totalreg=this.listaperfiles.length; });
+  }
+  
   actualizarrango(valor){
     this.config.itemsPerPage=parseInt(valor);
     this.inicio=((this.config.currentPage*1)-1)*this.config.itemsPerPage+1;
@@ -176,6 +204,40 @@ export class UsuarioComponent implements OnInit{
     
   }
   
+  HabDesUsuario(idusuario:number,$event){
+    console.log($event.checked);
+    if ($event.checked){
+      
+      if (this.servperfil.habilitar(idusuario)) {
+        this.listausuarios.forEach(element=>{
+          if (element.id==idusuario){
+            element.estado=null;
+            this.mensajes.success("Usuariol "+this.usuarioactual.nombre + " habilitado correctamente","Mensaje Informativo")
+            console.log(element.estado);
+            
+          }
+        })
+      }
+      
+    }
+    else{
+      if (this.servperfil.deshabilitar(idusuario)) {
+        
+        this.listausuarios.forEach(element=>{
+          if (element.id==idusuario){
+            element.estado="1";
+            this.mensajes.success("Usuariol "+this.usuarioactual.nombre + " deshabilitado correctamente","Mensaje Informativo")
+            console.log(element.estado);
+            
+          }
+        })
+      }
+    }
+    
+
+
+  }
+
   abrirpop(popover){
     if (popover.isOpen()) {
       

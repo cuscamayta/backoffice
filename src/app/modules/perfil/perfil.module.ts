@@ -6,6 +6,7 @@ import { BEPerfilPanelModule } from './beperfil/borrareditarperfil.module';
 import { APerfilPanelModule } from './aperfil/agregarperfil.module';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
+import { MatSlideToggleModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -16,6 +17,7 @@ import { FormsModule } from '@angular/forms';
     BEPerfilPanelModule,
     APerfilPanelModule,
     FormsModule,
+    MatSlideToggleModule
     
     
   ],

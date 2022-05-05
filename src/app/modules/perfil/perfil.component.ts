@@ -5,11 +5,13 @@ import {PaginationInstance} from 'ngx-pagination';
 import { SidePanelOverlayService } from '../../shared/side-panel/side-panel-overlay.service';
 import { BEPerfilPanelComponent } from './beperfil/borrareditarperfil.component';
 import { APerfilPanelComponent } from './aperfil/agregarperfil.component';
-import { MatDialog, MatDialogConfig} from '@angular/material';
+import { MatDialog, MatDialogConfig,MatSlideToggle} from '@angular/material';
 import { ConfirmarModalComponent } from './../../shared/confirmar-modal/confirmar-modal.component';
 import { servicioperfil } from './../../services/servicioperfil';
 import { modeloperfil } from './../../model/modperfil';
 import { ToastrService } from 'ngx-toastr';
+import { serviciopermiso } from './../../services/serviciopermiso';
+import { modpermiso } from 'src/app/model/modpermiso';
 
 
 
@@ -25,13 +27,18 @@ export class PerfilComponent implements OnInit{
   inicio:number;
   fin:number;
   totalreg:number;
+  listapermisos:modpermiso[]=[];
   
 
-  constructor(private mensajes:ToastrService, private servperfil:servicioperfil, private dialog: MatDialog, private modalService: NgbModal,  private _overlaySidePanelService: SidePanelOverlayService) {
+  constructor(private mensajes:ToastrService, private servperfil:servicioperfil, 
+    private dialog: MatDialog, private modalService: NgbModal,  
+    private servpermisos:serviciopermiso,
+    private _overlaySidePanelService: SidePanelOverlayService) {
     this.config.itemsPerPage=5;
     this.inicio=1;
     this.fin=this.config.currentPage*1*this.config.itemsPerPage;
     this.config.currentPage=1;
+    this.getPermisos(()=>{});
   }
   
   public config: PaginationInstance = {
@@ -48,8 +55,42 @@ export class PerfilComponent implements OnInit{
     
   }
 
+  getPermisos(cbpermisos){
+    
+    this.servpermisos.getpermisos()
+    .subscribe(
+      res => {
+        this.listapermisos = res;
+        cbpermisos();
+        
+      });
+  }
+
   getPerfiles(cbperfiles) {
     this.servperfil.getperfiles()
+      .subscribe(
+        res => {
+          this.listaperfiles.length=0;
+          res.forEach(element => {this.listaperfiles.push(element),console.log(element);})
+          console.log(this.listaperfiles);
+          cbperfiles();
+        },  
+        err => console.error(err)
+      );
+  }
+
+  filtropermiso(eventofiltro){
+    if(eventofiltro.target.value!=null){
+      console.log(eventofiltro.target.value);
+      this.getPerfilesfiltro(()=>{this.totalreg=this.listaperfiles.length;},eventofiltro.target.value)
+    }
+    else
+      this.getPerfiles(()=>{this.totalreg=this.listaperfiles.length; });
+  }
+
+  getPerfilesfiltro(cbperfiles,filtro:number) {
+    console.log(filtro);
+    this.servperfil.getperfilesfiltro(filtro)
       .subscribe(
         res => {
           this.listaperfiles.length=0;
@@ -77,10 +118,8 @@ export class PerfilComponent implements OnInit{
   }
 
   selectcheck(id:number) {
-    
-    console.log(id);
-    this.permisos[id-1]=!this.permisos[id-1];
-    console.log(this.permisos);
+    this.getPerfilesfiltro(()=>{},id);
+  
   }
 
   open(contenido) {
@@ -109,12 +148,45 @@ export class PerfilComponent implements OnInit{
           }
     );    
   }
+  
+  HabDesPerfil(idperfil:number,$event){
+    console.log($event.checked);
+    if ($event.checked){
+      
+      if (this.servperfil.habilitar(idperfil)) {
+        this.listaperfiles.forEach(element=>{
+          if (element.idperfil==idperfil){
+            element.estadoperfil="S";
+            this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " habilitado correctamente","Mensaje Informativo")
+            console.log(element.estadoperfil);
+            
+          }
+        })
+      }
+      
+    }
+    else{
+      if (this.servperfil.deshabilitar(idperfil)) {
+        
+        this.listaperfiles.forEach(element=>{
+          if (element.idperfil==idperfil){
+            element.estadoperfil="N";
+            this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " deshabilitado correctamente","Mensaje Informativo")
+            console.log(element.estadoperfil);
+            
+          }
+        })
+      }
+    }
     
+
+
+  }
   openEditarPerfil({idperfil,nombreperfil,descripcionperfil,estadoperfil,
                     fecharegistro,usuarioregistra,fechamodificacion,usuariomodificacion}:modeloperfil) {
     
     const dialogConfig = new MatDialogConfig();
-
+    
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
     dialogConfig.data= {idperfil,nombreperfil,descripcionperfil,estadoperfil,
@@ -152,7 +224,7 @@ export class PerfilComponent implements OnInit{
     dialogConfig.data = {
       titulo: 'Mensaje de Advertencia',
       mensaje: '¿Esta seguro que desea borrar el perfil seleccionado?'
-  };
+    };
     const dialogRef = this.dialog.open(ConfirmarModalComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
@@ -160,10 +232,12 @@ export class PerfilComponent implements OnInit{
           console.log(data.respuesta);
           if (data.respuesta){
             if (!this.servperfil.borrar(id)){
-              alert("El perfil no se ha podido borrar")
+              this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " no se ha podido borrar","Mensaje Informativo")
+              
 
             }
             else{
+              this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " borrado correctamente","Mensaje Informativo")
               this.getPerfiles(()=>{this.totalreg=this.listaperfiles.length; });
             }
           }

@@ -7,6 +7,7 @@ import { BEUsuarioPanelModule } from './beusuario/borrareditarusuario.module';
 import { AUsuarioPanelModule } from './agregarusuario/agregarusuario.module';
 import {NgxPaginationModule} from 'ngx-pagination';
 import { FormsModule } from '@angular/forms';
+import { MatSlideToggleModule } from '@angular/material';
 
 @NgModule({
   imports: [
@@ -15,7 +16,7 @@ import { FormsModule } from '@angular/forms';
     DragDropModule,
     BEUsuarioPanelModule,
     AUsuarioPanelModule,
-    
+    MatSlideToggleModule,
     NgxPaginationModule,
     FormsModule
   ],

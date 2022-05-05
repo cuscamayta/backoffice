@@ -49,6 +49,21 @@ export class servicioperfil{
           }));
      }
 
+     getperfilesfiltro(IdPermiso:number){
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaPerfilesDeUnPermiso?IdPermiso="+IdPermiso
+        return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
+            this.listaperfil.length=0;
+            this.listaperfil=[];
+            datos.perfiles.forEach(element => {
+                this.listaperfil.push(new modeloperfil(element.idperfil,element.nombreperfil,element.descripcionperfil
+                    ,element.estadoperfil,element.fecharegistro,element.usuarioregistra
+                    ,element.fechamodificacion,element.usuariomodificacion));
+            });
+            return this.listaperfil;
+            
+          }));
+     }
+
      actualizar(perfil:modeloperfil){
         var perfact:modeloperfilactualizar;
          perfact=new modeloperfilactualizar(perfil.idperfil,perfil.nombreperfil,perfil.descripcionperfil,
@@ -61,10 +76,54 @@ export class servicioperfil{
         
     }
      borrar(id:number){
+         var resp=false;
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/EliminarPerfil?IdPerfil="+id
+        return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+            if (datos.isOk="S"){
+                resp=true;
+            }
+            
+            
+            return resp;
+          });
         var resp=false;
         
         return resp;
      }
+
+     habilitar(id:number){
+        var resp=false;
+       this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/HabilitarPerfil?idperfil="+id
+       return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+           if (datos.isOk="S"){
+               resp=true;
+           }
+           
+           
+           return resp;
+         });
+       var resp=false;
+       
+       return resp;
+    }
+
+    deshabilitar(id:number){
+        var resp=false;
+       this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/DeshabilitarPerfil?idperfil="+id
+       return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+           if (datos.isOk="S"){
+               resp=true;
+           }
+           
+           
+           return resp;
+         });
+       var resp=false;
+       
+       return resp;
+    }
+
+
 
      agregar(perfil:modeloperfil){
         var perfact:modeloperfilinsertar;
