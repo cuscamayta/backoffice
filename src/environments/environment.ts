@@ -5,5 +5,5 @@
 
 export const environment = {
   production: false,
-  apiURL : 'http://localhost:46568/api'
+  apiURL : 'https://creapp.cre.com.bo'
 };

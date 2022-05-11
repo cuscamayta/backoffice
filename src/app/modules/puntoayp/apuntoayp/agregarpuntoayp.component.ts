@@ -4,6 +4,8 @@ import { MatDialogConfig, MatDialogRef } from '@angular/material';
 import { modelopuntoayp } from './../../../model/modpuntoayp';
 import { serviciopuntoayp} from './../../../services/serviciopuntoayp';
 import {FormBuilder, Validators, FormGroup} from "@angular/forms";
+import { MapsAPILoader, MouseEvent  } from '@agm/core';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -15,30 +17,33 @@ import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 export class APuntoaypPanelComponent implements OnInit{
   form:FormGroup;
   closeResult = '';
-  listatelefonos:string[];
+  idpunto:number;
   _puntoayp:modelopuntoayp;
   
-  
   enviado=false;
+  marcador:marker;
+  
+  zoom=12;
 
-  constructor(private _serviciopuntoayp:serviciopuntoayp,private fb: FormBuilder,private dialogRef: MatDialogRef<APuntoaypPanelComponent>) { 
+  constructor(private _serviciopuntoayp:serviciopuntoayp,
+    private mensajes:ToastrService,
+    private fb: FormBuilder,private dialogRef: MatDialogRef<APuntoaypPanelComponent>) { 
     this.enviado=false;
-    this._puntoayp=new modelopuntoayp(_serviciopuntoayp.getpuntoayps().length+1,"","","","",0,0,0,0,0);
+    this._puntoayp=new modelopuntoayp(0,"","","","",0,0);
+    this.marcador=new marker(-17.78629, -63.18117,true);
+    this.zoom=12;
     this.form = fb.group({
       nombre: ['', Validators.required],
-      servicios: ['', Validators.required],
-      telefono: ['', ],
+      servicio: [1, ],
       direccion: ['', Validators.required],
-      latitud: ['', Validators.required],
-      longitud: ['', Validators.required],
-      hadr:[false,],
-      hafs:[false,],
-      estado:['Habilitado',]
+      latitud: ['-17.78629', Validators.required],
+      longitud: ['-63.18117', Validators.required],
+      
   });
   }
 
   ngOnInit(): void {
-    this.listatelefonos=["3422323","72174790","3333333","70012323"]
+    
     
     
     
@@ -47,53 +52,88 @@ export class APuntoaypPanelComponent implements OnInit{
   get f() { return this.form.controls; }
 
    
-  close():void {
-    this.dialogRef.close();
+  longitudcambio(valor){
+    this.marcador.lon=(valor.valueOf());
   }
 
-  agregartelefono(){
-    this.listatelefonos.push(this.f.telefono.value);
+  latitudcambio(valor){
+    this.marcador.lat=(valor.valueOf());
+  }
+
+  mapClicked($event: MouseEvent) {
+    
+      this.marcador.lat= $event.coords.lat,
+      this.marcador.lon= $event.coords.lng
+      this.form.get('latitud').patchValue(this.marcador.lat.toString());
+      this.form.get('longitud').patchValue(this.marcador.lon.toString());
+      
+  }
+
+  clickedMarker(m:marker) {
+    console.log(m);
     
   }
-
-  eliminartelefono(numero){
-    var indice:number;
-    indice=this.listatelefonos.findIndex(numero);
-    if (indice>=0){
-      this.listatelefonos.splice(indice,1);
-    }
+  markerDragEnd(m:marker, $event: MouseEvent) {
+    this.marcador.lat= $event.coords.lat,
+      this.marcador.lon= $event.coords.lng
+      this.form.get('latitud').patchValue(this.marcador.lat.toString());
+      this.form.get('longitud').patchValue(this.marcador.lon.toString());
+      console.log(m);
   }
-  grabar(){
+
+  
+
+  
+
+  public close(valor):void {
+    this.dialogRef.close(valor);
+  }
+
+  public grabarcallback(){
+    this.grabar(()=>{this.close(this._puntoayp)});
+  }
+
+  public grabar(callback){
     this.enviado=true;
     if (this.form.valid) {
       this._puntoayp.nombre=this.form.value.nombre;
-      this._puntoayp.servicio=this.form.value.servicio;
-      this._puntoayp.telefono=this.form.value.telefono;
+      this._puntoayp.idtipo=this.form.value.servicio;
+
       this._puntoayp.direccion=this.form.value.direccion;
       this._puntoayp.latitud=this.form.value.latitud;
       this._puntoayp.longitud=this.form.value.longitud;
-      this._puntoayp.horarioatenciondiaregular=this.form.value.hadr;
-      this._puntoayp.horarioatencionfinsemana=this.form.value.hafs;
-      this._puntoayp.estado=this.form.value.estado;
       
 
-      if (this._serviciopuntoayp.agregar(this._puntoayp))
+      this._serviciopuntoayp.agregar(this._puntoayp).subscribe( datos=>
       {
-        
-        console.log("Los datos se guardaron correctamente");
-        
-        this.close();
-      }
-      else
-      {
-        console.log("Sucedio un error al guardar los datos")
-        
-      }
+        if (datos.isOk=="N"){
+          this.mensajes.error(datos.dsMens)
+            console.log(datos.dsMens);
+          
+        }
+        else{
+          
+          this._puntoayp=datos.punto[0];
+          
+        }
+        callback();
+      });
     }
-    else{
-      
+    else {
       return;
     }
     
+  }
+}
+
+export class marker {
+	lat: number;
+	lon: number;
+	draggable: boolean;
+
+  constructor(latitud,longitud,draggable){
+    this.lat=latitud;
+    this.lon=longitud;
+    this.draggable=draggable;
   }
 }

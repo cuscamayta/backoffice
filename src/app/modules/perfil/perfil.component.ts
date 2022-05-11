@@ -11,7 +11,7 @@ import { servicioperfil } from './../../services/servicioperfil';
 import { modeloperfil } from './../../model/modperfil';
 import { ToastrService } from 'ngx-toastr';
 import { serviciopermiso } from './../../services/serviciopermiso';
-import { modpermiso } from 'src/app/model/modpermiso';
+import { modpermiso } from './../../model/modpermiso';
 
 
 

@@ -1,5 +1,10 @@
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { modelopuntoayp } from "../model/modpuntoayp";
+import { map } from "rxjs/operators";
+import { environment } from "../../environments/environment";
+import { modelopuntoayp,modelopuntoaypactualizar,modelopuntoaypinsertar } from "../model/modpuntoayp";
+import { modelousuario } from "../model/modusuario";
+import { servicioautenticacion } from "./servicioautenticacion";
 
 @Injectable({
     providedIn: 'root'
@@ -8,79 +13,92 @@ import { modelopuntoayp } from "../model/modpuntoayp";
 export class serviciopuntoayp{
     private valorpuntoayp:modelopuntoayp;
     private listapuntoayp:modelopuntoayp[]=[];
+    private cadenahttp:string;
+    private valorusuario:modelousuario;
      
-    constructor(){
+    constructor(private http: HttpClient,servaut:servicioautenticacion){
         console.log("entro al constructor");
-        this.listapuntoayp= [new modelopuntoayp(1,"Banco Union",1,"Av. Pirai 324","3510845",0,0,0,0,0)];
+        this.listapuntoayp= [];
         console.log(this.listapuntoayp.toString());
+        this.valorusuario=servaut.userValue;
     } 
 
-    getpuntoayp(id:number){
-         var resp=null;
-        for(var i=0;i<this.listapuntoayp.length;i++){
-            if (this.listapuntoayp[i].id==id)
-            { 
-                resp=this.listapuntoayp[i];
-                
-            }
-        }
-        return resp;
+     getpuntoayps(){
 
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaPuntosAtencionPago"
+        return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
+            console.log(datos);
+            this.listapuntoayp.length=0;
+            this.listapuntoayp=[];
+            datos.puntos.forEach(element => {
+                this.listapuntoayp.push(new modelopuntoayp(element.idpunto,element.nombre,element.direccion
+                    ,element.idtipo,element.tipo,element.latitud,element.longitud));
+            });
+                
+                
+            
+            console.log(this.listapuntoayp);
+            return this.listapuntoayp;
+          }));
      }
 
-     getpuntoayps(){
-         return this.listapuntoayp;
+     getpuntoaypsfiltro(tipo:number){
+
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaPuntosAtencionPago"
+        return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
+            console.log(datos);
+            this.listapuntoayp.length=0;
+            this.listapuntoayp=[];
+            datos.puntos.forEach(element => {
+                this.listapuntoayp.push(new modelopuntoayp(element.idpunto,element.nombre,element.direccion
+                    ,element.idtipo,element.tipo,element.latitud,element.longitud));
+            });
+                
+                
+            
+            console.log(this.listapuntoayp);
+            return this.listapuntoayp;
+          }));
      }
 
      actualizar(puntoayp:modelopuntoayp){
-         var resp=false;
-        for(var i=0;i<this.listapuntoayp.length;i++){
-            if (this.listapuntoayp[i].id==puntoayp.id)
-            { 
-                this.listapuntoayp[i].nombre=puntoayp.nombre;
-                this.listapuntoayp[i].servicio=puntoayp.servicio;
-                this.listapuntoayp[i].telefono=puntoayp.telefono;
-                this.listapuntoayp[i].direccion=puntoayp.direccion;
-                this.listapuntoayp[i].latitud=puntoayp.latitud;
-                this.listapuntoayp[i].longitud=puntoayp.longitud;
-                this.listapuntoayp[i].horarioatenciondiaregular=puntoayp.horarioatenciondiaregular;
-                this.listapuntoayp[i].horarioatencionfinsemana=puntoayp.horarioatencionfinsemana;
-                this.listapuntoayp[i].estado=puntoayp.estado;
-                resp=true;
-                
-            }
-        }
-        return resp;
+        var papact:modelopuntoaypactualizar;
+
+        papact=new modelopuntoaypactualizar(puntoayp.idpunto,puntoayp.nombre,puntoayp.direccion,
+            puntoayp.idtipo,puntoayp.latitud,puntoayp.longitud,this.valorusuario.id);
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaPunto"
+         const headers = { 'content-type': 'application/json'}  
+        const body=JSON.stringify(papact);
+        console.log(body) 
+        return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
         
     }
 
      borrar(id:number){
         var resp=false;
-        for(var i=0;i<this.listapuntoayp.length;i++){
-            if (this.listapuntoayp[i].id==id)
-            { 
-                this.listapuntoayp.splice(i,1);
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/EliminarPunto?IdPunto="+id
+        return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+            if (datos.isOk="S"){
                 resp=true;
-                
             }
-        }
-        return resp;
+            
+            
+            return resp;
+          });
+        
      }
 
-     agregar(perfil:modelopuntoayp){
-        var resp=false;
-       for(var i=0;i<this.listapuntoayp.length;i++){
-           if (this.listapuntoayp[i].id==perfil.id)
-           { 
-               
-               resp=true;
-               
-           }
-       }
-       if (!resp){
-           this.listapuntoayp.push(perfil);
-       }
-       return !resp;
+     agregar(puntoayp:modelopuntoayp){
+        var papact:modelopuntoaypinsertar;
+
+        papact=new modelopuntoaypinsertar(puntoayp.nombre,puntoayp.direccion,
+            puntoayp.idtipo,puntoayp.latitud,puntoayp.longitud,this.valorusuario.id);
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaPunto"
+         const headers = { 'content-type': 'application/json'}  
+        const body=JSON.stringify(papact);
+        console.log(body) 
+        return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
+        
        
      }
 }

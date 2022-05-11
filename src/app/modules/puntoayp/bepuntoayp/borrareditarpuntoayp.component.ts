@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, AfterViewInit, Component, OnInit, Inject} from '@angular/core';
+import { ChangeDetectorRef, AfterViewInit, Component, OnInit, Inject, NgZone} from '@angular/core';
 import {CdkDragDrop, moveItemInArray, transferArrayItem} from '@angular/cdk/drag-drop';
 import { SidePanelOverlayService } from '../../../shared/side-panel/side-panel-overlay.service';
 import { ConfirmarModalComponent } from '../../../shared/confirmar-modal/confirmar-modal.component';
@@ -8,6 +8,8 @@ import { MatDialogConfig,MatDialogRef } from '@angular/material';
 import { modelopuntoayp } from './../../../model/modpuntoayp';
 import { serviciopuntoayp } from './../../../services/serviciopuntoayp';
 import {FormBuilder, Validators, FormGroup} from "@angular/forms";
+import { MapsAPILoader, MouseEvent  } from '@agm/core';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
@@ -19,79 +21,122 @@ export class BEPuntoaypPanelComponent implements OnInit{
   form: FormGroup;
   
   dropdownSettings = {};
-  idperfil:number;
+  idpunto:number;
   _puntoayp:modelopuntoayp;
-  listatelefonos:string[];
+  
   enviado=false;
+  marcador:marker;
+  
+  zoom=12;
+  
 
 
-  constructor(private _serviciopuntoayp:serviciopuntoayp,private fb: FormBuilder,private dialogrefp:MatDialogRef<BEPuntoaypPanelComponent>,@Inject(MAT_DIALOG_DATA) {id,nombre,servicio,telefono,direccion,latitud,longitud,horarioatenciondiaregular,horarioatencionfinsemana,estado}:modelopuntoayp) { 
+  constructor(private mensajes:ToastrService,
+    private ngZone: NgZone, private _serviciopuntoayp:serviciopuntoayp,private fb: FormBuilder,private dialogrefp:MatDialogRef<BEPuntoaypPanelComponent>,@Inject(MAT_DIALOG_DATA) {idpunto,nombre,direccion,idtipo,tipo,latitud,longitud}:modelopuntoayp) { 
     this.enviado=false;
-    this.idperfil=id;
-    this._puntoayp=new modelopuntoayp(id,nombre,servicio,telefono,direccion,latitud,longitud,horarioatenciondiaregular,horarioatencionfinsemana,estado);
-    
+    this.idpunto=idpunto;
+    this._puntoayp=new modelopuntoayp(idpunto,nombre,direccion,idtipo,tipo,latitud,longitud);
+    this.marcador=new marker((Math.round(latitud.valueOf()*100000))/100000,(Math.round(longitud.valueOf()*100000))/100000,true);
+    this.zoom=12;
     this.form = fb.group({
-      nombre: ['', Validators.required],
-      servicios: ['', Validators.required],
-      telefono: ['', ],
-      direccion: ['', Validators.required],
-      latitud: ['', Validators.required],
-      longitud: ['', Validators.required],
-      hadr:[false,],
-      hafs:[false,],
-      estado:['Habilitado',]
+      nombre: [nombre, Validators.required],
+      servicio: [idtipo, ],
+      direccion: [direccion, Validators.required],
+      latitud: [latitud, Validators.required],
+      longitud: [longitud, Validators.required],
+      
   });
   }
 
   get f() { return this.form.controls; }
 
-  ngOnInit(): void {
-    
-    
-    
-    
-  }
-
-  agregartelefono(){
-    this.listatelefonos.push(this.f.telefono.value);
+  ngOnInit() {
 
   }
 
-  public close():void {
-    this.dialogrefp.close();
+  longitudcambio(valor){
+    this.marcador.lon=(valor.valueOf());
   }
 
-  public grabar(){
+  latitudcambio(valor){
+    this.marcador.lat=(valor.valueOf());
+  }
+
+  mapClicked($event: MouseEvent) {
+    
+      this.marcador.lat= $event.coords.lat,
+      this.marcador.lon= $event.coords.lng
+      this.form.get('latitud').patchValue(this.marcador.lat.toString());
+      this.form.get('longitud').patchValue(this.marcador.lon.toString());
+      
+  }
+
+  clickedMarker(m:marker) {
+    console.log(m);
+    
+  }
+  markerDragEnd(m:marker, $event: MouseEvent) {
+    this.marcador.lat= $event.coords.lat,
+      this.marcador.lon= $event.coords.lng
+      this.form.get('latitud').patchValue(this.marcador.lat.toString());
+      this.form.get('longitud').patchValue(this.marcador.lon.toString());
+      console.log(m);
+  }
+
+  
+
+  
+
+  public close(valor):void {
+    this.dialogrefp.close(valor);
+  }
+
+  public grabarcallback(){
+    this.grabar(()=>{this.close(this._puntoayp)});
+  }
+
+  public grabar(callback){
     this.enviado=true;
     if (this.form.valid) {
       this._puntoayp.nombre=this.form.value.nombre;
-      this._puntoayp.servicio=this.form.value.servicio;
-      this._puntoayp.telefono=this.form.value.telefono;
+      this._puntoayp.idtipo=this.form.value.servicio;
+
       this._puntoayp.direccion=this.form.value.direccion;
       this._puntoayp.latitud=this.form.value.latitud;
       this._puntoayp.longitud=this.form.value.longitud;
-      this._puntoayp.horarioatenciondiaregular=this.form.value.hadr;
-      this._puntoayp.horarioatencionfinsemana=this.form.value.hafs;
-      this._puntoayp.estado=this.form.value.estado;
+      
 
-      if (this._serviciopuntoayp.actualizar(this._puntoayp))
+      this._serviciopuntoayp.actualizar(this._puntoayp).subscribe( datos=>
       {
-        
-          this.close();
-          console.log("Los datos se guardaron correctamente");
+        if (datos.isOk=="N"){
+          this.mensajes.error(datos.dsMens)
+            console.log(datos.dsMens);
           
-        
-      }
-      else
-      {
-        console.log("Sucedio un error al guardar los datos")
-        
-      }
+        }
+        else{
+          
+          this._puntoayp=datos.punto[0];
+          
+        }
+        callback();
+      });
     }
-    else{
+    else {
       return;
     }
     
   }
   
+}
+
+export class marker {
+	lat: number;
+	lon: number;
+	draggable: boolean;
+
+  constructor(latitud,longitud,draggable){
+    this.lat=latitud;
+    this.lon=longitud;
+    this.draggable=draggable;
+  }
 }

@@ -7,6 +7,7 @@ import { MatDialogModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material';
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   imports: [
@@ -16,7 +17,10 @@ import { MatSlideToggleModule } from '@angular/material';
     FormsModule,
     ReactiveFormsModule,
     MatDialogModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyC4iDjmkRljIqVOHyK-fvY8xxW13yb8CFE'
+    })
   ],
   declarations: [BEPuntoaypPanelComponent],
   exports: [BEPuntoaypPanelComponent],

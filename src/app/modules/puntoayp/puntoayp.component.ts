@@ -10,27 +10,29 @@ import { ConfirmarModalComponent } from './../../shared/confirmar-modal/confirma
 import { serviciopuntoayp } from './../../services/serviciopuntoayp';
 import { modelopuntoayp } from './../../model/modpuntoayp';
 import { observable,of } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
   selector: 'app-puntoayp',
   templateUrl: 'puntoayp.component.html',
-  encapsulation:ViewEncapsulation.None,
-  providers: [NgbModal],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  
 })
 export class PuntoaypComponent implements OnInit{
   public query: any = '';
   servicios:boolean[]=[false,false];
-  listapuntosayp:modelopuntoayp[];
+  listapuntosayp:modelopuntoayp[]=[];
   puntoaypactual:modelopuntoayp;
   inicio:number;
   fin:number;
   totalreg:number;
   
 
-  constructor(private servpuntoayp:serviciopuntoayp, private dialog: MatDialog, private modalService: NgbModal,  private _overlaySidePanelService: SidePanelOverlayService) {
-    this.config.itemsPerPage=1;
+  constructor(private servpuntoayp:serviciopuntoayp, 
+    private mensajes:ToastrService,
+    private dialog: MatDialog, private modalService: NgbModal,  
+    private _overlaySidePanelService: SidePanelOverlayService) {
+    this.config.itemsPerPage=5;
     this.inicio=1;
     this.fin=this.config.currentPage*1*this.config.itemsPerPage;
     this.config.currentPage=1;
@@ -38,27 +40,26 @@ export class PuntoaypComponent implements OnInit{
   
   public config: PaginationInstance = {
     id: 'custom',
-    itemsPerPage: 1,
+    itemsPerPage: 5,
     currentPage: 1
 };
 
   ngOnInit(): void {
     
     
-    this.getPuntosayp();
+    this.getPuntosayp(()=>{this.totalreg=this.listapuntosayp.length; });
     
-    this.totalreg=this.listapuntosayp.length; 
+    
   }
 
-  getPuntosayp() {
-    of(this.servpuntoayp.getpuntoayps())
-      .subscribe(
-        res => {
-          this.listapuntosayp = res;
-          console.log(this.listapuntosayp.length)
-        },  
-        err => console.error(err)
-      );
+  getPuntosayp(cbpuntos) {
+    this.servpuntoayp.getpuntoayps().subscribe(datos =>{
+      console.log(datos);
+      this.listapuntosayp.length=0;
+      datos.forEach(element =>{ this.listapuntosayp.push(element);
+      console.log(element);})
+      cbpuntos();
+    });  
   }
 
   actualizarrango(valor){
@@ -100,16 +101,23 @@ export class PuntoaypComponent implements OnInit{
     const dialogRef = this.dialog.open(APuntoaypPanelComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-        data => console.log("Dialog output:", data)
+      data => {
+        if (data!=null){
+          this.puntoaypactual=data;
+          this.listapuntosayp.push(this.puntoaypactual);
+          console.log(data);
+          this.mensajes.success("Punto de Atención y Pago "+this.puntoaypactual.nombre + " agregado correctamente","Mensaje Informativo")
+        }
+      }
     );    
     }
-  openEditarPuntoayp({id,nombre,servicio,telefono,direccion,latitud,longitud,horarioatenciondiaregular,horarioatencionfinsemana,estado}:modelopuntoayp) {
+  openEditarPuntoayp({idpunto,nombre,direccion,idtipo,tipo,latitud,longitud}:modelopuntoayp) {
     
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.data= {id,nombre,servicio,telefono,direccion,latitud,longitud,horarioatenciondiaregular,horarioatencionfinsemana,estado};
+    dialogConfig.data= {idpunto,nombre,direccion,idtipo,tipo,latitud,longitud};
     dialogConfig.minHeight='480px';
     dialogConfig.minWidth='700px';
     
@@ -118,8 +126,22 @@ export class PuntoaypComponent implements OnInit{
     const dialogRef = this.dialog.open(BEPuntoaypPanelComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-        data => console.log("Dialog output:", data)
-    );    
+      data => {
+        if (data!=null){
+          this.puntoaypactual=data;
+          var i;
+          for(i=0;i<this.listapuntosayp.length;i=i+1){
+            if(this.listapuntosayp[i].idpunto==this.puntoaypactual.idpunto)
+            this.listapuntosayp[i]=this.puntoaypactual;
+          }
+          console.log(data);
+          this.mensajes.success("Punto de Atención y Pago "+this.puntoaypactual.nombre + " actualizado correctamente","Mensaje Informativo")
+          
+        }
+        
+      }
+    );  
+        
   }
 
   openBorrarPuntoayp(id:number,$event) {
@@ -139,11 +161,12 @@ export class PuntoaypComponent implements OnInit{
           console.log(data.respuesta);
           if (data.respuesta){
             if (!this.servpuntoayp.borrar(id)){
-              alert("El punto de atención o pago no se ha podido borrar")
+              this.mensajes.error("El punto de atención o pago no se ha podido borrar","Mensaje de Advertencia");
 
             }
             else{
-              this.getPuntosayp();
+              
+              this.getPuntosayp(()=>{this.totalreg=this.listapuntosayp.length;});
             }
           }
         }

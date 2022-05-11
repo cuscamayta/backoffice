@@ -23,32 +23,16 @@
           </div>
           <div class="col-sm-12">
             <div class="input-group mb-3">
-              <select class="custom-select" formControlname="servicio" id="servicio" required>
-                <option value="1">Pago de Factura</option>
-                <option value="2">Atención al Socio</option>
+              <select class="custom-select" formControlname="servicio" required>
+                <option value=1>Atención al Socio</option>
+                <option value=2>Pago de Factura</option>
+                
               </select> 
             </div>
             <div *ngIf="enviado && f.servicio.errors" class="mensajevalidacion">
               <div *ngIf="f.servicio.errors.required">Servicio es requerido</div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="col-sm-3"  style="display:inline">
-            <label for="telefono">Teléfono<span style="font-weight:700;color:red;"> *</span></label>
-          </div>
-          <div class="col-sm-12">
-            <div class="input-group mb-3">
-              <input formControlName="telefono" type="number" class="form-control">
-              <div class="input-group-append">
-                <button type="button" class="btn btn-primary" onclick="agregarTelefono()"><i class='fa fa-plus'></i></button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="form-group row">
-        <div class="col-sm-6">
           <div class="col-sm-3"  style="display:inline">
             <label for="direccion">Dirección<span style="font-weight:700;color:red;"> *</span></label>
           </div>
@@ -58,40 +42,23 @@
               <div *ngIf="f.direccion.errors.required">Dirección es requerida</div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-6">
-          <div class="col-sm-12">
-            <ul class="list-group" *ngFor="let telefono of listatelefonos">
-              <li class="list-group-item">
-                <div style="margin-left:25px">{{telefono}}</div>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      
-      <div class="form-group row">
-        <div class="col-sm-6">
-          <div class="col-sm-3" style="display:inline">
+          <br/>
+          <div class="col-sm-3" style="display:inline;">
             <label for="latitud">Latitud<span style="font-weight:700;color:red;"> *</span></label>
           </div>
           <div class="col-sm-12">
-            <input formControlName="latitud" type="number" class="form-control">
+            <input formControlName="latitud" type="number" class="form-control" (input)="latitudcambio($event.target.value)">
             <div *ngIf="enviado && f.latitud.errors" class="mensajevalidacion">
               <div *ngIf="f.latitud.errors.required">Latitud es requerido</div>
             </div>
           </div>
-        </div>
-        <div class="col-sm-6">
+          <br/>
           <div class="col-sm-3"  style="display:inline">
             <label for="longitud">Longitud<span style="font-weight:700;color:red;"> *</span></label>
           </div>
           <div class="col-sm-12" >       
             <div class="input-group mb-3">
-              <input formControlName="longitud" type="number" class="form-control">
-              <div class="input-group-append">
-                <button type="button" class="btn btn-primary" ><img src="/assets/images/btn_ubicacion.png" class="buttonIcono" onclick="PintarMapa()"></button>
-              </div>
+              <input formControlName="longitud" type="number" class="form-control" (input)="longitudcambio($event.target.value)">
             </div>   
             
             
@@ -100,34 +67,39 @@
             </div>
             
           </div>
+
         </div>
-      </div>
-      <div style="margin-left:1rem;margin-right:1rem;margin-bottom:1rem;">
-        <div class="row">
-          <div class="col-sm-4 offset-sm-4" >
-            <label style="font-weight:bold;display:block;">Horario de Atención</label>      
-            <input class="form-check-input me-1" formControlName="hadr" style="margin-left:3px"  type="checkbox" value="" aria-label="...">
-            <div style="margin-left:25px">Dias Regulares</div>
-            <input class="form-check-input me-1" formControlName="hafs"  style="margin-left:3px"  type="checkbox" value="" aria-label="...">
-            <div style="margin-left:25px">Fin de Semana</div>
-            <br/>
-            <div class="form-group">
-              <mat-slide-toggle #estado formControlName="enabled">
-                <span>{{estado.checked?'Habilitado':'Deshabilitado'}}</span>
-              </mat-slide-toggle>
-            </div>
+        <div class="col-sm-6">
+          <div class="col-sm-3"  style="display:inline">
+            <label for="ubicacion">Ubicación<span style="font-weight:700;color:red;"> *</span></label>
+          </div>
+          <div class="col-sm-12">
+            <agm-map [latitude]="marcador.lat" [longitude]="marcador.lon" [disableDefaultUI]="false" 
+            
+            (mapClick)="mapClicked($event)" (dragEnd)="markerDragEnd(marcador, $event)">
+              <agm-marker [latitude]="marcador.lat" [longitude]="marcador.lon" markerDraggable="marcador.draggable"
+              (markerClick)="clickedMarker(marcador)" >
+                <agm-info-window>
+                  <strong>{{_puntoayp.nombre}}</strong>
+                </agm-info-window>
+              </agm-marker>
+                
+            </agm-map>
+            
           </div>
         </div>
       </div>
+      
+      
       
     </form>
   </div>
   </mat-dialog-content>
 <div class="modal-footer" style="height:40px">
   <button type="button" class="btn btn-outline-primary"
-    (click)="this.close()">Cancelar</button>
+    (click)="this.close(null)">Cancelar</button>
   <button type="button" class="btn btn-primary"
-  (click)="this.grabar()">Guardar</button>
+  (click)="this.grabarcallback()">Guardar</button>
 </div>
 
 

@@ -191,7 +191,7 @@ export class UsuarioComponent implements OnInit{
           console.log(data.respuesta);
           if (data.respuesta){
             if (!this.servusuario.borrar(id)){
-              alert("El usuario no se ha podido borrar")
+              this.mensajes.error("El usuario no se ha podido borrar","Mensaje de Advertencia")
 
             }
             else{

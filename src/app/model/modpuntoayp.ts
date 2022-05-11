@@ -4,28 +4,69 @@ export class modelopuntoayp{
     pipe(arg0: OperatorFunction<unknown, unknown>) {
       throw new Error('Method not implemented.');
     }
-    id:number;
+    idpunto:number;
     nombre:string;
-    servicio:string;
     direccion:string;
-    telefono:string;
+    idtipo:string;
+    tipo:string;
     latitud:number;
     longitud:number;
-    horarioatenciondiaregular:boolean;
-    horarioatencionfinsemana:boolean;
-    estado:boolean;
-    constructor(vid,vnombre,vservicio,vdireccion,vtelefono,vlatitud,vlongitud,vhadr,vhafs,vestado){
-        this.id=vid;
-        this.servicio=vservicio;
+    constructor(vid,vnombre,vdireccion,vidtipo,vtipo,vlatitud,vlongitud){
+        this.idpunto=vid;
         this.nombre=vnombre;
-        this.telefono=vtelefono;
         this.direccion=vdireccion;
+        this.idtipo=vidtipo;
+        this.tipo=vtipo;
         this.latitud=vlatitud;
         this.longitud=vlongitud;
-        this.horarioatenciondiaregular=vhadr;
-        this.horarioatencionfinsemana=vhafs;
-        this.estado=vestado;
     }
 
     
+}
+
+export class modelopuntoaypactualizar{
+  pipe(arg0: OperatorFunction<unknown, unknown>) {
+    throw new Error('Method not implemented.');
+  }
+  IDPUNTO:number;
+  NOMBRE:string;
+  DIRECCION:string;
+  TIPO:string;
+  LATITUD:number;
+  LONGITUD:number;
+  MODIFICA:number;
+  constructor(vid,vnombre,vdireccion,vtipo,vlatitud,vlongitud,vmodifica){
+      this.IDPUNTO=vid;
+      this.NOMBRE=vnombre;
+      this.DIRECCION=vdireccion;
+      this.TIPO=vtipo;
+      this.LATITUD=vlatitud;
+      this.LONGITUD=vlongitud;
+      this.MODIFICA=vmodifica;
+  }
+
+  
+}
+
+export class modelopuntoaypinsertar{
+  pipe(arg0: OperatorFunction<unknown, unknown>) {
+    throw new Error('Method not implemented.');
+  }
+  NOMBRE:string;
+  DIRECCION:string;
+  TIPO:string;
+  LATITUD:number;
+  LONGITUD:number;
+  REGISTRA:number;
+  constructor(vnombre,vdireccion,vtipo,vlatitud,vlongitud,vregistra){
+    
+    this.NOMBRE=vnombre;
+    this.DIRECCION=vdireccion;
+    this.TIPO=vtipo;
+    this.LATITUD=vlatitud;
+    this.LONGITUD=vlongitud;
+    this.REGISTRA=vregistra;
+  }
+
+  
 }

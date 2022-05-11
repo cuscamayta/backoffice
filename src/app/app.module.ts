@@ -1,3 +1,4 @@
+
 import { BrowserModule } from '@angular/platform-browser';
 import {NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
@@ -25,7 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ToastrModule } from 'ngx-toastr';
 import { ChangePassComponent } from './modules/auth/changepass/changepass.component';
 import 'rxjs/add/operator/mergeMap';
-
+import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
@@ -54,14 +55,18 @@ import 'rxjs/add/operator/mergeMap';
     ConfirmarModalModule,
     HttpClientModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyC4iDjmkRljIqVOHyK-fvY8xxW13yb8CFE'
+    })
   ],
   exports: [ SharedModule,FormsModule
     ],
   entryComponents:[ChangePassComponent],
   schemas: [ CUSTOM_ELEMENTS_SCHEMA  ],
     
-  providers: [ SidePanelOverlayService ],
+  providers: [ SidePanelOverlayService,
+     ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

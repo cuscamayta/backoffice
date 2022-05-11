@@ -9,6 +9,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { domainToASCII } from 'url';
 import { MatSlideToggleModule } from '@angular/material';
+import { AgmCoreModule } from '@agm/core';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -17,7 +19,9 @@ import { MatSlideToggleModule } from '@angular/material';
     MatDialogModule,
     FormsModule,
     ReactiveFormsModule,
-
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyC4iDjmkRljIqVOHyK-fvY8xxW13yb8CFE'
+    }),
     MatSlideToggleModule
   ],
   declarations: [APuntoaypPanelComponent],
