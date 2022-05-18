@@ -6,6 +6,7 @@ import { serviciopuntoayp} from './../../../services/serviciopuntoayp';
 import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 import { MapsAPILoader, MouseEvent  } from '@agm/core';
 import { ToastrService } from 'ngx-toastr';
+import { TipoPunto } from '../bepuntoayp/borrareditarpuntoayp.component';
 
 
 
@@ -24,6 +25,10 @@ export class APuntoaypPanelComponent implements OnInit{
   marcador:marker;
   
   zoom=12;
+  tipos = [
+    new TipoPunto(1, 'Atención al Socio'),
+    new TipoPunto(2, 'Pago de Factura') 
+  ];
 
   constructor(private _serviciopuntoayp:serviciopuntoayp,
     private mensajes:ToastrService,
@@ -34,7 +39,7 @@ export class APuntoaypPanelComponent implements OnInit{
     this.zoom=12;
     this.form = fb.group({
       nombre: ['', Validators.required],
-      servicio: [1, ],
+      tipo: [1, ],
       direccion: ['', Validators.required],
       latitud: ['-17.78629', Validators.required],
       longitud: ['-63.18117', Validators.required],
@@ -97,7 +102,7 @@ export class APuntoaypPanelComponent implements OnInit{
     this.enviado=true;
     if (this.form.valid) {
       this._puntoayp.nombre=this.form.value.nombre;
-      this._puntoayp.idtipo=this.form.value.servicio;
+      this._puntoayp.idtipo=this.form.value.tipo;
 
       this._puntoayp.direccion=this.form.value.direccion;
       this._puntoayp.latitud=this.form.value.latitud;

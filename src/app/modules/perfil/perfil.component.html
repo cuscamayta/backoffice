@@ -188,10 +188,18 @@
 </div>
 
 <ng-template #clickImgTemp>
-  <select name="permisos" id="permisos" (change)="filtropermiso($event)">
+  <ul class="listafiltro">
+    <li style="cursor:pointer;" (click)="filtropermiso(null)">
+      ( Todos )
+    </li>
+    <li  *ngFor="let perm of listapermisos" (click)="filtropermiso(perm.idpermiso)" style="cursor:pointer;">
+      {{perm.nombrepermiso}}
+    </li>
+  </ul>
+  <!-- <select name="permisos" id="permisos" (change)="filtropermiso($event)">
     <option [value]="null" disabled>( Todos )</option>
     <option *ngFor="let perm of listapermisos" [value]="perm.idpermiso">{{perm.nombrepermiso}}</option>
-  </select> 
+  </select>  -->
   <!-- <div >
     <div class='form-check' (click)="selectcheck(1)" >
       <input type='checkbox' class='form-check-input'>

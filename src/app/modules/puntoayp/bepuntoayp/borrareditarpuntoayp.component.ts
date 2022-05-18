@@ -17,6 +17,7 @@ import { ToastrService } from 'ngx-toastr';
   templateUrl: './borrareditarpuntoayp.component.html',
   styleUrls: ['./borrareditarpuntoayp.component.scss']
 })
+
 export class BEPuntoaypPanelComponent implements OnInit{
   form: FormGroup;
   
@@ -28,32 +29,35 @@ export class BEPuntoaypPanelComponent implements OnInit{
   marcador:marker;
   
   zoom=12;
-  
+  tipos = [
+    new TipoPunto(1, 'Atención al Socio'),
+    new TipoPunto(2, 'Pago de Factura') 
+] 
 
 
   constructor(private mensajes:ToastrService,
-    private ngZone: NgZone, private _serviciopuntoayp:serviciopuntoayp,private fb: FormBuilder,private dialogrefp:MatDialogRef<BEPuntoaypPanelComponent>,@Inject(MAT_DIALOG_DATA) {idpunto,nombre,direccion,idtipo,tipo,latitud,longitud}:modelopuntoayp) { 
+    private _serviciopuntoayp:serviciopuntoayp,private fb: FormBuilder,private dialogrefp:MatDialogRef<BEPuntoaypPanelComponent>,@Inject(MAT_DIALOG_DATA) {idpunto,nombre,direccion,idtipo,tipo,latitud,longitud}:modelopuntoayp) { 
     this.enviado=false;
     this.idpunto=idpunto;
     this._puntoayp=new modelopuntoayp(idpunto,nombre,direccion,idtipo,tipo,latitud,longitud);
     this.marcador=new marker((Math.round(latitud.valueOf()*100000))/100000,(Math.round(longitud.valueOf()*100000))/100000,true);
     this.zoom=12;
-    this.form = fb.group({
+    this.form = this.fb.group({
       nombre: [nombre, Validators.required],
-      servicio: [idtipo, ],
+      tipo: [idtipo],
       direccion: [direccion, Validators.required],
       latitud: [latitud, Validators.required],
       longitud: [longitud, Validators.required],
       
   });
+    
   }
-
+  
   get f() { return this.form.controls; }
 
   ngOnInit() {
-
+    
   }
-
   longitudcambio(valor){
     this.marcador.lon=(valor.valueOf());
   }
@@ -99,7 +103,7 @@ export class BEPuntoaypPanelComponent implements OnInit{
     this.enviado=true;
     if (this.form.valid) {
       this._puntoayp.nombre=this.form.value.nombre;
-      this._puntoayp.idtipo=this.form.value.servicio;
+      this._puntoayp.idtipo=this.form.value.tipo;
 
       this._puntoayp.direccion=this.form.value.direccion;
       this._puntoayp.latitud=this.form.value.latitud;
@@ -138,5 +142,10 @@ export class marker {
     this.lat=latitud;
     this.lon=longitud;
     this.draggable=draggable;
+  }
+}
+
+export class TipoPunto { 
+  constructor(public id:number, public nombre:string) {
   }
 }

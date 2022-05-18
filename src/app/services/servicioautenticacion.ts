@@ -78,7 +78,7 @@ export class servicioautenticacion {
         this.servusu.getusuariopassword(usuario,password).subscribe(datos => { 
             console.log(datos);
             if(datos.isOk=="S"){
-                usuariotemp= new modelousuario(datos.usuario[0].id,datos.usuario[0].login,
+                usuariotemp= new modelousuario(datos.usuario[0].idusuario,datos.usuario[0].login,
                     datos.usuario[0].nombre,datos.usuario[0].apellido,datos.usuario[0].telefono
                     ,datos.usuario[0].correo,datos.usuario[0].habilitado,"","",0
                     ,"",0); 
@@ -174,8 +174,10 @@ export class servicioautenticacion {
                 perfil.forEach(perfilel=>{
                     this.servperfpermiso.getperfilpermisos(perfilel.idperfil).subscribe(eleperm=>{
                         this.permisos=this.permisos.concat(eleperm); 
-
-                        cbOPMU1();});
+                        if(perfilel==perfil[perfil.length-1]){
+                           cbOPMU1();
+                        }
+                        });
                         
                 });
                 cbOPMU();

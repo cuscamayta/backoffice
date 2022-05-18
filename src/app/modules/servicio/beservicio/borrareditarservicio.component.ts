@@ -22,7 +22,7 @@ export class BEServicioPanelComponent implements OnInit{
   public listadetalleimagen:modeloimagen[]=[new modeloimagen(0,"","",0,0),new modeloimagen(0,"","",0,0),
                                 new modeloimagen(0,"","",0,0),new modeloimagen(0,"","",0,0)];
   public listadetalleimagenrec:modeloimagen[]=[];
-  
+  public respaldoimagen:modeloimagen;
   
   _requisito:modelorequisito;
   constructor(private mensajes:ToastrService,private servreq:serviciorequisito,
@@ -64,6 +64,8 @@ export class BEServicioPanelComponent implements OnInit{
   imagen(id:number){
     const fileUplodad=document.getElementById('File'+id.toString()) as HTMLInputElement;
     console.log(this.listadetalleimagen[id]);
+    this.respaldoimagen=new modeloimagen(this.listadetalleimagen[id].idimagen,this.listadetalleimagen[id].nombreimagen,
+      this.listadetalleimagen[id].imagenfisica,this.listadetalleimagen[id].ancho,this.listadetalleimagen[id].alto);
     fileUplodad.onchange = ()=> {
       const file=fileUplodad.files[0];
           var reader = new FileReader();
@@ -82,6 +84,10 @@ export class BEServicioPanelComponent implements OnInit{
           Img.onload = (e: any) => {
             this.listadetalleimagen[id].alto = e.path[0].height;
             this.listadetalleimagen[id].ancho = e.path[0].width;
+            if ((this.listadetalleimagen[id].alto>640)||(this.listadetalleimagen[id].ancho>926)){
+              this.listadetalleimagen[id]=this.respaldoimagen;
+              this.mensajes.error("El tamaño de la Imagen es demasiado grande","Mensaje de Error");
+            }
           }
           
     }
@@ -91,7 +97,8 @@ export class BEServicioPanelComponent implements OnInit{
 
   imagenportada(){
     const fileUplodad=document.getElementById('imagenportada') as HTMLInputElement;
-    
+    this.respaldoimagen=new modeloimagen(this._requisito.idimagen,this._requisito.nombreimagen,
+      this._requisito.imagenfisica,this._requisito.ancho,this._requisito.alto);
     fileUplodad.onchange = ()=> {
       const file=fileUplodad.files[0];
           var reader = new FileReader();
@@ -110,6 +117,19 @@ export class BEServicioPanelComponent implements OnInit{
           Img.onload = (e: any) => {
             this._requisito.alto = e.path[0].height;
             this._requisito.ancho = e.path[0].width;
+            if ((this._requisito.alto>640)||(this._requisito.ancho>322)){
+              this._requisito.idimagen=this.respaldoimagen.idimagen;
+              this._requisito.imagenfisica=this.respaldoimagen.imagenfisica;
+              this._requisito.nombreimagen=this.respaldoimagen.nombreimagen;
+              this._requisito.alto = this.respaldoimagen.alto;
+              this._requisito.ancho = this.respaldoimagen.ancho; 
+              /* this._requisito.idimagen=0;
+              this._requisito.imagenfisica="";
+              this._requisito.nombreimagen="";
+              this._requisito.alto = 0;
+              this._requisito.ancho = 0; */
+              this.mensajes.error("El tamaño de la Imagen de portada es demasiado grande","Mensaje de Error");
+            }
           }
     }
 

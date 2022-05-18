@@ -78,15 +78,23 @@ export class PerfilComponent implements OnInit{
         err => console.error(err)
       );
   }
+  filtropermiso(idpermiso){
+    if(idpermiso!=null){
+      console.log(idpermiso);
+      this.getPerfilesfiltro(()=>{this.totalreg=this.listaperfiles.length;},idpermiso)
+    }
+    else
+      this.getPerfiles(()=>{this.totalreg=this.listaperfiles.length; });
+  }
 
-  filtropermiso(eventofiltro){
+  /* filtropermiso(eventofiltro){
     if(eventofiltro.target.value!=null){
       console.log(eventofiltro.target.value);
       this.getPerfilesfiltro(()=>{this.totalreg=this.listaperfiles.length;},eventofiltro.target.value)
     }
     else
       this.getPerfiles(()=>{this.totalreg=this.listaperfiles.length; });
-  }
+  } */
 
   getPerfilesfiltro(cbperfiles,filtro:number) {
     console.log(filtro);

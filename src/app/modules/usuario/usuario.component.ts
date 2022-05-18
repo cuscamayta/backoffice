@@ -101,10 +101,10 @@ export class UsuarioComponent implements OnInit{
     
   }
 
-  filtroperfil(eventofiltro){
-    if(eventofiltro.target.value!=null){
-      console.log(eventofiltro.target.value);
-      this.getUsuariosfiltro(()=>{this.totalreg=this.listaperfiles.length;},eventofiltro.target.value)
+  filtroperfil(idperfil){
+    if(idperfil!=null){
+      console.log(idperfil);
+      this.getUsuariosfiltro(()=>{this.totalreg=this.listaperfiles.length;},idperfil)
     }
     else
       this.getUsuarios(()=>{this.totalreg=this.listaperfiles.length; });

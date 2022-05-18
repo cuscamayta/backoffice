@@ -193,10 +193,18 @@
 <ng-template #clickImgTemp>
 
   <div style="text-align: center;margin: 5px;color:#3A3D5F">Perfiles</div>
-  <select name="perfiles" id="perfiles"(change)="filtroperfil($event)">
+  <ul class="listafiltro">
+    <li style="cursor:pointer;" (click)="filtroperfil(null)">
+      ( Todos )
+    </li>
+    <li  *ngFor="let perf of listaperfiles" (click)="filtroperfil(perf.idperfil)" style="cursor:pointer;">
+      {{perf.nombreperfil}}
+    </li>
+  </ul>
+  <!-- <select name="perfiles" id="perfiles"(change)="filtroperfil($event)">
     <option [value]="null" disabled>( Todos )</option>
     <option *ngFor="let perf of listaperfiles" [value]="perf.idperfil">{{perf.nombreperfil}}</option>
-  </select> 
+  </select>  -->
 
 </ng-template>
 

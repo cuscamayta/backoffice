@@ -24,10 +24,8 @@
           </div>
           <div class="col-sm-12">
             <div class="input-group mb-3">
-              <select class="custom-select" formControlname="servicio" required>
-                <option value=1>Atención al Socio</option>
-                <option value=2>Pago de Factura</option>
-                
+              <select formControlName="tipo">
+                <option *ngFor="let tipo of tipos" [ngValue]="tipo.id">{{tipo.nombre}}</option>               
               </select> 
             </div>
             <div *ngIf="enviado && f.servicio.errors" class="mensajevalidacion">
@@ -78,8 +76,8 @@
             <agm-map [latitude]="marcador.lat" [longitude]="marcador.lon" [disableDefaultUI]="false" 
             
             (mapClick)="mapClicked($event)" (dragEnd)="markerDragEnd(marcador, $event)">
-              <agm-marker [latitude]="marcador.lat" [longitude]="marcador.lon" markerDraggable="marcador.draggable"
-              (markerClick)="clickedMarker(marcador)" >
+              <agm-marker [latitude]="marcador.lat" [longitude]="marcador.lon" [markerDraggable]="marcador.draggable"
+              (markerClick)="clickedMarker(marcador)" (dragEnd)="markerDragEnd(marcador, $event)" >
                 <agm-info-window>
                   <strong>{{_puntoayp.nombre}}</strong>
                 </agm-info-window>

@@ -49,6 +49,7 @@ export class BasicLoginComponent  implements OnInit {
 
       // get return url from route parameters or default to '/'
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      console.log(this.authenticationService.userValue);
   }
 
   // convenience getter for easy access to form fields
