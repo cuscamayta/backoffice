@@ -23,7 +23,7 @@ export class TitleComponent implements OnInit {
             }
           });
         } while (currentRoute);
-        this.titleService.setTitle( title + ' | Guru Able Angular 8+');
+        this.titleService.setTitle('CRE');
       });
   }
 

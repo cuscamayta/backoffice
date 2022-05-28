@@ -46,7 +46,7 @@ export class BEPuntoaypPanelComponent implements OnInit{
       nombre: [nombre, Validators.required],
       tipo: [idtipo],
       direccion: [direccion, Validators.required],
-      latitud: [latitud, Validators.required],
+      latitud: [latitud, Validators.required ],
       longitud: [longitud, Validators.required],
       
   });

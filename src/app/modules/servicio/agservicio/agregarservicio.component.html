@@ -24,14 +24,14 @@
         
           <div class="col-sm-3" *ngIf="(!_requisito.idimagen||_requisito.idimagen==0)">
             <span>Portada</span><br>
-            <input id="imagenportada" type="file" class="fileClass detalle" style="display: none;" accept=".png,.jpg,jpeg,.bmp,.gif" >
+            <input id="imagenportada" type="file" class="fileClass detalle" style="display: none;" accept=".jpg,jpeg,.bmp,.gif" >
               <img id="idimagen" style="width:226px; height:124px;margin-right:2.5px;cursor:pointer;" src="assets/images/add_imagen.jpg" (click)="imagenportada(_requisito.idimagen);">
               <br>
               <span>Tamaño de imagen: 640 x 322 px.</span>
           </div>
           <div class="col-sm-3" *ngIf="((_requisito.idimagen)&&(_requisito.idimagen!=0))">
             <span>Portada</span><br>
-            <input id="imagenportada" type="file" class="fileClass detalle" style="display: none;" accept=".png,.jpg,jpeg,.bmp,.gif" >
+            <input id="imagenportada" type="file" class="fileClass detalle" style="display: none;" accept=".jpg,jpeg,.bmp,.gif" >
               <img id="idimagen" style="width:226px; height:124px;margin-right:2.5px;cursor:pointer;" [src]="'data:image/gif;base64,'+_requisito.imagenfisica" (click)="imagenportada(_requisito.idimagen);">
               <br>
               <span>Tamaño de imagen: 640 x 322 px.</span>
@@ -58,11 +58,11 @@
             <div class="row text-center" >
               <ng-container ngSwitch="{{item.idimagen}}" *ngFor="let item of listadetalleimagen;let i=index">
                 <div class="col-sm-3" *ngSwitchCase="0">
-                  <input [id]="'File'+i" type="file" class="fileClass detalle" style="display: none;" accept=".png,.jpg,jpeg,.bmp,.gif">
+                  <input [id]="'File'+i" type="file" class="fileClass detalle" style="display: none;" accept=".jpg,jpeg,.bmp,.gif">
                     <img id="item.idimagen" style="width:226px; height:124px;margin-right:2.5px;cursor:pointer;" src="assets/images/add_imagen.jpg"  (click)="imagen(i);">
                 </div>
                 <div class="col-sm-3" *ngSwitchDefault>
-                  <input [id]="'File'+i" type="file" class="fileClass detalle" style="display: none;" accept=".png,.jpg,jpeg,.bmp,.gif">
+                  <input [id]="'File'+i" type="file" class="fileClass detalle" style="display: none;" accept=".jpg,jpeg,.bmp,.gif">
                     <img id="item.idimagen" style="width:226px; height:124px;margin-right:2.5px;cursor:pointer;" [src]="'data:image/gif;base64,'+item.imagenfisica"  (click)="imagen(i);">
                     <div class="eliminar" >
                         <img title="Borrar" src="assets/images/eliminar_img.jpg" (click)="Borrar(i)">
@@ -81,7 +81,7 @@
       
   
     <div class="form-group">
-      <mat-slide-toggle #estado formControlName="estado">
+      <mat-slide-toggle #estado  [checked]="(_requisito.estadorequisito === null || _requisito.estadorequisito === '1')? true : false"  (change)="HabDesEstado($event)">
         <span>{{estado.checked?'Habilitado':'Deshabilitado'}}</span>
       </mat-slide-toggle>
     </div>

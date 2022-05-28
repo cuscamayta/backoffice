@@ -33,6 +33,7 @@ export class AServicioPanelComponent implements OnInit{
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AServicioPanelComponent>) { 
       this._usuautenticado=this.servaut.userValue;
+      this._requisito.estadorequisito="1";
       this._requisito.usuariomodifica=this._usuautenticado.id;
       this._requisito.usuarioregistra=this._usuautenticado.id;
       this.form = fb.group({
@@ -133,6 +134,15 @@ export class AServicioPanelComponent implements OnInit{
     fileUplodad.click();
   }
 
+  HabDesEstado($Event){
+    if($Event.checked){
+      this._requisito.estadorequisito="1";
+    
+    }
+    else{
+      this._requisito.estadorequisito="0";
+    }
+  }
 
   getdetalleimagen(id:number,cbdetimg){
     this.servreq.getdetallerequisitos(id).subscribe(datos =>{
@@ -162,7 +172,6 @@ export class AServicioPanelComponent implements OnInit{
       
       
       this._requisito.nombrerequisito=this.form.value.nombre;
-      this._requisito.estadorequisito=this.form.value.estado;
       this._requisito.usuariomodifica=this._usuautenticado.id;
       this.servreq.agregar(this._requisito).subscribe(datos=>
       {

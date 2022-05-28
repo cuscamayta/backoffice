@@ -72,7 +72,7 @@
           <ul class="list-group" formArrayName="perfiles" *ngFor="let perfil of perfilesFormArray.controls; let i = index">
             <li class="list-group-item">
               <input class="form-check-input me-1" style="margin-left:3px" (change)="cambiar(listaperfsel[i].id,$event)" type="checkbox"  aria-label="..." [formControlName]="i">
-              <div style="margin-left:25px">{{listaperfsel[i].nombre}}</div>
+              <div class="perfilmostrar" style="margin-left:25px">{{listaperfsel[i].nombre}}</div>
             </li>
           </ul>
         </div>
@@ -82,7 +82,7 @@
           <ul class="list-group" formArrayName="permisos" *ngFor="let permiso of permisosFormArray.controls; let j = index">
             <li class="list-group-item">
               <input class="form-check-input me-1" style="margin-left:3px"  type="checkbox" aria-label="..." [formControlName]="j">
-              <div style="margin-left:25px">{{listapermisos[j].nombrepermiso}}</div>
+              <div class="perfilmostrar" style="margin-left:25px">{{listapermisos[j].nombrepermiso}}</div>
             </li>
             
           </ul>

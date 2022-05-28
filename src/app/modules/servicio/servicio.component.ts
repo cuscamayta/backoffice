@@ -46,7 +46,7 @@ export class ServicioComponent implements OnInit{
     
     
   }
-  openDialog() {
+  openDialog(idreq:number) {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
@@ -61,7 +61,24 @@ export class ServicioComponent implements OnInit{
     const dialogRef = this.dialog.open(ConfirmarModalComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-        data => console.log("Dialog output:", data)
+        data => { 
+          console.log(data.respuesta);
+          if (data.respuesta){
+            if (!this.servreq.borrar(idreq)){
+              this.mensajes.error("El servicio no se ha podido borrar","Mensaje de Advertencia")
+
+            }
+            else{
+              var i=0;
+              this.listaservicio.forEach(elem=>{
+                if(elem.idrequisito=idreq){
+                  this.listaservicio.splice(i,1);
+                }
+                i=i+1;
+              })
+            }
+          }
+        }
     );    
   }
    

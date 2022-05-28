@@ -20,7 +20,7 @@
       <div class="form-group row">
         <div class="col-sm-6">
           <div class="col-sm-3" style="display:inline">
-            <label for="servicio">Servicio<span style="font-weight:700;color:red;"> *</span></label>
+            <label for="tipo">Servicio<span style="font-weight:700;color:red;"> *</span></label>
           </div>
           <div class="col-sm-12">
             <div class="input-group mb-3">
@@ -28,8 +28,8 @@
                 <option *ngFor="let tipo of tipos" [ngValue]="tipo.id">{{tipo.nombre}}</option>               
               </select> 
             </div>
-            <div *ngIf="enviado && f.servicio.errors" class="mensajevalidacion">
-              <div *ngIf="f.servicio.errors.required">Servicio es requerido</div>
+            <div *ngIf="enviado && f.tipo.errors" class="mensajevalidacion">
+              <div *ngIf="f.tipo.errors.required">El Tipo de Servicio es requerido</div>
             </div>
           </div>
           <div class="col-sm-3"  style="display:inline">
@@ -46,7 +46,7 @@
             <label for="latitud">Latitud<span style="font-weight:700;color:red;"> *</span></label>
           </div>
           <div class="col-sm-12">
-            <input formControlName="latitud" type="number" class="form-control" (input)="latitudcambio($event.target.value)">
+            <input formControlName="latitud" type="number" class="form-control" (input)="latitudcambio($event.target.value)" required>
             <div *ngIf="enviado && f.latitud.errors" class="mensajevalidacion">
               <div *ngIf="f.latitud.errors.required">Latitud es requerido</div>
             </div>
@@ -57,10 +57,8 @@
           </div>
           <div class="col-sm-12" >       
             <div class="input-group mb-3">
-              <input formControlName="longitud" type="number" class="form-control" (input)="longitudcambio($event.target.value)">
+              <input formControlName="longitud" type="number" class="form-control" (input)="longitudcambio($event.target.value)" required>
             </div>   
-            
-            
             <div *ngIf="enviado && f.longitud.errors" class="mensajevalidacion">
               <div *ngIf="f.longitud.errors.required">Longitud es requerido</div>
             </div>

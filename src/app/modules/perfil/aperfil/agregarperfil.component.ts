@@ -11,6 +11,7 @@ import { serviciopermiso } from './../../../services/serviciopermiso';
 import { ToastrService } from 'ngx-toastr';
 import { modelousuario } from './../../../model/modusuario';
 import { servicioautenticacion } from './../../../services/servicioautenticacion';
+import { EspaciosValidator } from '../../../shared/soloespacios';
 
 @Component({
   selector: 'app-agregarperfil',
@@ -35,8 +36,8 @@ export class APerfilPanelComponent{
     this.enviado=false;
     this._perfil=new modeloperfil(0,"","","","",0,"",0);
     this.form = fb.group({
-      descripcion: ['', Validators.required],
-      nombre: ['', Validators.required],
+      descripcion: ['', [Validators.required,Validators.maxLength(50),EspaciosValidator.solo]],
+      nombre: ['', [Validators.required,Validators.maxLength(30),EspaciosValidator.solo]],
       permisos:new FormArray([]),
       
       
@@ -76,6 +77,7 @@ export class APerfilPanelComponent{
   }
 
   
+  
   public grabarcallback(){
     this.grabar(()=>{this.close(this._perfil);})
   }
@@ -84,8 +86,8 @@ export class APerfilPanelComponent{
     this.enviado=true;
     _usuautenticado=this.servauten.userValue;
     if (this.form.valid) {
-      this._perfil.descripcionperfil=this.form.value.descripcion;
-      this._perfil.nombreperfil=this.form.value.nombre;
+      this._perfil.descripcionperfil=this.form.value.descripcion.trim();
+      this._perfil.nombreperfil=this.form.value.nombre.trim();
       
       this._perfil.usuarioregistra=_usuautenticado.id;
       this._servicioperfil.agregar(this._perfil).subscribe(datos=>

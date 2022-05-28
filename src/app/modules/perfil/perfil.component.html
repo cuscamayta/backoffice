@@ -45,7 +45,7 @@
         <div *ngFor="let perfil of listaperfiles | searchFilter: query | paginate: config">
           <div class="documentRowStyle columns" *ngIf="perfil.idperfil" (click)="openEditarPerfil(perfil)" >
             <div class="column is-3 documentName">{{perfil.nombreperfil}}</div>
-            <div class="column is-5">{{perfil.descripcionperfil}}</div>
+            <div class="column is-5 documentName">{{perfil.descripcionperfil}}</div>
             
             <div class="column is-2"><button class="ns-btn btn-danger --small" (click)="openBorrarPerfil(perfil.idperfil,$event)" data-toggle="tooltip" data-placement="bottom"
               title="Borra el Perfil Seleccionado">Eliminar</button> 

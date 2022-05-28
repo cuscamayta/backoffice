@@ -60,8 +60,16 @@ export class serviciorequisito{
     }
       borrar(id:number){
         var resp=false;
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/EliminarRequisito?IdRequisito="+id
+        return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+            if (datos.isOk="S"){
+                resp=true;
+            }
+            
+            
+            return resp;
+          });
         
-        return true;
      }  
      agregar(requisito:modelorequisito){
         var reqag:modelorequisitoinsertar;
@@ -88,10 +96,11 @@ export class serviciorequisito{
             .set('Ancho',servicio.alto.toString())
             .set('Alto',servicio.ancho.toString())
             .set('Tipo',servicio.tipo.toString())
-            .set('idRequisito',servicio.idrequisito.toString());
+            .set('IdRequisito',servicio.idrequisito.toString());
        
        const body=this.base64ToArrayBuffer(servicio.imagenfisica);
        console.log(body);
+       console.log(headers);
        return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
 
      }

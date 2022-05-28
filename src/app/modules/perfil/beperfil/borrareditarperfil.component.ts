@@ -15,6 +15,7 @@ import { serviciopermiso } from './../../../services/serviciopermiso';
 import { ToastrService } from 'ngx-toastr';
 import { modelousuario } from './../../../model/modusuario';
 import { servicioautenticacion } from './../../../services/servicioautenticacion';
+import { EspaciosValidator } from '../../../shared/soloespacios';
 
 
 @Component({
@@ -47,8 +48,8 @@ export class BEPerfilPanelComponent implements OnInit{
     
     
     this.form = fb.group({
-      descripcion: [descripcionperfil, Validators.required],
-      nombre: [nombreperfil, Validators.required],
+      descripcion: [descripcionperfil, [Validators.required,Validators.maxLength(50),EspaciosValidator.solo]],
+      nombre: [nombreperfil, [Validators.required,Validators.maxLength(30),EspaciosValidator.solo]],
       permisos:new FormArray([]),
       
     });
@@ -125,8 +126,8 @@ export class BEPerfilPanelComponent implements OnInit{
     this.enviado=true;
     _usuautenticado=this.servauten.userValue;
     if (this.form.valid) {
-      this._perfil.descripcionperfil=this.form.value.descripcion;
-      this._perfil.nombreperfil=this.form.value.nombre;
+      this._perfil.descripcionperfil=this.form.value.descripcion.trim();
+      this._perfil.nombreperfil=this.form.value.nombre.trim();
       
       this._perfil.usuariomodificacion=_usuautenticado.id;
       this._servicioperfil.actualizar(this._perfil).subscribe(datos=>
@@ -170,6 +171,15 @@ export class BEPerfilPanelComponent implements OnInit{
     }
     
   }
+
+  _keyUp(event: any,tamano:number,cadena:string) {
+    
+
+    if (cadena.length>=tamano) {
+      // invalid character, prevent input
+      event.preventDefault();
+    }
+}
   abrirpop(popover){
     if (popover.isOpen()) {
       

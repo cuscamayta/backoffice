@@ -165,7 +165,6 @@ export class BEServicioPanelComponent implements OnInit{
       
       
       this._requisito.nombrerequisito=this.form.value.nombre;
-      this._requisito.estadorequisito=this.form.value.estado;
       this._requisito.usuariomodifica=_usuautenticado.id;
       this.servreq.actualizar(this._requisito).subscribe(datos=>
       {
@@ -204,6 +203,16 @@ export class BEServicioPanelComponent implements OnInit{
       return;
     }
     
+  }
+
+  HabDesEstado($Event){
+    if($Event.checked){
+      this._requisito.estadorequisito="1";
+    
+    }
+    else{
+      this._requisito.estadorequisito="0";
+    }
   }
 
   abrirpop(popover){

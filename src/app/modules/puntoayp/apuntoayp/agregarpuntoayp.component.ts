@@ -41,7 +41,7 @@ export class APuntoaypPanelComponent implements OnInit{
       nombre: ['', Validators.required],
       tipo: [1, ],
       direccion: ['', Validators.required],
-      latitud: ['-17.78629', Validators.required],
+      latitud: ['-17.78629', Validators.required ],
       longitud: ['-63.18117', Validators.required],
       
   });
