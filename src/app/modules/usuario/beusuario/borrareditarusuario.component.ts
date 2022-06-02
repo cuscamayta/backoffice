@@ -17,6 +17,7 @@ import { servicioperfilpermiso } from '../../../services/servicioperfilpermiso';
 import { ToastrService } from 'ngx-toastr';
 import { serviciopermiso } from '../../../services/serviciopermiso';
 import { servicioautenticacion } from './../../../services/servicioautenticacion';
+import { EspaciosValidator } from '../../../shared/soloespacios';
 
 @Component({
   selector: 'app-borrareditarusuario',
@@ -34,6 +35,7 @@ export class BEUsuarioPanelComponent {
   idusuario:number;
   _usuario:modelousuario;
   enviado=false;
+  load:boolean;
 
   constructor(private mensajes:ToastrService,private servperperf:servicioperfilpermiso,
     private servpermisos:serviciopermiso,private _servusuperf:serviciousuarioperfil,
@@ -45,20 +47,24 @@ export class BEUsuarioPanelComponent {
     this.enviado=false;
     this.idusuario=id;
     this.form = fb.group({
-      usuario: [login, Validators.required],
-      nombre: [nombre, Validators.required],
-      apellidos: [apellido, Validators.required],
-      telefono: [telefono, Validators.required],
-      direccion: [correo, Validators.required],
+      usuario: [login, [Validators.required,Validators.maxLength(30),EspaciosValidator.solo]],
+      nombre: [nombre, [Validators.required,Validators.maxLength(50),EspaciosValidator.solo]],
+      apellidos: [apellido, [Validators.required,Validators.maxLength(50),EspaciosValidator.solo]],
+      telefono: [telefono, [Validators.required,Validators.maxLength(20)]],
+      direccion: [correo, [Validators.required,EspaciosValidator.solo]],
+      
       perfiles: new FormArray([]),
       permisos: new FormArray([]),
       
      });
     this._usuario=new modelousuario(id,login,nombre,apellido,telefono,correo,estado,primeravez,fechamodificacion,usuariomodifica,fecharegistro,usuarioregistra);
-    this.getPermisos(()=>{this.listapermisos.forEach(element => this.permisosFormArray.push(new FormControl(element.estado)));}); 
-    this.getPerfiles(()=>{this.crealistasel();});
     
-      
+    
+    this.load=true;
+    setTimeout(()=>{                           //<<<---using ()=> syntax
+      this.getPermisos(()=>{this.listapermisos.forEach(element => this.permisosFormArray.push(new FormControl(element.estado)));}); 
+      this.getPerfiles(()=>{this.crealistasel();this.load=false;});
+    }, 1000);  
     
     
     

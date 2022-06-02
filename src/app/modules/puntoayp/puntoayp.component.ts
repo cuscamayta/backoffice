@@ -26,6 +26,7 @@ export class PuntoaypComponent implements OnInit{
   inicio:number;
   fin:number;
   totalreg:number;
+  load:boolean;
   
 
   constructor(private servpuntoayp:serviciopuntoayp, 
@@ -36,6 +37,7 @@ export class PuntoaypComponent implements OnInit{
     this.inicio=1;
     this.fin=this.config.currentPage*1*this.config.itemsPerPage;
     this.config.currentPage=1;
+
   }
   
   public config: PaginationInstance = {
@@ -46,8 +48,11 @@ export class PuntoaypComponent implements OnInit{
 
   ngOnInit(): void {
     
+    this.load=true;
+    setTimeout(()=>{                           //<<<---using ()=> syntax
+      this.getPuntosayp(()=>{this.totalreg=this.listapuntosayp.length;this.load=false; });
+    }, 1000);
     
-    this.getPuntosayp(()=>{this.totalreg=this.listapuntosayp.length; });
     
     
   }

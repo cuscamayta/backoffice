@@ -1,20 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { APerfilPanelComponent } from './agregarperfil.component';
 
-import { BEPerfilPanelComponent } from './borrareditarperfil.component';
 
-describe('BEPerfilPanelComponent', () => {
-  let component: BEPerfilPanelComponent;
-  let fixture: ComponentFixture<BEPerfilPanelComponent>;
+
+describe('APerfilPanelComponent', () => {
+  let component: APerfilPanelComponent;
+  let fixture: ComponentFixture<APerfilPanelComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BEPerfilPanelComponent ]
+      declarations: [ APerfilPanelComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BEPerfilPanelComponent);
+    fixture = TestBed.createComponent(APerfilPanelComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

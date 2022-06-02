@@ -21,6 +21,8 @@ export class ServicioComponent implements OnInit{
   public query: any = '';
   requisitoactual:modelorequisito;
   listaservicio:modelorequisito[]=[];
+  load:boolean;
+  
   constructor(private mensajes:ToastrService,private servreq:serviciorequisito,
     
     private dialog: MatDialog, private modalService: NgbModal,private _overlaySidePanelService: SidePanelOverlayService) {
@@ -28,7 +30,11 @@ export class ServicioComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.getRequisitos(()=>{});
+    this.load=true;
+    setTimeout(()=>{                           //<<<---using ()=> syntax
+      this.getRequisitos(()=>{ this.load=false; });
+    }, 1000);
+    
   }
 
   getRequisitos(cbRequisitos) {

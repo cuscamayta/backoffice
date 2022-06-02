@@ -1,7 +1,9 @@
 <div class="page-title-modal">Datos Servicio</div>
 <mat-dialog-content>
-
-<div>
+<div class="contenedor" id="spinner" *ngIf="load" >
+  <div class="lds-dual-ring"><span style="font-size:25px">Cargando</span></div>
+</div>
+<div *ngIf="!load">
   <form id="editarrequisitoForm" [formGroup]="form">
     <div class="form-group">
       <div class="col-sm-2">

@@ -346,3 +346,39 @@ body.modal-open {
     overflow: hidden;
     text-overflow: ellipsis;
    }
+
+   .lds-dual-ring {
+    display: inline-block;
+    width: 180px;
+    height: 180px;
+  }
+  .lds-dual-ring:after {
+    content: " ";
+    display: block;
+    width: 160px;
+    height: 160px;
+    margin: 8px;
+    border-radius: 50%;
+    border: 16px solid green;
+    border-color: green transparent green transparent;
+    animation: lds-dual-ring 1.2s linear infinite;
+  }
+  @keyframes lds-dual-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .contenedor {
+    padding-top: 20px;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 100% !important;
+    height: 80% !important;
+    min-width: 500px;
+    min-height: 400px;
+    text-align: center;
+  }

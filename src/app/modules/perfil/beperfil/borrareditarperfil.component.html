@@ -3,7 +3,10 @@
 <hr/>
 <mat-dialog-content >
 
-<div>
+  <div class="contenedor w-100 vh-100" id="spinner" *ngIf="load">
+  <div class="lds-dual-ring"><span style="font-size:25px">Cargando</span></div>
+</div>
+<div *ngIf="!load">
   <form id="editarperfilForm" [formGroup]="form">
     <div class="form-group">
       <div class="col-sm-4">

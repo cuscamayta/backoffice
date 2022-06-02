@@ -98,12 +98,11 @@ export class serviciousuario{
          var usuact:modelousuarioactualizar;
          usuact=new modelousuarioactualizar(usuario.id,usuario.login,contrasena,usuario.nombre,usuario.apellido
             ,usuario.telefono,usuario.correo, usuario.estado, usuario.primeravez,usuario.usuariomodifica);
-        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaPassword?P_IdUsuario="+usuario.id+"&P_Password="+contrasena
-        /* const headers = { 'content-type': 'application/json'}  
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaUsuario"
+        const headers = { 'content-type': 'application/json'}  
         const body=JSON.stringify(usuact);
-        console.log(body) 
-        return this.http.post<any>(this.cadenahttp , body,{'headers':headers});*/
-        return this.http.post<any>(this.cadenahttp , null);
+        console.log(body)
+        return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
     }
 
     cambiarpassword(id:number,contrasena:string){

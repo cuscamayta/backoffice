@@ -29,8 +29,10 @@
 
       </div>
     </div>
-
-    <div class="card-group" style="margin-left:-0.75rem;margin-right:-0.75rem;" >
+    <div class="contenedor w-100 vh-100" id="spinner" *ngIf="load">
+      <div class="lds-dual-ring"><span style="font-size:25px;">Cargando</span></div>
+    </div>
+    <div class="card-group" style="margin-left:-0.75rem;margin-right:-0.75rem;" *ngIf="!load">
       <ng-container *ngFor="let elemento of listaservicio | searchFilter: query">
         <div class="col-lg-3 col-md-12">
           <!--Card-->

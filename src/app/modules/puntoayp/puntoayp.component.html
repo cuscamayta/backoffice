@@ -31,9 +31,11 @@
     </div>
 
 
+    <div class="contenedor w-100 vh-100" id="spinner" *ngIf="load">
+      <div class="lds-dual-ring"><span style="font-size:25px">Cargando</span></div>
+    </div>
 
-
-    <div class="columns document-list-container">
+    <div class="columns document-list-container" *ngIf="!load">
       <div class="documentTableStyle" >
         <div class="tableHeaderStyle columns">
           <div class="column is-4">Nombre </div>

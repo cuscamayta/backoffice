@@ -15,6 +15,7 @@ import { modelousuarioperfil } from '../../../model/modusuarioperfil';
 import { ToastrService } from 'ngx-toastr';
 import { serviciopermiso } from '../../../services/serviciopermiso';
 import { servicioautenticacion } from './../../../services/servicioautenticacion';
+import { EspaciosValidator } from '../../../shared/soloespacios';
 
 @Component({
   selector: 'app-borrareditarusuario',
@@ -25,7 +26,7 @@ export class AUsuarioPanelComponent {
   listaperfiles:modeloperfil[];
   public listapermisos:modpermiso[]=[];
   form: FormGroup;
-  
+  load:boolean;
   public listaperfsel:modelolistaconsel[]=[];
   
   enviado=false;
@@ -44,17 +45,22 @@ export class AUsuarioPanelComponent {
     this.enviado=false;
     this._usuario=new modelousuario(0,'','','','','','','S','',0,'',0);
     this.form = fb.group({
-      usuario: ['', Validators.required],
-      nombre: ['', Validators.required],
-      apellidos: ['', Validators.required],
-      telefono: ['', Validators.required],
-      direccion: ['', Validators.required],
+      usuario: ['', [Validators.required,Validators.maxLength(30),EspaciosValidator.solo]],
+      nombre: ['', [Validators.required,Validators.maxLength(50),EspaciosValidator.solo]],
+      apellidos: ['', [Validators.required,Validators.maxLength(50),EspaciosValidator.solo]],
+      telefono: ['', [Validators.required,Validators.maxLength(20)]],
+      direccion: ['', [Validators.required,EspaciosValidator.solo]],
       perfiles: new FormArray([]),
       permisos: new FormArray([]),
 
      });
-     this.getPermisos(()=>{this.listapermisos.forEach(element => this.permisosFormArray.push(new FormControl(element.estado)));}); 
-     this.getPerfiles(()=>{this.crealistasel();this.listaperfsel.forEach(element => this.perfilesFormArray.push(new FormControl(element.seleccionado)));});
+
+      this.load=true;
+      setTimeout(()=>{                           
+        this.getPermisos(()=>{this.listapermisos.forEach(element => this.permisosFormArray.push(new FormControl(element.estado)));}); 
+        this.getPerfiles(()=>{this.crealistasel();this.listaperfsel.forEach(element => this.perfilesFormArray.push(new FormControl(element.seleccionado)));this.load=false;});
+      }, 1000);  
+     
     
     
   }

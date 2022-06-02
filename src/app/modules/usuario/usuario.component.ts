@@ -6,7 +6,7 @@ import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
 import { BEUsuarioPanelComponent } from './beusuario/borrareditarusuario.component';
 import { AUsuarioPanelComponent } from './agregarusuario/agregarusuario.component';
 import { SidePanelOverlayService } from '../../shared/side-panel/side-panel-overlay.service';
-import { MatDialog, MatDialogConfig} from '@angular/material';
+import { MatDialog, MatDialogConfig, MatSlideToggle} from '@angular/material';
 import { ConfirmarModalComponent } from './../../shared/confirmar-modal/confirmar-modal.component';
 import { serviciousuario } from './../../services/serviciousuario';
 import { servicioperfil } from './../../services/servicioperfil';
@@ -36,6 +36,7 @@ export class UsuarioComponent implements OnInit{
   inicio:number;
   fin:number;
   totalreg:number;
+  load:boolean;
   
   
  
@@ -51,7 +52,11 @@ export class UsuarioComponent implements OnInit{
   }
  ngOnInit(): void {
 
-     this.getUsuarios(()=>{this.totalreg=this.listausuarios.length; });
+  this.load=true;
+  setTimeout(()=>{                           
+    this.getUsuarios(()=>{ this.totalreg=this.listausuarios.length; this.load=false; });
+  }, 1000);
+     
      
  }
   
@@ -203,40 +208,73 @@ export class UsuarioComponent implements OnInit{
     );    
     
   }
-  
   HabDesUsuario(idusuario:number,$event){
-    console.log($event.checked);
+    
+    
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
     if ($event.checked){
-      
-      if (this.servperfil.habilitar(idusuario)) {
-        this.listausuarios.forEach(element=>{
-          if (element.id==idusuario){
-            element.estado=null;
-            this.mensajes.success("Usuariol "+this.usuarioactual.nombre + " habilitado correctamente","Mensaje Informativo")
-            console.log(element.estado);
-            
-          }
-        })
-      }
-      
+      dialogConfig.data = {
+        titulo: 'Mensaje de Advertencia',
+        mensaje: '¿Esta seguro que desea habilitar el usuario seleccionado?'
+      };
     }
     else{
-      if (this.servperfil.deshabilitar(idusuario)) {
-        
-        this.listausuarios.forEach(element=>{
-          if (element.id==idusuario){
-            element.estado="1";
-            this.mensajes.success("Usuariol "+this.usuarioactual.nombre + " deshabilitado correctamente","Mensaje Informativo")
-            console.log(element.estado);
+      dialogConfig.data = {
+        titulo: 'Mensaje de Advertencia',
+        mensaje: '¿Esta seguro que desea deshabilitar el usuario seleccionado?'
+      };
+    }
+    const dialogRef = this.dialog.open(ConfirmarModalComponent, dialogConfig);
+
+    dialogRef.afterClosed().subscribe(
+      data => {
+          console.log(data.respuesta);
+          if (data.respuesta){
+            if ($event.checked){
+      
+              if (this.servperfil.habilitar(idusuario)) {
+                this.listausuarios.forEach(element=>{
+                  if (element.id==idusuario){
+                    this.usuarioactual=element;
+                    element.estado=null;
+                    this.mensajes.success("Usuariol "+this.usuarioactual.nombre + " habilitado correctamente","Mensaje Informativo")
+                    console.log(element.estado);
+                    
+                  }
+                })
+              }
+              
+            }
+            else{
+              if (this.servperfil.deshabilitar(idusuario)) {
+                
+                this.listausuarios.forEach(element=>{
+                  if (element.id==idusuario){
+                    this.usuarioactual=element;
+                    element.estado="1";
+                    this.mensajes.success("Usuariol "+this.usuarioactual.nombre + " deshabilitado correctamente","Mensaje Informativo")
+                    console.log(element.estado);
+                    
+                  }
+                })
+              }
+            }
             
           }
-        })
-      }
-    }
+          else{
+            let matSlideToggle: MatSlideToggle = $event.source;
+            matSlideToggle.toggle();
+          }
+        }
+        
+    );   
     
 
-
   }
+  
 
   abrirpop(popover){
     if (popover.isOpen()) {

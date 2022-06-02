@@ -33,6 +33,7 @@ export class BEPerfilPanelComponent implements OnInit{
   enviado=false;
   listapermisos:modpermiso[]=[];
   listapermisossel:modpermiso[]=[];
+  load:boolean;
 
   constructor(private mensajes:ToastrService,private servpermisos:serviciopermiso,
     private _servicioperfilpermiso:servicioperfilpermiso,private _servicioperfil:servicioperfil,
@@ -53,26 +54,31 @@ export class BEPerfilPanelComponent implements OnInit{
       permisos:new FormArray([]),
       
     });
-    this.getPermisos(()=>{
-      this.traerpermisosperfil(()=>{
-        for (var i = 0; i < this._perfilpermisos.length; i++){
-          // aqui se puede referir al objeto con arreglo[i];
-          this.listapermisos.forEach(perm=>{
-            if (perm.idpermiso==this._perfilpermisos[i].idpermiso)
-            {
-              perm.estado=true;
-            }
-          })
-          this.listapermisossel.forEach(permsel=>{
-            if (permsel.idpermiso==this._perfilpermisos[i].idpermiso)
-            {
-              permsel.estado=true;
-            }
-          })
-        }
-        this.listapermisossel.forEach(element => this.permisosFormArray.push(new FormControl(element.estado)));
+    this.load=true;
+    setTimeout(()=>{                           //<<<---using ()=> syntax
+      this.getPermisos(()=>{
+        this.traerpermisosperfil(()=>{
+          for (var i = 0; i < this._perfilpermisos.length; i++){
+            // aqui se puede referir al objeto con arreglo[i];
+            this.listapermisos.forEach(perm=>{
+              if (perm.idpermiso==this._perfilpermisos[i].idpermiso)
+              {
+                perm.estado=true;
+              }
+            })
+            this.listapermisossel.forEach(permsel=>{
+              if (permsel.idpermiso==this._perfilpermisos[i].idpermiso)
+              {
+                permsel.estado=true;
+              }
+            })
+          }
+          this.listapermisossel.forEach(element => this.permisosFormArray.push(new FormControl(element.estado)));
+          this.load=false;
+        });
       });
-    });
+    }, 1000);
+    
     
   }
 

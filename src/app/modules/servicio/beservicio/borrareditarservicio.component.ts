@@ -23,6 +23,7 @@ export class BEServicioPanelComponent implements OnInit{
                                 new modeloimagen(0,"","",0,0),new modeloimagen(0,"","",0,0)];
   public listadetalleimagenrec:modeloimagen[]=[];
   public respaldoimagen:modeloimagen;
+  load:boolean;
   
   _requisito:modelorequisito;
   constructor(private mensajes:ToastrService,private servreq:serviciorequisito,
@@ -39,17 +40,23 @@ export class BEServicioPanelComponent implements OnInit{
         estado: [estadorequisito, ],
         
        });
-      this._requisito=new modelorequisito(idrequisito,nombrerequisito,estadorequisito
-        ,fecharegistro,usuarioregistra,fechamodificacion,usuariomodifica,idimagen
-        ,nombreimagen,imagenfisica,ancho,alto);
-        this.getdetalleimagen(this._requisito.idrequisito,()=>{
-          var i=0;
-          this.listadetalleimagenrec.forEach(elemento=>{
-              this.listadetalleimagen[i]=elemento;
-              console.log(this.listadetalleimagen[i]);
-              i=i+1;
-          })
-        });
+
+       this.load=true;
+      setTimeout(()=>{                           //<<<---using ()=> syntax
+        this._requisito=new modelorequisito(idrequisito,nombrerequisito,estadorequisito
+          ,fecharegistro,usuarioregistra,fechamodificacion,usuariomodifica,idimagen
+          ,nombreimagen,imagenfisica,ancho,alto);
+          this.getdetalleimagen(this._requisito.idrequisito,()=>{
+            var i=0;
+            this.listadetalleimagenrec.forEach(elemento=>{
+                this.listadetalleimagen[i]=elemento;
+                console.log(this.listadetalleimagen[i]);
+                i=i+1;
+            })
+            this.load=false;
+          });
+      }, 1000);
+      
     }
 
 

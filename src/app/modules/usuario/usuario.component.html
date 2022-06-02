@@ -37,8 +37,10 @@
     
 
 
-
-    <div class="columns document-list-container">
+    <div class="contenedor w-100 vh-100" id="spinner" *ngIf="load">
+      <div class="lds-dual-ring"><span style="font-size:25px">Cargando</span></div>
+    </div>
+    <div class="columns document-list-container" *ngIf="!load">
       <div class="documentTableStyle">
         <div class="tableHeaderStyle columns">
           <div class="column is-4">Usuario </div>
@@ -49,9 +51,9 @@
         </div>
         <div *ngFor="let usuario of listausuarios | searchFilter: query | paginate: config">
           <div class="documentRowStyle columns" *ngIf="usuario.login" (click)="openEditarUsuario(usuario)">
-            <div class="column is-2">{{usuario.login}}</div>
-            <div class="column is-3">{{usuario.nombre}}</div>
-            <div class="column is-3">{{usuario.apellido}}</div>
+            <div class="column is-2 documentName">{{usuario.login}}</div>
+            <div class="column is-3 documentName">{{usuario.nombre}}</div>
+            <div class="column is-3 documentName">{{usuario.apellido}}</div>
             <div class="column is-2"><button class="ns-btn btn-danger --small" (click)="openBorrarUsuario(usuario.id,$event)" data-toggle="tooltip" data-placement="bottom"
               title="Borra el Usuario Seleccionado">Eliminar</button>
             </div>

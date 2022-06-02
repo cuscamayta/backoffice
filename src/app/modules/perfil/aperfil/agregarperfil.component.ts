@@ -26,7 +26,7 @@ export class APerfilPanelComponent{
   listapermisossel:modpermiso[]=[];
   _perfil:modeloperfil;
   _perfilpermisos:modeloperfilpermiso[];
-  
+  load:boolean;
   
 
   constructor(private mensajes:ToastrService,private servpermisos:serviciopermiso, 
@@ -42,15 +42,20 @@ export class APerfilPanelComponent{
       
       
     });
-    this.getPermisos(()=>{
+    this.load=true;
+    setTimeout(()=>{                           //<<<---using ()=> syntax
+      this.getPermisos(()=>{
       
         
-          this.listapermisossel.forEach(permsel=>{
-              permsel.estado=false;
-          });
-        
-        this.listapermisossel.forEach(element => this.permisosFormArray.push(new FormControl(element.estado)));
+        this.listapermisossel.forEach(permsel=>{
+            permsel.estado=false;
+        });
+      
+      this.listapermisossel.forEach(element => this.permisosFormArray.push(new FormControl(element.estado)));
+      this.load=false;
     });
+    }, 1000);
+    
     
   }
 

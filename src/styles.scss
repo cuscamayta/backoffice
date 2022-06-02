@@ -17373,7 +17373,7 @@ body {
   display: flex; }
   .flex-container .flex-item {
     padding: 5px;
-    margin: 10px 20px 10px 0;
+    margin: 10px 20px 10px 20px;
     line-height: 100px;
     color: white;
     font-weight: bold;
@@ -19949,13 +19949,14 @@ textarea {
   padding: 1px 9px 0 9px; }
 
 .llc .regulation-tiles-container {
-  margin-top: 30px; }
+  margin-top: 10px; 
+  margin-bottom:10px;}
   .llc .regulation-tiles-container .box {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 160px;
-    height: 180px;
+    width: 180px;
+    height: 210px;
     border: 1px solid rgba(210, 210, 210, 0.5);
     border-radius: 2px;
     background-color: #FFFFFF;
@@ -19963,18 +19964,18 @@ textarea {
     .llc .regulation-tiles-container .box .imageContainer {
       margin-top: 5px;
       align-items: center;
-      height: 140px; }
+      height: 100px; }
   .llc .regulation-tiles-container .box:hover {
     transition: top .15s, box-shadow .15s;
     transition-timing-function: ease-in-out;
     box-shadow: 0 5px 15px 0 rgba(0, 0, 0, 0.2); }
   .llc .regulation-tiles-container .library-icon {
-    height: 60px;
+    height: 70px;
     width: 70px; }
   .llc .regulation-tiles-container .imageTitle {
     color: #2F3648;
-    font-size: 14px !important;
-    font-weight: 600;
+    font-size: 12px !important;
+    font-weight: 700;
     line-height: 19px;
     text-align: center;
     width: 100%;
