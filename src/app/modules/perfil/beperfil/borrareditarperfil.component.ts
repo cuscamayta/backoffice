@@ -114,12 +114,7 @@ export class BEPerfilPanelComponent implements OnInit{
     
   }
 
-  onItemSelect(item: any) {
-    console.log(item);
-  }
-  onSelectAll(items: any) {
-    console.log(items);
-  }
+
 
   public close(valor):void {
     this.dialogrefp.close(valor);
@@ -138,10 +133,10 @@ export class BEPerfilPanelComponent implements OnInit{
       this._perfil.usuariomodificacion=_usuautenticado.id;
       this._servicioperfil.actualizar(this._perfil).subscribe(datos=>
       {
-        console.log(datos);
+        
         if (datos.isOk=="N"){
-          this.mensajes.error(datos.dsMens)
-            console.log(datos.dsMens);
+          this.mensajes.error("Error al guardar los datos editados del perfil: "+datos.dsMens)
+            
           
         }
         else{
@@ -150,8 +145,8 @@ export class BEPerfilPanelComponent implements OnInit{
             if (!this.listapermisos.includes(persel))
               this._servicioperfilpermiso.agregar(new modeloperfilpermiso(this._perfil.idperfil,persel.idpermiso)).subscribe(datos=>{
                 if(datos.isOk=="N"){
-                  this.mensajes.error(datos.dsMens)
-                  console.log(datos.dsMens);
+                  this.mensajes.error("Error al guardar los datos editados del perfil: "+datos.dsMens)
+                  
                 }
               });
             
@@ -161,7 +156,7 @@ export class BEPerfilPanelComponent implements OnInit{
               this._servicioperfilpermiso.borrar(this._perfil.idperfil,per.idpermiso).subscribe(datos2=>{
                 if(datos2.isOk=="N"){
                   this.mensajes.error(datos.dsMens)
-                  console.log(datos.dsMens);
+                  this.mensajes.error("Error al guardar los datos editados del perfil: "+datos.dsMens)
                 }
               });
             
@@ -186,6 +181,26 @@ export class BEPerfilPanelComponent implements OnInit{
       event.preventDefault();
     }
 }
+
+cambiopermisopadre(id:number,evento){
+  var valor=false;
+  console.log("entro al evento de consola"+id+evento.value);
+  this.listapermisossel.forEach(elemento=>{
+    if(elemento.idpermiso==id){
+      valor=!elemento.estado;
+      elemento.estado=valor;
+    }
+    if(elemento.idpadre==id){
+      elemento.estado=valor;
+    }
+  })
+  // actualizar pantalla con los valores del padre
+  let index = 0; 
+  for(index=0;index<this.listapermisossel.length;index=index+1){
+     (<FormArray>this.form.controls['permisos']).at(index).patchValue(this.listapermisossel[index].estado);
+  }  
+}
+
   abrirpop(popover){
     if (popover.isOpen()) {
       

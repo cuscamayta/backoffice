@@ -26,7 +26,7 @@ export class serviciorequisito{
         
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaRequisitos"
         return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
-            console.log(datos);
+            
             this.listarequisito.length=0;
             this.listarequisito=[];
             datos.requisitos.forEach(element => {
@@ -38,7 +38,7 @@ export class serviciorequisito{
                 
                 
             
-            console.log(this.listarequisito);
+            
             return this.listarequisito;
           }));
      }
@@ -54,7 +54,7 @@ export class serviciorequisito{
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaRequisito"
         const headers = { 'content-type': 'application/json'}  
         const body=JSON.stringify(reqact);
-        console.log(body)
+        
         return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
         
     }
@@ -82,7 +82,7 @@ export class serviciorequisito{
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaRequisito"
         const headers = { 'content-type': 'application/json'}  
         const body=JSON.stringify(reqag);
-        console.log(body);
+        
         return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
        
      }
@@ -99,8 +99,7 @@ export class serviciorequisito{
             .set('IdRequisito',servicio.idrequisito.toString());
        
        const body=this.base64ToArrayBuffer(servicio.imagenfisica);
-       console.log(body);
-       console.log(headers);
+       
        return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
 
      }
@@ -117,14 +116,14 @@ export class serviciorequisito{
         
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaDetalleRequisito?IdRequisito="+idrequisito
         return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
-            console.log(datos);
+            
             this.listadetallereq.length=0;
             this.listadetallereq=[];
             datos.detallerequisito.forEach(element => {
                 this.listadetallereq.push(new modeloimagen(element.idimagen,element.nombreimagen
                     ,element.imagenfisica,element.ancho,element.alto));
             });
-            console.log(this.listadetallereq);
+            
             return this.listadetallereq;
           }));
      }

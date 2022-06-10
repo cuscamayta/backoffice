@@ -35,7 +35,7 @@ export class BasicLoginComponent  implements OnInit {
   ) { 
       // redirect to home if already logged in
       
-      console.log(this.authenticationService.userValue);
+      
       if (this.authenticationService.userValue) { 
           this.router.navigate(['/']);
       }
@@ -49,7 +49,6 @@ export class BasicLoginComponent  implements OnInit {
 
       // get return url from route parameters or default to '/'
       this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-      console.log(this.authenticationService.userValue);
   }
 
   // convenience getter for easy access to form fields
@@ -62,13 +61,13 @@ export class BasicLoginComponent  implements OnInit {
 
     // stop here if form is invalid
     if (this.loginForm.invalid) {
-        console.log("entro falso directo");
+        
         return;
     }
 
     this.loading = true;
     this.authenticationService.login(this.f.username.value, this.f.password.value,()=>{
-        console.log(this.authenticationService.userValue);
+        
         
             
         if (this.authenticationService.userValue!=null){

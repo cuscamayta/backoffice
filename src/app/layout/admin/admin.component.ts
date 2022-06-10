@@ -158,8 +158,7 @@ export class AdminComponent implements OnInit {
     this.windowWidth = window.innerWidth;
     this.setMenuAttributes(this.windowWidth);
     
-    console.log(localStorage.length);
-    console.log(this.admenu);
+    
     
     
       
@@ -180,7 +179,7 @@ export class AdminComponent implements OnInit {
     this._servicioautenticacion.menues.subscribe(menus=>{this.admenu=menus;
     
     });
-    console.log(this.admenu);
+
     
   }
   

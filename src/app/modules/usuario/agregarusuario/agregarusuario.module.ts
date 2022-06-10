@@ -6,6 +6,7 @@ import {SharedModule} from '../../../shared/shared.module';
 import { MatDialogModule } from '@angular/material';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
+
 @NgModule({
   imports: [
     CommonModule,

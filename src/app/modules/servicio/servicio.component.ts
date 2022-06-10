@@ -22,7 +22,7 @@ export class ServicioComponent implements OnInit{
   requisitoactual:modelorequisito;
   listaservicio:modelorequisito[]=[];
   load:boolean;
-  
+
   constructor(private mensajes:ToastrService,private servreq:serviciorequisito,
     
     private dialog: MatDialog, private modalService: NgbModal,private _overlaySidePanelService: SidePanelOverlayService) {
@@ -39,10 +39,10 @@ export class ServicioComponent implements OnInit{
 
   getRequisitos(cbRequisitos) {
     this.servreq.getrequisitos().subscribe(datos =>{
-      console.log(datos);
+      
       this.listaservicio.length=0;
       datos.forEach(element =>{ this.listaservicio.push(element);
-      console.log(element);})
+      })
       cbRequisitos();
     });  
        
@@ -68,7 +68,7 @@ export class ServicioComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(
         data => { 
-          console.log(data.respuesta);
+          
           if (data.respuesta){
             if (!this.servreq.borrar(idreq)){
               this.mensajes.error("El servicio no se ha podido borrar","Mensaje de Advertencia")
@@ -77,7 +77,7 @@ export class ServicioComponent implements OnInit{
             else{
               var i=0;
               this.listaservicio.forEach(elem=>{
-                if(elem.idrequisito=idreq){
+                if(elem.idrequisito==idreq){
                   this.listaservicio.splice(i,1);
                 }
                 i=i+1;
@@ -105,7 +105,7 @@ export class ServicioComponent implements OnInit{
           if (data!=null){
             this.requisitoactual=data;
             this.listaservicio.push(this.requisitoactual)
-            console.log(data);
+            
             this.mensajes.success("Usuario "+this.requisitoactual.nombrerequisito + " agregado correctamente","Mensaje Informativo")
             
           }
@@ -133,6 +133,7 @@ export class ServicioComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(
       data => {
+        
         if (data!=null){
           this.requisitoactual=data;
           var i;
@@ -140,7 +141,7 @@ export class ServicioComponent implements OnInit{
             if(this.listaservicio[i].idrequisito==this.requisitoactual.idrequisito)
             this.listaservicio[i]=this.requisitoactual;
           }
-          console.log(data);
+          
           this.mensajes.success("Usuario "+this.requisitoactual.nombrerequisito + " actualizado correctamente","Mensaje Informativo")
           
         }
@@ -159,10 +160,7 @@ export class ServicioComponent implements OnInit{
 
   
   
-  public show(): void {
-    this._overlaySidePanelService.setContent(BEServicioPanelComponent);
-    this._overlaySidePanelService.show();
-  }
+  
 
 }
 

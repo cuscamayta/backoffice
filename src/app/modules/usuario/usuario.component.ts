@@ -76,7 +76,7 @@ export class UsuarioComponent implements OnInit{
     this.usuarios$=this.servusuario.getusuarios();
     
     this.usuarios$.subscribe(datos =>{
-      console.log(datos);
+      
       this.listausuarios.length=0;
       datos.forEach(element => this.listausuarios.push(element))
       cbUsuarios();
@@ -87,7 +87,7 @@ export class UsuarioComponent implements OnInit{
     this.usuarios$=this.servusuario.getusuariosfiltro(IdPerfil);
     
     this.usuarios$.subscribe(datos =>{
-      console.log(datos);
+      
       this.listausuarios.length=0;
       datos.forEach(element => this.listausuarios.push(element))
       cbUsuarios();
@@ -99,7 +99,7 @@ export class UsuarioComponent implements OnInit{
       .subscribe(
         res => {
           this.listaperfiles = res;
-          console.log(this.listaperfiles);
+          
           cbperfiles();
         });
 
@@ -108,7 +108,7 @@ export class UsuarioComponent implements OnInit{
 
   filtroperfil(idperfil){
     if(idperfil!=null){
-      console.log(idperfil);
+      
       this.getUsuariosfiltro(()=>{this.totalreg=this.listaperfiles.length;},idperfil)
     }
     else
@@ -170,7 +170,7 @@ export class UsuarioComponent implements OnInit{
               if(this.listausuarios[i].id==this.usuarioactual.id)
               this.listausuarios[i]=this.usuarioactual;
             }
-            console.log(data);
+            
             this.mensajes.success("Usuario "+this.usuarioactual.nombre + " actualizado correctamente","Mensaje Informativo")
             
           }
@@ -193,7 +193,7 @@ export class UsuarioComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(
         data => {
-          console.log(data.respuesta);
+          
           if (data.respuesta){
             if (!this.servusuario.borrar(id)){
               this.mensajes.error("El usuario no se ha podido borrar","Mensaje de Advertencia")
@@ -231,7 +231,7 @@ export class UsuarioComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(
       data => {
-          console.log(data.respuesta);
+          
           if (data.respuesta){
             if ($event.checked){
       
@@ -241,7 +241,7 @@ export class UsuarioComponent implements OnInit{
                     this.usuarioactual=element;
                     element.estado=null;
                     this.mensajes.success("Usuariol "+this.usuarioactual.nombre + " habilitado correctamente","Mensaje Informativo")
-                    console.log(element.estado);
+                    
                     
                   }
                 })
@@ -256,7 +256,7 @@ export class UsuarioComponent implements OnInit{
                     this.usuarioactual=element;
                     element.estado="1";
                     this.mensajes.success("Usuariol "+this.usuarioactual.nombre + " deshabilitado correctamente","Mensaje Informativo")
-                    console.log(element.estado);
+                    
                     
                   }
                 })

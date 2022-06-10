@@ -18,7 +18,7 @@ export class serviciousuario{
 
     constructor(private http: HttpClient){
         this.listausuario= [];
-        console.log(this.listausuario.toString());
+        
     } 
 
     getusuariopassword(usuario:string,password:string){
@@ -46,8 +46,7 @@ export class serviciousuario{
         return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
             
             this.valorusuario = datos.usuario[0];
-            console.log(datos.usuario[0]);
-            console.log(this.valorusuario);
+            
             return this.valorusuario;
           });
           
@@ -58,7 +57,7 @@ export class serviciousuario{
         
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaUsuarios"
         return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
-            console.log(datos);
+            
             this.listausuario.length=0;
             this.listausuario=[];
             datos.usuarios.forEach(element => {
@@ -69,7 +68,7 @@ export class serviciousuario{
                 
                 
             
-            console.log(this.listausuario);
+            
             return this.listausuario;
           }));
      }
@@ -78,7 +77,7 @@ export class serviciousuario{
         
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaUsuariosDeUnPerfil?IdPerfil="+IdPerfil
         return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
-            console.log(datos);
+            
             this.listausuario.length=0;
             this.listausuario=[];
             datos.usuarios.forEach(element => {
@@ -89,7 +88,7 @@ export class serviciousuario{
                 
                 
             
-            console.log(this.listausuario);
+            
             return this.listausuario;
           }));
      }
@@ -101,7 +100,7 @@ export class serviciousuario{
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaUsuario"
         const headers = { 'content-type': 'application/json'}  
         const body=JSON.stringify(usuact);
-        console.log(body)
+        
         return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
     }
 
@@ -151,7 +150,7 @@ export class serviciousuario{
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaUsuario"
         const headers = { 'content-type': 'application/json'}  
         const body=JSON.stringify(usuag);
-        console.log(body)
+        
         return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
        
      }

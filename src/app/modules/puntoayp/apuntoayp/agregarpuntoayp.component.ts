@@ -7,6 +7,7 @@ import {FormBuilder, Validators, FormGroup} from "@angular/forms";
 import { MapsAPILoader, MouseEvent  } from '@agm/core';
 import { ToastrService } from 'ngx-toastr';
 import { TipoPunto } from '../bepuntoayp/borrareditarpuntoayp.component';
+import { EspaciosValidator } from '../../../../app/shared/soloespacios';
 
 
 
@@ -38,9 +39,9 @@ export class APuntoaypPanelComponent implements OnInit{
     this.marcador=new marker(-17.78629, -63.18117,true);
     this.zoom=12;
     this.form = fb.group({
-      nombre: ['', Validators.required],
+      nombre: ['', [Validators.required,Validators.maxLength(100),EspaciosValidator.solo]],
       tipo: [1, ],
-      direccion: ['', Validators.required],
+      direccion: ['', [Validators.required,Validators.maxLength(150),EspaciosValidator.solo]],
       latitud: ['-17.78629', Validators.required ],
       longitud: ['-63.18117', Validators.required],
       
@@ -75,7 +76,7 @@ export class APuntoaypPanelComponent implements OnInit{
   }
 
   clickedMarker(m:marker) {
-    console.log(m);
+    
     
   }
   markerDragEnd(m:marker, $event: MouseEvent) {
@@ -83,7 +84,7 @@ export class APuntoaypPanelComponent implements OnInit{
       this.marcador.lon= $event.coords.lng
       this.form.get('latitud').patchValue(this.marcador.lat.toString());
       this.form.get('longitud').patchValue(this.marcador.lon.toString());
-      console.log(m);
+      
   }
 
   
@@ -112,8 +113,8 @@ export class APuntoaypPanelComponent implements OnInit{
       this._serviciopuntoayp.agregar(this._puntoayp).subscribe( datos=>
       {
         if (datos.isOk=="N"){
-          this.mensajes.error(datos.dsMens)
-            console.log(datos.dsMens);
+          this.mensajes.error("Error al agregar un punto de atención: "+datos.dsMens)
+            
           
         }
         else{

@@ -48,9 +48,9 @@
           <div class="documentRowStyle columns" *ngIf="puntoayp.nombre" (click)="openEditarPuntoayp(puntoayp)" >
             <div class="column is-4 documentName">{{puntoayp.nombre}}</div>
             <div class="column is-2">{{puntoayp.tipo}}</div>
-            <div class="column is-4">{{puntoayp.direccion}}</div>
+            <div class="column is-4 documentName">{{puntoayp.direccion}}</div>
             <div class="column is-2"><button class="ns-btn btn-danger --small" (click)="openBorrarPuntoayp(puntoayp.idpunto,$event)" data-toggle="tooltip" data-placement="bottom"
-              title="Borra el Punto de Pago o Atención al Socio Seleccionado">Eliminar</button></div>
+              title="Borra el Punto de Pago o Atención al Socio seleccionado">Eliminar</button></div>
             <div class="column tag-row"></div>
           </div>
           

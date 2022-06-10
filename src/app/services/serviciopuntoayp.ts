@@ -17,9 +17,9 @@ export class serviciopuntoayp{
     private valorusuario:modelousuario;
      
     constructor(private http: HttpClient,servaut:servicioautenticacion){
-        console.log("entro al constructor");
+        
         this.listapuntoayp= [];
-        console.log(this.listapuntoayp.toString());
+        
         this.valorusuario=servaut.userValue;
     } 
 
@@ -27,7 +27,7 @@ export class serviciopuntoayp{
 
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaPuntosAtencionPago"
         return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
-            console.log(datos);
+            
             this.listapuntoayp.length=0;
             this.listapuntoayp=[];
             datos.puntos.forEach(element => {
@@ -37,7 +37,7 @@ export class serviciopuntoayp{
                 
                 
             
-            console.log(this.listapuntoayp);
+            
             return this.listapuntoayp;
           }));
      }
@@ -46,7 +46,7 @@ export class serviciopuntoayp{
 
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaPuntosAtencionPago"
         return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
-            console.log(datos);
+            
             this.listapuntoayp.length=0;
             this.listapuntoayp=[];
             datos.puntos.forEach(element => {
@@ -56,7 +56,7 @@ export class serviciopuntoayp{
                 
                 
             
-            console.log(this.listapuntoayp);
+            
             return this.listapuntoayp;
           }));
      }
@@ -69,7 +69,7 @@ export class serviciopuntoayp{
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaPunto"
          const headers = { 'content-type': 'application/json'}  
         const body=JSON.stringify(papact);
-        console.log(body) 
+        
         return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
         
     }
@@ -96,7 +96,7 @@ export class serviciopuntoayp{
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaPunto"
          const headers = { 'content-type': 'application/json'}  
         const body=JSON.stringify(papact);
-        console.log(body) 
+        
         return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
         
        

@@ -18,6 +18,7 @@ import { ToastrService } from 'ngx-toastr';
 import { serviciopermiso } from '../../../services/serviciopermiso';
 import { servicioautenticacion } from './../../../services/servicioautenticacion';
 import { EspaciosValidator } from '../../../shared/soloespacios';
+import { almenosunitem } from '../../../shared/almenosunitem';
 
 @Component({
   selector: 'app-borrareditarusuario',
@@ -53,7 +54,7 @@ export class BEUsuarioPanelComponent {
       telefono: [telefono, [Validators.required,Validators.maxLength(20)]],
       direccion: [correo, [Validators.required,EspaciosValidator.solo]],
       
-      perfiles: new FormArray([]),
+      perfiles: new FormArray([],[Validators.required,almenosunitem()]),
       permisos: new FormArray([]),
       
      });
@@ -100,7 +101,7 @@ export class BEUsuarioPanelComponent {
             }
         }
       } 
-      console.log(this.listaperfsel);
+      
       this.listausuarioperfil.forEach(element=> {
           this.servperperf.getperfilpermisos(element.idperfil).subscribe(perm=>{
             perm.forEach(elementper=>{
@@ -135,7 +136,7 @@ export class BEUsuarioPanelComponent {
       .subscribe(
         res => {
           this.listaperfiles = res;
-          console.log(this.listaperfiles);
+          
           cbperfiles();
         });
 
@@ -148,14 +149,14 @@ export class BEUsuarioPanelComponent {
     this.listaperfiles.forEach(elemento =>{
       this.listaperfsel.push(new modelolistaconsel(elemento.idperfil,elemento.nombreperfil,false));
     })
-    console.log(this.listaperfsel);
-    this.getUsuarioPerfiles(this._usuario.id,()=>{this.listaperfsel.forEach(element => this.perfilesFormArray.push(new FormControl(element.seleccionado))); console.log(this.listaperfsel);});
+    
+    this.getUsuarioPerfiles(this._usuario.id,()=>{this.listaperfsel.forEach(element => this.perfilesFormArray.push(new FormControl(element.seleccionado))); });
     
   }
  
    
   cambiar(id:number,e){
-    console.log(this.listaperfsel);
+    
     this.listaperfsel.forEach(element=>{
       if(element.id==id)
         if (e.target.checked)
@@ -219,8 +220,8 @@ export class BEUsuarioPanelComponent {
       this._serviciousuario.actualizar(this._usuario,this._usuario.login).subscribe(datos=>
       {
         if (datos.isOk=="N"){
-          this.mensajes.error(datos.dsMens)
-            console.log(datos.dsMens);
+          this.mensajes.error("Error al editar los datos del usuario: "+datos.dsMens)
+            
           
         }
         else{
@@ -234,7 +235,7 @@ export class BEUsuarioPanelComponent {
             
                 if(datos.isOk=="N"){
                   this.mensajes.error(datos.dsMens)
-                  console.log(datos.dsMens);
+                  this.mensajes.error("Error al editar los datos del perfil del usuario: "+datos.dsMens)
                 }
                 
               })     
@@ -252,7 +253,7 @@ export class BEUsuarioPanelComponent {
             
                 if(datos.isOk=="N"){
                   this.mensajes.error(datos.dsMens)
-                  console.log(datos.dsMens);
+                  this.mensajes.error("Error al borrar los datos del perfil del usuario: "+datos.dsMens)
                 }
               }) ;
           })

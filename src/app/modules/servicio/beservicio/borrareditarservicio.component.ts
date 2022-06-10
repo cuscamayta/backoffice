@@ -9,6 +9,7 @@ import { modeloimagen, modeloimagenTotal, modelorequisito } from '../../../model
 import { serviciousuario } from '../../../../app/services/serviciousuario';
 import { servicioautenticacion } from '../../../../app/services/servicioautenticacion';
 import { modelousuario } from '../../../../app/model/modusuario';
+import { EspaciosValidator } from '../../../../app/shared/soloespacios';
 @Component({
   selector: 'app-borrareditarservicio',
   templateUrl: './borrareditarservicio.component.html',
@@ -35,7 +36,7 @@ export class BEServicioPanelComponent implements OnInit{
     ,nombreimagen,imagenfisica,ancho,alto}:modelorequisito) { 
       this.form = fb.group({
         
-        nombre: [nombrerequisito, Validators.required],
+        nombre: [nombrerequisito, [Validators.required,Validators.maxLength(70),EspaciosValidator.solo]],
         idimagen: [idimagen,],
         estado: [estadorequisito, ],
         
@@ -50,7 +51,7 @@ export class BEServicioPanelComponent implements OnInit{
             var i=0;
             this.listadetalleimagenrec.forEach(elemento=>{
                 this.listadetalleimagen[i]=elemento;
-                console.log(this.listadetalleimagen[i]);
+                
                 i=i+1;
             })
             this.load=false;
@@ -70,7 +71,7 @@ export class BEServicioPanelComponent implements OnInit{
 
   imagen(id:number){
     const fileUplodad=document.getElementById('File'+id.toString()) as HTMLInputElement;
-    console.log(this.listadetalleimagen[id]);
+    
     this.respaldoimagen=new modeloimagen(this.listadetalleimagen[id].idimagen,this.listadetalleimagen[id].nombreimagen,
       this.listadetalleimagen[id].imagenfisica,this.listadetalleimagen[id].ancho,this.listadetalleimagen[id].alto);
     fileUplodad.onchange = ()=> {
@@ -146,7 +147,7 @@ export class BEServicioPanelComponent implements OnInit{
 
   getdetalleimagen(idrequisito:number,cbdetimg){
     this.servreq.getdetallerequisitos(idrequisito).subscribe(datos =>{
-      console.log(datos);
+      
       this.listadetalleimagenrec.length=0;
       datos.forEach(element => this.listadetalleimagenrec.push(element))
       cbdetimg();
@@ -176,8 +177,8 @@ export class BEServicioPanelComponent implements OnInit{
       this.servreq.actualizar(this._requisito).subscribe(datos=>
       {
         if (datos.isOk=="N"){
-          this.mensajes.error(datos.dsMens)
-            console.log(datos.dsMens);
+          this.mensajes.error(" Error al editar los datos: " + datos.dsMens)
+            
           
         }
         else{

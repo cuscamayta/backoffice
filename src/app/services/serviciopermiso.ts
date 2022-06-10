@@ -38,7 +38,7 @@ export class serviciopermiso{
         
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaPermisos"
         return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
-            console.log(datos);
+            
             this.listapermiso.length=0;
             this.listapermiso=[];
             datos.permisos.forEach(element => {
@@ -56,7 +56,7 @@ export class serviciopermiso{
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaPermiso"
         const headers = { 'content-type': 'application/json'}  
         const body=JSON.stringify(permact);
-        console.log(body)
+        
         return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
         
     }
@@ -68,7 +68,7 @@ export class serviciopermiso{
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaPermiso"
         const headers = { 'content-type': 'application/json'}  
         const body=JSON.stringify(permag);
-        console.log(body)
+        
         return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
        
      }

@@ -85,16 +85,27 @@
         
         <div class="col-sm-6">
           <label for="permisos"  style="font-weight:bold;text-align:center;display:block">Permisos</label>
-          <ul class="list-group" formArrayName="permisos" *ngFor="let permiso of permisosFormArray.controls; let j = index">
-            <li class="list-group-item">
-              <input class="form-check-input me-1" style="margin-left:3px"  type="checkbox" aria-label="..." [formControlName]="j">
-              <div class="perfilmostrar" style="margin-left:25px">{{listapermisos[j].nombrepermiso}}</div>
-            </li>
+          
+          <ul class="list-group" formArrayName="permisos" *ngFor="let permiso of permisosFormArray.controls; let j = index" >
+            
+              <li class="list-group-item" *ngIf="(listapermisos[j].idpadre==0)">
+                <input class="form-check-input me-1" style="margin-left:3px"  type="checkbox" aria-label="..." [formControlName]="j" disabled>
+                <div class="perfilmostrar" style="margin-left:25px">{{listapermisos[j].nombrepermiso}}</div>
+              </li>
+              <li class="list-group-item" *ngIf="(listapermisos[j].idpadre!=0)">
+                <input class="form-check-input me-1" style="margin-left:23px"  type="checkbox" aria-label="..." [formControlName]="j" disabled>
+                <div class="perfilmostrar" style="margin-left:45px">{{listapermisos[j].nombrepermiso}}</div>
+              </li>
+            
+            
             
           </ul>
         </div>
       </div>
     </div> 
+    <div *ngIf="enviado && f.perfiles.errors" class="mensajevalidacion">
+      <div *ngIf="f.perfiles.errors">Debe seleccionar al menos un perfil</div>
+    </div>
   </form>
 </div>
 </mat-dialog-content>

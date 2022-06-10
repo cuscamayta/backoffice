@@ -10,9 +10,9 @@ export class servicioparametro{
     private listaparametro:modeloparametro[]=[];
      
     constructor(){
-        console.log("entro al constructor");
+        
         this.listaparametro= [new modeloparametro(1,"Contraseña","cre123","Contraseña asignada a los nuevos usuarios"),new modeloparametro(2,"IntervaloProximidadAP","3","Intervalo de tiempo para notificaciones por proximidad")];
-        console.log(this.listaparametro.toString());
+        
     } 
 
     getparametro(id:number){

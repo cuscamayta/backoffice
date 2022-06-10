@@ -15,7 +15,7 @@ export class serviciousuarioperfil{
     private listausuarioperfil:modelousuarioperfil[]=[];
      
     constructor(private http: HttpClient){
-        console.log("entro al constructor");
+        
         this.listausuarioperfil.length=0;
     } 
 
@@ -23,13 +23,13 @@ export class serviciousuarioperfil{
         
         
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaPerfilesDeUnUusario?IdUsuario="+vidusuario
-        console.log(this.cadenahttp);
+        
         this.listausuarioperfil.length=0;
         this.listausuarioperfil=[];
         return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
             
             datos.perfilusuario.forEach(element => this.listausuarioperfil.push(new modelousuarioperfil(element.idusuario,element.idperfil)));
-            console.log(this.listausuarioperfil.length);
+            
             return this.listausuarioperfil;
           }));
        

@@ -53,7 +53,7 @@ export class ParametroComponent implements OnInit{
       .subscribe(
         res => {
           this.listaparametros = res;
-          console.log(this.listaparametros.length)
+          26
         },  
         err => console.error(err)
       );
@@ -68,10 +68,7 @@ export class ParametroComponent implements OnInit{
         this.inicio=((this.config.currentPage*1)-1)*this.config.itemsPerPage+1;
         this.fin=this.config.currentPage*1*this.config.itemsPerPage;
       }
-      console.log(this.inicio);
-      console.log(this.config.itemsPerPage);
-      console.log(this.fin);
-      console.log(this.config);
+      
   }
 
   open(contenido) {
@@ -93,7 +90,7 @@ export class ParametroComponent implements OnInit{
     const dialogRef = this.dialog.open(BEParametroPanelComponent, dialogConfig);
 
     dialogRef.afterClosed().subscribe(
-        data => console.log("Dialog output:", data)
+        data => {}
     );    
   }
 

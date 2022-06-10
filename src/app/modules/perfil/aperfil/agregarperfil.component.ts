@@ -98,8 +98,8 @@ export class APerfilPanelComponent{
       this._servicioperfil.agregar(this._perfil).subscribe(datos=>
       {
         if (datos.isOk=="N"){
-          this.mensajes.error(datos.dsMens)
-            console.log(datos.dsMens);
+          this.mensajes.error("Error al agregar un nuevo perfil: "+datos.dsMens)
+            
           
         }
         else{
@@ -109,7 +109,7 @@ export class APerfilPanelComponent{
               this._servicioperfilpermiso.agregar(new modeloperfilpermiso(this._perfil.idperfil,persel.idpermiso)).subscribe(datos=>{
                 if(datos.isOk=="N"){
                   this.mensajes.error(datos.dsMens)
-                  console.log(datos.dsMens);
+                  
                 }
               });
             
@@ -126,6 +126,27 @@ export class APerfilPanelComponent{
     
   }  
   
+  cambiopermisopadre(id:number,evento){
+     var valor=false;
+     console.log("entro al evento de consola"+id+evento.value);
+     this.listapermisossel.forEach(elemento=>{
+       if(elemento.idpermiso==id){
+         valor=!elemento.estado;
+         elemento.estado=valor;
+       }
+       if(elemento.idpadre==id){
+         elemento.estado=valor;
+       }
+     })
+     // actualizar pantalla con los valores del padre
+     let index = 0; 
+     for(index=0;index<this.listapermisossel.length;index=index+1){
+        (<FormArray>this.form.controls['permisos']).at(index).patchValue(this.listapermisossel[index].estado);
+     }  
+  }
+
+
+
   abrirpop(popover){
     if (popover.isOpen()) {
       

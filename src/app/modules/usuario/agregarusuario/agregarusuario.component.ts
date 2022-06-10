@@ -16,6 +16,11 @@ import { ToastrService } from 'ngx-toastr';
 import { serviciopermiso } from '../../../services/serviciopermiso';
 import { servicioautenticacion } from './../../../services/servicioautenticacion';
 import { EspaciosValidator } from '../../../shared/soloespacios';
+import { almenosunitem } from '../../../shared/almenosunitem';
+import { hoja } from '../../../shared/arbol';
+
+
+
 
 @Component({
   selector: 'app-borrareditarusuario',
@@ -28,11 +33,13 @@ export class AUsuarioPanelComponent {
   form: FormGroup;
   load:boolean;
   public listaperfsel:modelolistaconsel[]=[];
-  
+  arbolpermisos:hoja[]=[];
   enviado=false;
   
   
   _usuario:modelousuario;
+
+  
 
   constructor(private mensajes:ToastrService, private dialogRefBE: MatDialogRef<AUsuarioPanelComponent>,
     private servpermisos:serviciopermiso,private servperperf:servicioperfilpermiso,
@@ -43,6 +50,7 @@ export class AUsuarioPanelComponent {
     this.listapermisos.length=0;
     this.listapermisos=[];
     this.enviado=false;
+
     this._usuario=new modelousuario(0,'','','','','','','S','',0,'',0);
     this.form = fb.group({
       usuario: ['', [Validators.required,Validators.maxLength(30),EspaciosValidator.solo]],
@@ -50,14 +58,26 @@ export class AUsuarioPanelComponent {
       apellidos: ['', [Validators.required,Validators.maxLength(50),EspaciosValidator.solo]],
       telefono: ['', [Validators.required,Validators.maxLength(20)]],
       direccion: ['', [Validators.required,EspaciosValidator.solo]],
-      perfiles: new FormArray([]),
+      perfiles: new FormArray([],[Validators.required,almenosunitem()]),
       permisos: new FormArray([]),
 
      });
 
       this.load=true;
       setTimeout(()=>{                           
-        this.getPermisos(()=>{this.listapermisos.forEach(element => this.permisosFormArray.push(new FormControl(element.estado)));}); 
+        this.getPermisos(()=>{this.listapermisos.forEach(element =>{
+           /* if(element.idpadre==0){
+              this.arbolpermisos.push(new hoja(element.idpermiso,element.nombrepermiso,[]))
+           }
+           else{
+             this.arbolpermisos.forEach(arbolhoja=>{
+               if(arbolhoja.value==element.idpadre){
+                 arbolhoja.agregarhijo(element.idpermiso,element.nombrepermiso);
+               }
+             })
+           } */
+           this.permisosFormArray.push(new FormControl(element.estado));
+          });}); 
         this.getPerfiles(()=>{this.crealistasel();this.listaperfsel.forEach(element => this.perfilesFormArray.push(new FormControl(element.seleccionado)));this.load=false;});
       }, 1000);  
      
@@ -90,7 +110,7 @@ export class AUsuarioPanelComponent {
       .subscribe(
         res => {
           this.listaperfiles = res;
-          console.log(this.listaperfiles);
+          
           cbperfiles();
         });
 
@@ -172,8 +192,8 @@ export class AUsuarioPanelComponent {
       this._serviciousuario.agregar(this._usuario).subscribe(datos=>
       {
         if (datos.isOk=="N"){
-          this.mensajes.error(datos.dsMens)
-          console.log(datos.dsMens);
+          this.mensajes.error("Error al agregar usuario: "+datos.dsMens)
+          
         }
         else{
           
@@ -187,7 +207,7 @@ export class AUsuarioPanelComponent {
                 if(datos.isOk=="N")
                 {
                   this.mensajes.error(datos.dsMens)
-                  console.log(datos.dsMens);
+                  
                 }
               })     
                 

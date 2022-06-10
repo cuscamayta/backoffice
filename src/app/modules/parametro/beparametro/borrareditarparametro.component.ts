@@ -63,13 +63,13 @@ export class BEParametroPanelComponent implements OnInit{
       {
         
           this.close();
-          console.log("Los datos se guardaron correctamente");
+          
          
         
       }
       else
       {
-        console.log("Sucedio un error al guardar los datos")
+        
         
       }
     }

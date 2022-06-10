@@ -9,6 +9,7 @@ import { modeloimagen, modeloimagenTotal, modelorequisito } from '../../../model
 import { serviciousuario } from '../../../../app/services/serviciousuario';
 import { servicioautenticacion } from '../../../../app/services/servicioautenticacion';
 import { modelousuario } from '../../../../app/model/modusuario';
+import { EspaciosValidator } from '../../../../app/shared/soloespacios';
 @Component({
   selector: 'app-agregarservicio',
   templateUrl: './agregarservicio.component.html',
@@ -38,12 +39,12 @@ export class AServicioPanelComponent implements OnInit{
       this._requisito.usuarioregistra=this._usuautenticado.id;
       this.form = fb.group({
         
-        nombre: [this._requisito.nombrerequisito, Validators.required],
+        nombre: [this._requisito.nombrerequisito, [Validators.required,Validators.maxLength(70),EspaciosValidator.solo]],
         idimagen: [this._requisito.idimagen,],
         estado: [this._requisito.estadorequisito, ],
         
        });
-       console.log(this.form.value.idimage);
+       
       
         
     }
@@ -59,7 +60,7 @@ export class AServicioPanelComponent implements OnInit{
   
   imagen(id:number){
     const fileUplodad=document.getElementById('File'+id.toString()) as HTMLInputElement;
-    console.log(this.listadetalleimagen[id]);
+    
     this.respaldoimagen=new modeloimagen(this.listadetalleimagen[id].idimagen,this.listadetalleimagen[id].nombreimagen,
       this.listadetalleimagen[id].imagenfisica,this.listadetalleimagen[id].ancho,this.listadetalleimagen[id].alto);
     fileUplodad.onchange = ()=> {
@@ -146,7 +147,7 @@ export class AServicioPanelComponent implements OnInit{
 
   getdetalleimagen(id:number,cbdetimg){
     this.servreq.getdetallerequisitos(id).subscribe(datos =>{
-      console.log(datos);
+      
       this.listadetalleimagenrec.length=0;
       datos.forEach(element => this.listadetalleimagenrec.push(element))
       cbdetimg();
@@ -177,7 +178,7 @@ export class AServicioPanelComponent implements OnInit{
       {
         if (datos.isOk=="N"){
           this.mensajes.error(datos.dsMens)
-            console.log(datos.dsMens);
+            
           
         }
         else{

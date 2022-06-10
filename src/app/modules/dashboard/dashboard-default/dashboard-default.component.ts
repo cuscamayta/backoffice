@@ -21,7 +21,7 @@ export class DashboardDefaultComponent implements OnInit{
   ngOnInit() {
     this.acceso2=JSON.parse(localStorage.getItem('accesos'));
     this._servicioautenticacion.opcion.subscribe(valor=>{this.acceso2=valor;
-    console.log(this.acceso2);});
+    });
   }
 
   

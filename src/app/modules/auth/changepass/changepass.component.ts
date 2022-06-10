@@ -59,28 +59,25 @@ export class ChangePassComponent implements OnInit{
         this._serviciousuario.actualizar(this._usuario,this.form.value.nueva).subscribe(datos=>{
         if (datos.isOk=="S")
           {
-            console.log("Se cambio la contraseña correctamente");
-            
+            this.mensajes.success("Se cambio la contraseña correctamente");
             this.close(datos);
           }
           else
           {
-            console.log("Sucedio un error al cambiar la contraseña")
-            this.mensajes.error(datos.dsMens);
+            this.mensajes.error("Sucedio un error al cambiar la contraseña: "+datos.dsMens);
           }
         });
 
       }
       else 
       {
-        console.log("Sucedio un error al cambiar la contraseña")
+        
         this.mensajes.error("La Contraseña nueva debe ser igual al campo confirmar");
       }
 
       
     }
     else{
-      console.log("Sucedio un error al cambiar la contraseña")
       this.mensajes.error("Se deben rellenar todos los campos para cambiar contraseña");
     }
     

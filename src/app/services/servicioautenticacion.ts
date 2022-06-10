@@ -48,8 +48,7 @@ export class servicioautenticacion {
         this.listapermisos = this.listapermisosSubject.asObservable();
         this.menu=JSON.parse(localStorage.getItem('menu'));
         this.accesos=JSON.parse(localStorage.getItem('accesos'));
-        console.log(this.menu);
-        console.log(this.accesos);
+        
         this.menues.emit(this.menu);
         this.opcion.emit(this.accesos);
         this.traerusuarios(()=>{});
@@ -76,7 +75,7 @@ export class servicioautenticacion {
         this.permisos=[];
         
         this.servusu.getusuariopassword(usuario,password).subscribe(datos => { 
-            console.log(datos);
+            
             if(datos.isOk=="S"){
                 usuariotemp= new modelousuario(datos.usuario[0].idusuario,datos.usuario[0].login,
                     datos.usuario[0].nombre,datos.usuario[0].apellido,datos.usuario[0].telefono
@@ -89,7 +88,7 @@ export class servicioautenticacion {
                         ,element.fechamodificacion,element.usuariomodifica); 
                     
                 }); */
-                console.log(usuariotemp);
+                
                 if (usuariotemp!=null){
                     this.menu=modmenu.cargarmenu();
                     this.accesos=modmenu.cargaraccesos();
@@ -98,7 +97,7 @@ export class servicioautenticacion {
                     this.ObtenerPermisos(()=>
                         this.ObtenerPermisosMenuUsuario(()=>{},()=>{
                             if(this.lista.length>0){
-                                console.log(this.permisos);
+                                
                                 this.permisos.forEach(perusu=>{
                                     
                                     this.lista.forEach(eleper=>{
@@ -128,8 +127,7 @@ export class servicioautenticacion {
                                           }
                                         
                                       })
-                                      console.log(this.menu);
-                                      console.log(this.accesos);
+                                      
                                       
                                       localStorage.setItem('menu',JSON.stringify(this.menu));
                                       localStorage.setItem('accesos',JSON.stringify(this.accesos));

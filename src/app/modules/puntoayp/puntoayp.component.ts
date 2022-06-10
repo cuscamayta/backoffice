@@ -59,10 +59,10 @@ export class PuntoaypComponent implements OnInit{
 
   getPuntosayp(cbpuntos) {
     this.servpuntoayp.getpuntoayps().subscribe(datos =>{
-      console.log(datos);
+      
       this.listapuntosayp.length=0;
       datos.forEach(element =>{ this.listapuntosayp.push(element);
-      console.log(element);})
+      })
       cbpuntos();
     });  
   }
@@ -76,17 +76,13 @@ export class PuntoaypComponent implements OnInit{
         this.inicio=((this.config.currentPage*1)-1)*this.config.itemsPerPage+1;
         this.fin=this.config.currentPage*1*this.config.itemsPerPage;
       }
-      console.log(this.inicio);
-      console.log(this.config.itemsPerPage);
-      console.log(this.fin);
-      console.log(this.config);
+      
   }
 
   selectcheck(id:number) {
     
-    console.log(id);
     this.servicios[id-1]=!this.servicios[id-1];
-    console.log(this.servicios);
+   
   }
 
   open(contenido) {
@@ -110,7 +106,7 @@ export class PuntoaypComponent implements OnInit{
         if (data!=null){
           this.puntoaypactual=data;
           this.listapuntosayp.push(this.puntoaypactual);
-          console.log(data);
+          
           this.mensajes.success("Punto de Atención y Pago "+this.puntoaypactual.nombre + " agregado correctamente","Mensaje Informativo")
         }
       }
@@ -139,7 +135,7 @@ export class PuntoaypComponent implements OnInit{
             if(this.listapuntosayp[i].idpunto==this.puntoaypactual.idpunto)
             this.listapuntosayp[i]=this.puntoaypactual;
           }
-          console.log(data);
+          
           this.mensajes.success("Punto de Atención y Pago "+this.puntoaypactual.nombre + " actualizado correctamente","Mensaje Informativo")
           
         }
@@ -163,7 +159,7 @@ export class PuntoaypComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(
         data => {
-          console.log(data.respuesta);
+          
           if (data.respuesta){
             if (!this.servpuntoayp.borrar(id)){
               this.mensajes.error("El punto de atención o pago no se ha podido borrar","Mensaje de Advertencia");

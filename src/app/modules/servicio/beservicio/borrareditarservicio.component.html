@@ -10,9 +10,10 @@
         <label for="nombre">Nombre</label>
       </div>
       <div class="col-sm-12">
-        <input formControlName="nombre"  type="text" class="form-control">
+        <input formControlName="nombre"  type="text" class="form-control" [maxlength]="70" required>
         <div *ngIf="enviado && f.nombre.errors" class="mensajevalidacion">
           <div *ngIf="f.nombre.errors.required">El campo nombre debe ser llenado</div>
+          <div *ngIf="f.nombre.errors.solo">El campo nombre no debe contener solo espacios</div>
         </div>
       </div>
       

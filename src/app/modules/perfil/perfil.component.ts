@@ -66,11 +66,9 @@ export class PerfilComponent implements OnInit{
     if (times.length > 0) {
       // Remove the first time from the array
       let wait = times.shift();
-      console.log("Waiting For: " + wait/1000 + " seconds");
       
       // Wait for the given amount of time
       setTimeout(() => {
-          console.log("Waited For: " + wait/1000 + " seconds");
           // Call the setDelay function again with the remaining times
           this.setDelay(times);
       }, wait);
@@ -93,8 +91,8 @@ export class PerfilComponent implements OnInit{
       .subscribe(
         res => {
           this.listaperfiles.length=0;
-          res.forEach(element => {this.listaperfiles.push(element),console.log(element);})
-          console.log(this.listaperfiles);
+          res.forEach(element => {this.listaperfiles.push(element);})
+          
           cbperfiles();
         },  
         err => console.error(err)
@@ -102,7 +100,7 @@ export class PerfilComponent implements OnInit{
   }
   filtropermiso(idpermiso){
     if(idpermiso!=null){
-      console.log(idpermiso);
+      
       this.getPerfilesfiltro(()=>{this.totalreg=this.listaperfiles.length;},idpermiso)
     }
     else
@@ -111,7 +109,7 @@ export class PerfilComponent implements OnInit{
 
   /* filtropermiso(eventofiltro){
     if(eventofiltro.target.value!=null){
-      console.log(eventofiltro.target.value);
+      
       this.getPerfilesfiltro(()=>{this.totalreg=this.listaperfiles.length;},eventofiltro.target.value)
     }
     else
@@ -119,13 +117,13 @@ export class PerfilComponent implements OnInit{
   } */
 
   getPerfilesfiltro(cbperfiles,filtro:number) {
-    console.log(filtro);
+    
     this.servperfil.getperfilesfiltro(filtro)
       .subscribe(
         res => {
           this.listaperfiles.length=0;
-          res.forEach(element => {this.listaperfiles.push(element),console.log(element);})
-          console.log(this.listaperfiles);
+          res.forEach(element => {this.listaperfiles.push(element);})
+          
           cbperfiles();
         },  
         err => console.error(err)
@@ -141,10 +139,7 @@ export class PerfilComponent implements OnInit{
         this.inicio=((this.config.currentPage*1)-1)*this.config.itemsPerPage+1;
         this.fin=this.config.currentPage*1*this.config.itemsPerPage;
       }
-      console.log(this.inicio);
-      console.log(this.config.itemsPerPage);
-      console.log(this.fin);
-      console.log(this.config);
+      
   }
 
   selectcheck(id:number) {
@@ -202,7 +197,7 @@ export class PerfilComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(
       data => {
-          console.log(data.respuesta);
+          
           if (data.respuesta){
             if ($event.checked){
       
@@ -211,7 +206,7 @@ export class PerfilComponent implements OnInit{
                   if (element.idperfil==idperfil){
                     element.estadoperfil="S";
                     this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " habilitado correctamente","Mensaje Informativo")
-                    console.log(element.estadoperfil);
+                    
                     
                   }
                 })
@@ -226,7 +221,7 @@ export class PerfilComponent implements OnInit{
                   if (element.idperfil==idperfil){
                     element.estadoperfil="N";
                     this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " deshabilitado correctamente","Mensaje Informativo")
-                    console.log(element.estadoperfil);
+                    
                     
                   }
                 })
@@ -271,7 +266,7 @@ export class PerfilComponent implements OnInit{
               if(this.listaperfiles[i].idperfil==this.perfilactual.idperfil)
               this.listaperfiles[i]=this.perfilactual;
             }
-            console.log(data);
+            
             this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " actualizado correctamente","Mensaje Informativo")
             
           }
@@ -293,7 +288,7 @@ export class PerfilComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(
         data => {
-          console.log(data.respuesta);
+          
           if (data.respuesta){
             if (!this.servperfil.borrar(id)){
               this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " no se ha podido borrar","Mensaje Informativo")
