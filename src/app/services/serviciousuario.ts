@@ -73,17 +73,19 @@ export class serviciousuario{
           }));
      }
 
-     getusuariosfiltro(IdPerfil:number):Observable<any>{
+     getusuariosfiltro(Id:string):Observable<any>{
         
-        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaUsuariosDeUnPerfil?IdPerfil="+IdPerfil
+        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/RetornaUsuarios"
         return this.http.post<any>(this.cadenahttp,null).pipe(map(datos => {
             
             this.listausuario.length=0;
             this.listausuario=[];
             datos.usuarios.forEach(element => {
-                this.listausuario.push(new modelousuario(element.id,element.login,element.nombre,element.apellido,element.telefono
-                    ,element.correo,element.estado,element.primeravez,element.fecharegistro,element.usuarioregistra
-                    ,element.fechamodificacion,element.usuariomodifica));
+                if(element.estado==Id){
+                    this.listausuario.push(new modelousuario(element.id,element.login,element.nombre,element.apellido,element.telefono
+                        ,element.correo,element.estado,element.primeravez,element.fecharegistro,element.usuarioregistra
+                        ,element.fechamodificacion,element.usuariomodifica));
+                }
             });
                 
                 
@@ -128,9 +130,24 @@ export class serviciousuario{
           });
      }  
 
+
+     habilitar(idusuario:number){
+        var resp=false;                      
+       this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/HabilitarUsuario?IdUsuario="+idusuario
+       return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+           if (datos.isOk="S"){
+               resp=true;
+           }
+           
+           
+           return resp;
+         });
+       
+    }
+
      deshabilitar(idusuario:number){
-        var resp=false;
-       this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/DesHabilitarUsuario?IdUsuario="+idusuario
+        var resp=false;                      
+       this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/DeshabilitarUsuario?IdUsuario="+idusuario
        return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
            if (datos.isOk="S"){
                resp=true;

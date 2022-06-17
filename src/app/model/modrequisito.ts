@@ -7,18 +7,18 @@ export class modelorequisito{
     idrequisito:number;
     nombrerequisito:string;
     estadorequisito:string;
-    usuarioregistra?:number;
-    fecharegistro?:string;
-    usuariomodifica?:number;
-    fechamodificacion?:string;
+    usuarioregistra:number;
+    fecharegistro:string;
+    usuariomodifica:number;
+    fechamodificacion:string;
     idimagen:number;
     nombreimagen:string;
     imagenfisica:string;
     ancho:number;
     alto:number;
     
-    constructor(vid:number,vnombre:string,vestado:string,vfechareg:string,vusureg:number,
-      vfecmod:string,vusumod:number,vidimg:number,vnomimg:string,vimagen:string,vancho:number,valto:number){
+    constructor(vid:number,vnombre:string,vestado:string,vusureg:number,vfechareg:string,
+      vusumod:number,vfecmod:string,vidimg:number,vnomimg:string,vimagen:string,vancho:number,valto:number){
         this.idrequisito=vid;
         this.nombrerequisito=vnombre;
         this.estadorequisito=vestado;

@@ -41,6 +41,7 @@ export class ServicioComponent implements OnInit{
     this.servreq.getrequisitos().subscribe(datos =>{
       
       this.listaservicio.length=0;
+      console.log(this.listaservicio);
       datos.forEach(element =>{ this.listaservicio.push(element);
       })
       cbRequisitos();
@@ -114,15 +115,15 @@ export class ServicioComponent implements OnInit{
       );    
     }
 
-  public openeditarservicio({idrequisito,nombrerequisito,estadorequisito,usuarioregistra
-  ,fecharegistro,usuariomodifica,fechamodificacion,idimagen
+  public openeditarservicio({idrequisito,nombrerequisito,estadorequisito
+    ,usuarioregistra,fecharegistro,usuariomodifica,fechamodificacion,idimagen
   ,nombreimagen,imagenfisica,ancho,alto}:modelorequisito):void {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
-    dialogConfig.data= {idrequisito,nombrerequisito,estadorequisito,usuarioregistra
-      ,fecharegistro,usuariomodifica,fechamodificacion,idimagen
+    dialogConfig.data= {idrequisito,nombrerequisito,estadorequisito
+      ,usuarioregistra,fecharegistro,usuariomodifica,fechamodificacion,idimagen
     ,nombreimagen,imagenfisica,ancho,alto};
     dialogConfig.scrollStrategy
 

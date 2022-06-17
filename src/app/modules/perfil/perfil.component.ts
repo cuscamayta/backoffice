@@ -12,6 +12,7 @@ import { modeloperfil } from './../../model/modperfil';
 import { ToastrService } from 'ngx-toastr';
 import { serviciopermiso } from './../../services/serviciopermiso';
 import { modpermiso } from './../../model/modpermiso';
+import { modelohabilitado } from './../../model/modHabilitado';
 
 
 
@@ -32,6 +33,7 @@ export class PerfilComponent implements OnInit{
   totalreg:number;
   listapermisos:modpermiso[]=[];
   load:boolean;
+  opciones:modelohabilitado[]=[];
   
 
   constructor(private mensajes:ToastrService, private servperfil:servicioperfil, 
@@ -42,6 +44,8 @@ export class PerfilComponent implements OnInit{
     this.inicio=1;
     this.fin=this.config.currentPage*1*this.config.itemsPerPage;
     this.config.currentPage=1;
+    this.opciones.push(new modelohabilitado("S","Habilitado"));
+    this.opciones.push(new modelohabilitado("N","DesHabilitado"));
     this.getPermisos(()=>{});
   }
   
@@ -98,25 +102,18 @@ export class PerfilComponent implements OnInit{
         err => console.error(err)
       );
   }
-  filtropermiso(idpermiso){
-    if(idpermiso!=null){
+  filtro(id){
+    if(id!=null){
       
-      this.getPerfilesfiltro(()=>{this.totalreg=this.listaperfiles.length;},idpermiso)
+      this.getPerfilesfiltro(()=>{this.totalreg=this.listaperfiles.length;},id)
     }
     else
       this.getPerfiles(()=>{this.totalreg=this.listaperfiles.length; });
   }
 
-  /* filtropermiso(eventofiltro){
-    if(eventofiltro.target.value!=null){
-      
-      this.getPerfilesfiltro(()=>{this.totalreg=this.listaperfiles.length;},eventofiltro.target.value)
-    }
-    else
-      this.getPerfiles(()=>{this.totalreg=this.listaperfiles.length; });
-  } */
+  
 
-  getPerfilesfiltro(cbperfiles,filtro:number) {
+  getPerfilesfiltro(cbperfiles,filtro:string) {
     
     this.servperfil.getperfilesfiltro(filtro)
       .subscribe(
@@ -142,7 +139,7 @@ export class PerfilComponent implements OnInit{
       
   }
 
-  selectcheck(id:number) {
+  selectcheck(id:string) {
     this.getPerfilesfiltro(()=>{},id);
   
   }

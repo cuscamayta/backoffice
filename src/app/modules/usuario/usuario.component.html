@@ -196,11 +196,11 @@
 
   <div style="text-align: center;margin: 5px;color:#3A3D5F">Perfiles</div>
   <ul class="listafiltro">
-    <li style="cursor:pointer;" (click)="filtroperfil(null)">
+    <li style="cursor:pointer;" (click)="filtro(null)">
       ( Todos )
     </li>
-    <li  *ngFor="let perf of listaperfiles" (click)="filtroperfil(perf.idperfil)" style="cursor:pointer;">
-      {{perf.nombreperfil}}
+    <li  *ngFor="let opcion of opciones" (click)="filtro(opcion.id)" style="cursor:pointer;">
+      {{opcion.nombre}}
     </li>
   </ul>
   <!-- <select name="perfiles" id="perfiles"(change)="filtroperfil($event)">

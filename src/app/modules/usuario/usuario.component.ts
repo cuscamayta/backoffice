@@ -15,6 +15,7 @@ import {  Observable} from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { PaginationInstance } from 'ngx-pagination';
 import { modeloperfil } from './../../model/modperfil';
+import { modelohabilitado } from './../../model/modHabilitado';
 
 
 
@@ -37,17 +38,19 @@ export class UsuarioComponent implements OnInit{
   fin:number;
   totalreg:number;
   load:boolean;
-  
+  opciones:modelohabilitado[]=[];
   
  
 
   closeResult = '';
 
-  constructor(private mensajes:ToastrService, private servperfil:servicioperfil,private servusuario:serviciousuario,private dialog:MatDialog, private modalService: NgbModal,private _overlaySidePanelService: SidePanelOverlayService) {
+  constructor(private mensajes:ToastrService, private servperfil:servicioperfil,private servusuario:serviciousuario,private dialog:MatDialog, private modalService: NgbModal) {
     this.config.itemsPerPage=5;
     this.inicio=1;
     this.fin=this.config.currentPage*1*this.config.itemsPerPage;
     this.config.currentPage=1;
+    this.opciones.push(new modelohabilitado("S","Habilitado"));
+    this.opciones.push(new modelohabilitado("N","DesHabilitado"));
     this.getPerfiles(()=>{})
   }
  ngOnInit(): void {
@@ -83,8 +86,8 @@ export class UsuarioComponent implements OnInit{
     });  
   }
 
-  getUsuariosfiltro(cbUsuarios,IdPerfil:number) {
-    this.usuarios$=this.servusuario.getusuariosfiltro(IdPerfil);
+  getUsuariosfiltro(cbUsuarios,Id:string) {
+    this.usuarios$=this.servusuario.getusuariosfiltro(Id);
     
     this.usuarios$.subscribe(datos =>{
       
@@ -106,13 +109,13 @@ export class UsuarioComponent implements OnInit{
     
   }
 
-  filtroperfil(idperfil){
-    if(idperfil!=null){
+  filtro(id){
+    if(id!=null){
       
-      this.getUsuariosfiltro(()=>{this.totalreg=this.listaperfiles.length;},idperfil)
+      this.getUsuariosfiltro(()=>{this.totalreg=this.listausuarios.length;},id)
     }
     else
-      this.getUsuarios(()=>{this.totalreg=this.listaperfiles.length; });
+      this.getUsuarios(()=>{this.totalreg=this.listausuarios.length; });
   }
   
   actualizarrango(valor){
@@ -235,7 +238,7 @@ export class UsuarioComponent implements OnInit{
           if (data.respuesta){
             if ($event.checked){
       
-              if (this.servperfil.habilitar(idusuario)) {
+              if (this.servusuario.habilitar(idusuario)) {
                 this.listausuarios.forEach(element=>{
                   if (element.id==idusuario){
                     this.usuarioactual=element;
@@ -249,7 +252,7 @@ export class UsuarioComponent implements OnInit{
               
             }
             else{
-              if (this.servperfil.deshabilitar(idusuario)) {
+              if (this.servusuario.deshabilitar(idusuario)) {
                 
                 this.listausuarios.forEach(element=>{
                   if (element.id==idusuario){

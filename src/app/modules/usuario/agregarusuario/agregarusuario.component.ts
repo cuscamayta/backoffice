@@ -200,7 +200,8 @@ export class AUsuarioPanelComponent {
           this._usuario=datos.usuario[0];
           
           this.listaperfsel.forEach(elemento=>{
-            _usuperf=new modelousuarioperfil(this._usuario.id,elemento.id);
+            if(elemento.seleccionado){
+              _usuperf=new modelousuarioperfil(this._usuario.id,elemento.id);
             
               this._servusuperf.agregar(_usuperf).subscribe(datos => {
             
@@ -210,7 +211,7 @@ export class AUsuarioPanelComponent {
                   
                 }
               })     
-                
+            }
           })
           
           

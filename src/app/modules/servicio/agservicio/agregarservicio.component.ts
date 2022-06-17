@@ -27,7 +27,7 @@ export class AServicioPanelComponent implements OnInit{
   public respaldoimagen:modeloimagen;
   
   _requisito:modelorequisito=new modelorequisito(0,"",""
-  ,"",0,"",0,0
+  ,0,"",0,"",0
   ,"","",0,0);;
   constructor(private mensajes:ToastrService,private servreq:serviciorequisito,
     private servaut:servicioautenticacion,
@@ -189,18 +189,21 @@ export class AServicioPanelComponent implements OnInit{
           
           _imagencomp=new modeloimagenTotal(this._requisito.idimagen,this._requisito.nombreimagen,
                         this._requisito.imagenfisica,this._requisito.alto,this._requisito.ancho,1,this._requisito.idrequisito);
-          
               this.servreq.agregarimagen(_imagencomp).subscribe(resap=>{
+                console.log(resap);
                 this.listadetalleimagen.forEach(elemento=>{
-                  if (elemento.idimagen!=0){
-                  _imagencomp=new modeloimagenTotal(elemento.idimagen,elemento.nombreimagen,
-                    elemento.imagenfisica,elemento.ancho,elemento.alto,2,this._requisito.idrequisito);
-                    this.servreq.agregarimagen(_imagencomp);
+                  if(elemento.idimagen!=0){
+                    _imagencomp=new modeloimagenTotal(elemento.idimagen,elemento.nombreimagen,
+                      elemento.imagenfisica,elemento.ancho,elemento.alto,2,this._requisito.idrequisito);
+                      this.servreq.agregarimagen(_imagencomp).subscribe(resultadoii=>{
+                        console.log(resultadoii);
+                      });
                   }
+                  
+                    
                 })
+                callback();
               })
-              callback();
-          
         }
       })
     }

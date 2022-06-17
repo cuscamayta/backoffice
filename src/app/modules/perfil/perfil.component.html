@@ -191,11 +191,11 @@
 
 <ng-template #clickImgTemp>
   <ul class="listafiltro">
-    <li style="cursor:pointer;" (click)="filtropermiso(null)">
+    <li style="cursor:pointer;" (click)="filtro(null)">
       ( Todos )
     </li>
-    <li  *ngFor="let perm of listapermisos" (click)="filtropermiso(perm.idpermiso)" style="cursor:pointer;">
-      {{perm.nombrepermiso}}
+    <li  *ngFor="let opcion of opciones" (click)="filtro(opcion.id)" style="cursor:pointer;">
+      {{opcion.nombre}}
     </li>
   </ul>
   <!-- <select name="permisos" id="permisos" (change)="filtropermiso($event)">

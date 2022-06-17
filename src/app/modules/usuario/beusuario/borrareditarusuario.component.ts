@@ -227,19 +227,20 @@ export class BEUsuarioPanelComponent {
         else{
           
           this._usuario=datos.usuario[0];
-          
+          console.log(this.listaperfsel);
           this.listaperfsel.forEach(elemento=>{
-            _usuperf=new modelousuarioperfil(this._usuario.id,elemento.id);
-            if (!this.listausuarioperfil.includes(_usuperf))
-              this._servusuperf.agregar(_usuperf).subscribe(datos => {
-            
-                if(datos.isOk=="N"){
-                  this.mensajes.error(datos.dsMens)
-                  this.mensajes.error("Error al editar los datos del perfil del usuario: "+datos.dsMens)
-                }
-                
+            if(elemento.seleccionado){
+              _usuperf=new modelousuarioperfil(this._usuario.id,elemento.id);
+              if (!this.listausuarioperfil.includes(_usuperf))
+                this._servusuperf.agregar(_usuperf).subscribe(datos => {
+              
+                  if(datos.isOk=="N"){
+                    this.mensajes.error(datos.dsMens)
+                    this.mensajes.error("Error al editar los datos del perfil del usuario: "+datos.dsMens)
+                  }
+                  
               })     
-                
+            }
           })
           this.listausuarioperfil.forEach(datos=>{
             eliminar=true;

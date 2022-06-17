@@ -31,8 +31,8 @@ export class BEServicioPanelComponent implements OnInit{
     private servaut:servicioautenticacion,
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<BEServicioPanelComponent>, private dialog: MatDialog,@Inject(MAT_DIALOG_DATA) 
-    {idrequisito,nombrerequisito,estadorequisito,usuarioregistra
-    ,fecharegistro,usuariomodifica,fechamodificacion,idimagen
+    {idrequisito,nombrerequisito,estadorequisito
+    ,fecharegistro,usuarioregistra,fechamodificacion,usuariomodifica,idimagen
     ,nombreimagen,imagenfisica,ancho,alto}:modelorequisito) { 
       this.form = fb.group({
         
@@ -45,8 +45,10 @@ export class BEServicioPanelComponent implements OnInit{
        this.load=true;
       setTimeout(()=>{                           //<<<---using ()=> syntax
         this._requisito=new modelorequisito(idrequisito,nombrerequisito,estadorequisito
-          ,fecharegistro,usuarioregistra,fechamodificacion,usuariomodifica,idimagen
+          ,usuarioregistra,fecharegistro,usuariomodifica,fechamodificacion,idimagen
           ,nombreimagen,imagenfisica,ancho,alto);
+          console.log(fecharegistro,usuarioregistra,fechamodificacion,usuariomodifica);
+          console.log(this._requisito);
           this.getdetalleimagen(this._requisito.idrequisito,()=>{
             var i=0;
             this.listadetalleimagenrec.forEach(elemento=>{
@@ -54,6 +56,7 @@ export class BEServicioPanelComponent implements OnInit{
                 
                 i=i+1;
             })
+            
             this.load=false;
           });
       }, 1000);
@@ -174,6 +177,7 @@ export class BEServicioPanelComponent implements OnInit{
       
       this._requisito.nombrerequisito=this.form.value.nombre;
       this._requisito.usuariomodifica=_usuautenticado.id;
+      console.log(this._requisito);
       this.servreq.actualizar(this._requisito).subscribe(datos=>
       {
         if (datos.isOk=="N"){
@@ -191,16 +195,25 @@ export class BEServicioPanelComponent implements OnInit{
           this.servreq.eliminarimagen(_imagencomp.idimagen).subscribe(resultado=>{
             if(resultado.isOk=="S"){
               this.servreq.agregarimagen(_imagencomp).subscribe(resap=>{
+                console.log(this.listadetalleimagenrec);
+                console.log(this.listadetalleimagen);
                 this.listadetalleimagenrec.forEach(elemento=>{
-                  this.servreq.eliminarimagen(elemento.idimagen)
+                  this.servreq.eliminarimagen(elemento.idimagen).subscribe(est=>{});
                 })
                 this.listadetalleimagen.forEach(elemento=>{
-                  _imagencomp=new modeloimagenTotal(elemento.idimagen,elemento.nombreimagen,
-                    elemento.imagenfisica,elemento.ancho,elemento.alto,2,this._requisito.idrequisito);
-                    this.servreq.agregarimagen(_imagencomp);
+                  if(elemento.idimagen!=0){
+                    _imagencomp=new modeloimagenTotal(elemento.idimagen,elemento.nombreimagen,
+                      elemento.imagenfisica,elemento.ancho,elemento.alto,2,this._requisito.idrequisito);
+                      this.servreq.agregarimagen(_imagencomp).subscribe(resultadoii=>{
+                        console.log(_imagencomp);
+                      });
+                  }
+                  
+                    
                 })
+                callback();
               })
-              callback();
+              
             }
           })
         }
@@ -221,6 +234,7 @@ export class BEServicioPanelComponent implements OnInit{
     else{
       this._requisito.estadorequisito="0";
     }
+    console.log(this._requisito);
   }
 
   abrirpop(popover){
