@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { environment } from "../../environments/environment.prod";
-import { modeloperfilpermiso } from "../model/modperfilpermiso";
+import { modeloperfilpermiso, modeloperfilpermisoact } from "../model/modperfilpermiso";
 import { HttpClient } from '@angular/common/http';
 import { map } from "rxjs/operators";
 @Injectable({
@@ -46,4 +46,14 @@ export class servicioperfilpermiso{
         return this.http.post<any>(this.cadenahttp,null);
        
      }
+
+     actualizarpermisos(perfil:modeloperfilpermisoact){
+        
+        
+       this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/ActualizaPermisosDeUnPerfil"
+       const headers = { 'content-type': 'application/json'}  
+       const body=JSON.stringify(perfil);
+       console.log(perfil);
+       return this.http.post<any>(this.cadenahttp , body,{'headers':headers});
+   }
 }

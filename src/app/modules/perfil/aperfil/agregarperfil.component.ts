@@ -4,7 +4,7 @@ import { MatDialogConfig, MatDialogRef } from '@angular/material';
 import { modeloperfil } from './../../../model/modperfil';
 import { servicioperfil } from './../../../services/servicioperfil';
 import {FormBuilder, Validators, FormGroup, FormArray, FormControl} from "@angular/forms";
-import { modeloperfilpermiso } from './../../../model/modperfilpermiso';
+import { actpermiso, modeloperfilpermiso, modeloperfilpermisoact } from './../../../model/modperfilpermiso';
 import { servicioperfilpermiso } from './../../../services/servicioperfilpermiso';
 import { modpermiso } from './../../../model/modpermiso';
 import { serviciopermiso } from './../../../services/serviciopermiso';
@@ -12,6 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { modelousuario } from './../../../model/modusuario';
 import { servicioautenticacion } from './../../../services/servicioautenticacion';
 import { EspaciosValidator } from '../../../shared/soloespacios';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-agregarperfil',
@@ -25,7 +26,8 @@ export class APerfilPanelComponent{
   listapermisos:modpermiso[]=[];
   listapermisossel:modpermiso[]=[];
   _perfil:modeloperfil;
-  _perfilpermisos:modeloperfilpermiso[];
+  
+  _perfilpermisos:modeloperfilpermisoact;
   load:boolean;
   
 
@@ -42,6 +44,7 @@ export class APerfilPanelComponent{
       
       
     });
+    
     this.load=true;
     setTimeout(()=>{                           //<<<---using ()=> syntax
       this.getPermisos(()=>{
@@ -104,17 +107,27 @@ export class APerfilPanelComponent{
         }
         else{
           this._perfil=datos.perfil[0];
+          this._perfilpermisos=new modeloperfilpermisoact();
           this.listapermisossel.forEach(persel=>{
-            if (!this.listapermisos.includes(persel))
-              this._servicioperfilpermiso.agregar(new modeloperfilpermiso(this._perfil.idperfil,persel.idpermiso)).subscribe(datos=>{
+            if(persel.estado==true){
+              this._perfilpermisos.perfil.idperfil=this._perfil.idperfil;
+              
+              this._perfilpermisos.perfil.permisos.push(new actpermiso(persel.idpermiso));
+              /* this._servicioperfilpermiso.agregar(new modeloperfilpermiso(this._perfil.idperfil,persel.idpermiso)).subscribe(datos=>{
                 if(datos.isOk=="N"){
                   this.mensajes.error(datos.dsMens)
                   
                 }
-              });
-            
+              }); */
+            }
           });
-          cbgrabar();
+          this._servicioperfilpermiso.actualizarpermisos(this._perfilpermisos).subscribe(datos=>{
+            if(datos.isOk=="N"){
+              this.mensajes.error(datos.dsMens)
+            }
+            cbgrabar();
+          });
+          
         }
         
       });
@@ -126,20 +139,50 @@ export class APerfilPanelComponent{
     
   }  
   
-  cambiopermisopadre(id:number,evento){
+  cambiopermisopadre(id:number,padre,indice){
      var valor=false;
-     console.log("entro al evento de consola"+id+evento.value);
-     this.listapermisossel.forEach(elemento=>{
-       if(elemento.idpermiso==id){
-         valor=!elemento.estado;
-         elemento.estado=valor;
+     var nocambiar=false;
+     
+     if(padre==0){
+      this.listapermisossel.forEach(elemento=>{
+        if(elemento.idpermiso==id){
+          valor=!elemento.estado;
+          elemento.estado=valor;
+        }
+        if(elemento.idpadre==id){
+          elemento.estado=valor;
+        }
+      })
+     }
+     else
+     {
+       this.listapermisossel[indice].estado=!this.listapermisossel[indice].estado;
+       this.listapermisossel.forEach(element=>{
+         if(element.idpadre==this.listapermisossel[indice].idpadre){
+           if(element.estado!=this.listapermisossel[indice].estado){
+              nocambiar=true;
+           }
+         }
+       })
+       if(!nocambiar){
+        this.listapermisossel.forEach(element=>{
+          if(element.idpermiso==this.listapermisossel[indice].idpadre){
+            element.estado=this.listapermisossel[indice].estado;
+          }
+        })
        }
-       if(elemento.idpadre==id){
-         elemento.estado=valor;
+       else
+       {
+        this.listapermisossel.forEach(element=>{
+          if(element.idpermiso==this.listapermisossel[indice].idpadre){
+            element.estado=false;
+          }
+        })
        }
-     })
+     }
      // actualizar pantalla con los valores del padre
      let index = 0; 
+     
      for(index=0;index<this.listapermisossel.length;index=index+1){
         (<FormArray>this.form.controls['permisos']).at(index).patchValue(this.listapermisossel[index].estado);
      }  

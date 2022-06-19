@@ -54,8 +54,6 @@ export class servicioperfil{
             this.listaperfil.length=0;
             this.listaperfil=[];
             datos.perfiles.forEach(element => {
-                console.log(element);
-                console.log(Id);
                 if (element.estadoperfil==Id){
                     this.listaperfil.push(new modeloperfil(element.idperfil,element.nombreperfil,element.descripcionperfil
                         ,element.estadoperfil,element.fecharegistro,element.usuarioregistra

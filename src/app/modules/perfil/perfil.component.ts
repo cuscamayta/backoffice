@@ -103,7 +103,8 @@ export class PerfilComponent implements OnInit{
       );
   }
   filtro(id){
-    if(id!=null){
+    console.log(id);
+    if(id!=null&&id!=undefined){
       
       this.getPerfilesfiltro(()=>{this.totalreg=this.listaperfiles.length;},id)
     }
@@ -139,10 +140,7 @@ export class PerfilComponent implements OnInit{
       
   }
 
-  selectcheck(id:string) {
-    this.getPerfilesfiltro(()=>{},id);
   
-  }
 
   open(contenido) {
     this.modalService.open(contenido);
@@ -166,6 +164,7 @@ export class PerfilComponent implements OnInit{
             this.perfilactual=data;
             this.listaperfiles.push(this.perfilactual);
             this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " agregado correctamente","Mensaje Informativo")
+            this.totalreg=this.listaperfiles.length;
             }
           }
     );    

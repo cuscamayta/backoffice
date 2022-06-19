@@ -11,7 +11,7 @@ import { modpermiso } from '../../../model/modpermiso';
 import { modelolistaconsel } from '../../../model/modlistaconsel';
 import { servicioperfilpermiso } from '../../../services/servicioperfilpermiso';
 import { serviciousuarioperfil } from '../../../services/serviciousuarioperfil';
-import { modelousuarioperfil } from '../../../model/modusuarioperfil';
+import { actperfil, modelousuarioperfil, modelousuarioperfilact } from '../../../model/modusuarioperfil';
 import { ToastrService } from 'ngx-toastr';
 import { serviciopermiso } from '../../../services/serviciopermiso';
 import { servicioautenticacion } from './../../../services/servicioautenticacion';
@@ -35,7 +35,7 @@ export class AUsuarioPanelComponent {
   public listaperfsel:modelolistaconsel[]=[];
   arbolpermisos:hoja[]=[];
   enviado=false;
-  
+  _usuarioperfiles:modelousuarioperfilact;
   
   _usuario:modelousuario;
 
@@ -50,6 +50,7 @@ export class AUsuarioPanelComponent {
     this.listapermisos.length=0;
     this.listapermisos=[];
     this.enviado=false;
+
 
     this._usuario=new modelousuario(0,'','','','','','','S','',0,'',0);
     this.form = fb.group({
@@ -198,10 +199,12 @@ export class AUsuarioPanelComponent {
         else{
           
           this._usuario=datos.usuario[0];
-          
+          this._usuarioperfiles=new modelousuarioperfilact();
+          this._usuarioperfiles.usuario.idusuario=this._usuario.id;
           this.listaperfsel.forEach(elemento=>{
             if(elemento.seleccionado){
-              _usuperf=new modelousuarioperfil(this._usuario.id,elemento.id);
+              this._usuarioperfiles.usuario.perfiles.push(new actperfil(elemento.id));
+              /* _usuperf=new modelousuarioperfil(this._usuario.id,elemento.id);
             
               this._servusuperf.agregar(_usuperf).subscribe(datos => {
             
@@ -210,7 +213,15 @@ export class AUsuarioPanelComponent {
                   this.mensajes.error(datos.dsMens)
                   
                 }
-              })     
+              })    */  
+            }
+          })
+          this._servusuperf.actualizarperfiles(this._usuarioperfiles).subscribe(datos => {
+            
+            if(datos.isOk=="N")
+            {
+              this.mensajes.error(datos.dsMens)
+              
             }
           })
           

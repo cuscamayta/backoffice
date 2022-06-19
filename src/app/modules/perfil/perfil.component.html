@@ -18,7 +18,7 @@
               </div>
             </div>
             <button type="button" class="btn-icon" placement="bottom" [autoClose]="'outside'" [ngbPopover]="clickImgTemp" triggers="manual"
-              #p1="ngbPopover" (click)="p1.toggle();" (shown)="selectcheck($event)" 
+              #p1="ngbPopover" (click)="p1.toggle();"  
               popoverTitle="Permisos">
               <img src="assets/images/filtro.svg">
             </button>
@@ -191,7 +191,7 @@
 
 <ng-template #clickImgTemp>
   <ul class="listafiltro">
-    <li style="cursor:pointer;" (click)="filtro(null)">
+    <li style="cursor:pointer;" (click)="filtro(null)" selected >
       ( Todos )
     </li>
     <li  *ngFor="let opcion of opciones" (click)="filtro(opcion.id)" style="cursor:pointer;">

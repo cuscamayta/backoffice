@@ -7,7 +7,7 @@ import { MatDialogRef,MatDialogConfig } from '@angular/material';
 import { modeloperfil } from './../../../model/modperfil';
 import { servicioperfil } from './../../../services/servicioperfil';
 import { modelousuario } from './../../../model/modusuario';
-import { modelousuarioperfil } from './../../../model/modusuarioperfil';
+import { actperfil, modelousuarioperfil, modelousuarioperfilact } from './../../../model/modusuarioperfil';
 import { serviciousuario } from './../../../services/serviciousuario';
 import {FormBuilder, Validators, FormGroup, FormArray, FormControl} from "@angular/forms";
 import { serviciousuarioperfil } from '../../../services/serviciousuarioperfil';
@@ -37,6 +37,7 @@ export class BEUsuarioPanelComponent {
   _usuario:modelousuario;
   enviado=false;
   load:boolean;
+  _usuarioperfiles:modelousuarioperfilact;
 
   constructor(private mensajes:ToastrService,private servperperf:servicioperfilpermiso,
     private servpermisos:serviciopermiso,private _servusuperf:serviciousuarioperfil,
@@ -228,9 +229,12 @@ export class BEUsuarioPanelComponent {
           
           this._usuario=datos.usuario[0];
           console.log(this.listaperfsel);
+          this._usuarioperfiles=new modelousuarioperfilact();
+          this._usuarioperfiles.usuario.idusuario=this._usuario.id;
           this.listaperfsel.forEach(elemento=>{
             if(elemento.seleccionado){
-              _usuperf=new modelousuarioperfil(this._usuario.id,elemento.id);
+              this._usuarioperfiles.usuario.perfiles.push(new actperfil(elemento.id));
+              /* _usuperf=new modelousuarioperfil(this._usuario.id,elemento.id);
               if (!this.listausuarioperfil.includes(_usuperf))
                 this._servusuperf.agregar(_usuperf).subscribe(datos => {
               
@@ -239,10 +243,10 @@ export class BEUsuarioPanelComponent {
                     this.mensajes.error("Error al editar los datos del perfil del usuario: "+datos.dsMens)
                   }
                   
-              })     
+              })  */    
             }
           })
-          this.listausuarioperfil.forEach(datos=>{
+          /* this.listausuarioperfil.forEach(datos=>{
             eliminar=true;
             this.listaperfsel.forEach(persel=>{
   
@@ -257,6 +261,15 @@ export class BEUsuarioPanelComponent {
                   this.mensajes.error("Error al borrar los datos del perfil del usuario: "+datos.dsMens)
                 }
               }) ;
+          }) */
+
+          this._servusuperf.actualizarperfiles(this._usuarioperfiles).subscribe(datos => {
+            
+            if(datos.isOk=="N")
+            {
+              this.mensajes.error(datos.dsMens)
+              
+            }
           })
           
         }

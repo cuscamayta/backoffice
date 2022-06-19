@@ -44,12 +44,12 @@
           <div class="col-sm-12 m-1" formArrayName="permisos" *ngFor="let permiso of permisosFormArray.controls; let j = index">
             <ng-container *ngIf="(listapermisos[j].idpadre==0)">
               <label style="margin-left:35px">
-                <input class="form-check-input me-1" style="margin-left:13px"  type="checkbox" aria-label="..." [formControlName]="j" (change)="cambiopermisopadre(listapermisos[j].idpermiso,$event)">
+                <input class="form-check-input me-1" style="margin-left:13px"  type="checkbox" aria-label="..." [formControlName]="j" (change)="cambiopermisopadre(listapermisos[j].idpermiso,0,j)">
                 <div style="margin-left:35px">{{listapermisos[j].nombrepermiso}}</div></label>
             </ng-container>
             <ng-container *ngIf="(listapermisos[j].idpadre!=0)">
               <label style="margin-left:35px">
-                <input class="form-check-input me-1" style="margin-left:33px"  type="checkbox" aria-label="..." [formControlName]="j">
+                <input class="form-check-input me-1" style="margin-left:33px"  type="checkbox" aria-label="..." [formControlName]="j" (change)="cambiopermisopadre(listapermisos[j].idpermiso,1,j)">
                 <div style="margin-left:55px">{{listapermisos[j].nombrepermiso}}</div></label>
             </ng-container>
           </div>  
