@@ -98,14 +98,21 @@ export class BEPerfilPanelComponent implements OnInit{
 
   getPermisos(cbpermisos){
     
-    this.servpermisos.getpermisos()
-    .subscribe(
-      res => {
-        this.listapermisos = res;
-        this.listapermisossel=res;
+      this.listapermisos=JSON.parse(localStorage.getItem("permisos"));
+      if (this.listapermisos==null){
+        this.servpermisos.getpermisos()
+        .subscribe(
+          res => {
+            this.listapermisos = res;
+            this.listapermisossel=res;
+            cbpermisos();
+            
+          });
+      }
+      else{
+        this.listapermisossel=JSON.parse(localStorage.getItem("permisos"));
         cbpermisos();
-        
-      });
+      }
   }
   traerpermisosperfil(cbperper){
     this._servicioperfilpermiso.getperfilpermisos(this.idperfil).subscribe(datos=>{
@@ -158,28 +165,8 @@ export class BEPerfilPanelComponent implements OnInit{
             }
             cbgrabar();
           });
-          /* this.listapermisossel.forEach(persel=>{
-            if (!this.listapermisos.includes(persel))
-              this._servicioperfilpermiso.agregar(new modeloperfilpermiso(this._perfil.idperfil,persel.idpermiso)).subscribe(datos=>{
-                if(datos.isOk=="N"){
-                  this.mensajes.error("Error al guardar los datos editados del perfil: "+datos.dsMens)
-                  
-                }
-              });
-            
-          }); */
-          // Borra los elementos originales no seleccionados
-          /* this.listapermisos.forEach(per=>{
-            if (!this.listapermisossel.includes(per))
-              this._servicioperfilpermiso.borrar(this._perfil.idperfil,per.idpermiso).subscribe(datos2=>{
-                if(datos2.isOk=="N"){
-                  this.mensajes.error(datos.dsMens)
-                  this.mensajes.error("Error al guardar los datos editados del perfil: "+datos.dsMens)
-                }
-              });
-            
-          }) */
-          cbgrabar();
+          
+          
         }
         
       });

@@ -58,8 +58,8 @@
               title="Borra el Usuario Seleccionado">Eliminar</button>
             </div>
             <div class="column is-2" (click)="$event.stopPropagation();">
-              <mat-slide-toggle [checked]="usuario.estado === null ? true : false"  (change)="HabDesUsuario( usuario.id, $event);" >
-                <span>{{usuario.estado===null?'Habilitado':'Deshabilitado'}}</span>
+              <mat-slide-toggle [checked]="((usuario.estado === null)||(usuario.estado==='S')) ? true : false"  (change)="HabDesUsuario( usuario.id, $event);" >
+                <span>{{((usuario.estado === null)||(usuario.estado==='S'))?'Habilitado':'Deshabilitado'}}</span>
               </mat-slide-toggle>
           </div>
             <div class="column tag-row"></div>
@@ -193,8 +193,6 @@
   </div>
 </div>
 <ng-template #clickImgTemp>
-
-  <div style="text-align: center;margin: 5px;color:#3A3D5F">Perfiles</div>
   <ul class="listafiltro">
     <li style="cursor:pointer;" (click)="filtro(null)">
       ( Todos )
@@ -203,10 +201,7 @@
       {{opcion.nombre}}
     </li>
   </ul>
-  <!-- <select name="perfiles" id="perfiles"(change)="filtroperfil($event)">
-    <option [value]="null" disabled>( Todos )</option>
-    <option *ngFor="let perf of listaperfiles" [value]="perf.idperfil">{{perf.nombreperfil}}</option>
-  </select>  -->
+  
 
 </ng-template>
 

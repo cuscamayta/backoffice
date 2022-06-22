@@ -69,11 +69,14 @@
 <app-side-panel-overlay></app-side-panel-overlay>
 <ng-template #clickImgTemp>
 
-  <div style="text-align: center;margin: 5px;color:#3A3D5F">Servicios</div>
-  <select name="perfiles" id="perfiles">
-    <option value="1">Habilitados</option>
-    <option value="2">Deshabilitados</option>
-  </select> 
+  <ul class="listafiltro">
+    <li style="cursor:pointer;" (click)="filtro(null)" selected >
+      ( Todos )
+    </li>
+    <li  *ngFor="let opcion of opciones" (click)="filtro(opcion.id)" style="cursor:pointer;">
+      {{opcion.nombre}}
+    </li>
+  </ul>
 
 </ng-template>
 

@@ -13,6 +13,7 @@ import { ToastrService } from 'ngx-toastr';
 import { serviciopermiso } from './../../services/serviciopermiso';
 import { modpermiso } from './../../model/modpermiso';
 import { modelohabilitado } from './../../model/modHabilitado';
+import { isEmpty } from 'rxjs/operators';
 
 
 
@@ -46,7 +47,7 @@ export class PerfilComponent implements OnInit{
     this.config.currentPage=1;
     this.opciones.push(new modelohabilitado("S","Habilitado"));
     this.opciones.push(new modelohabilitado("N","DesHabilitado"));
-    this.getPermisos(()=>{});
+    /* this.getPermisos(()=>{}); */
   }
   
   public config: PaginationInstance = {
@@ -91,17 +92,25 @@ export class PerfilComponent implements OnInit{
   }
 
   getPerfiles(cbperfiles) {
-    this.servperfil.getperfiles()
-      .subscribe(
-        res => {
-          this.listaperfiles.length=0;
-          res.forEach(element => {this.listaperfiles.push(element);})
-          
-          cbperfiles();
-        },  
-        err => console.error(err)
-      );
+    this.listaperfiles=JSON.parse(localStorage.getItem('perfiles'));
+    if(this.listaperfiles==null){
+      this.servperfil.getperfiles()
+        .subscribe(
+          res => {
+            this.listaperfiles.length=0;
+            res.forEach(element => {this.listaperfiles.push(element);})
+            
+            cbperfiles();
+          },  
+          err => console.error(err)
+        );
+    }
+    else{
+
+      cbperfiles();
+    }
   }
+
   filtro(id){
     console.log(id);
     if(id!=null&&id!=undefined){
@@ -163,6 +172,7 @@ export class PerfilComponent implements OnInit{
           if (data!=null){
             this.perfilactual=data;
             this.listaperfiles.push(this.perfilactual);
+            localStorage.setItem('perfiles',JSON.stringify(this.listaperfiles));
             this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " agregado correctamente","Mensaje Informativo")
             this.totalreg=this.listaperfiles.length;
             }
@@ -197,31 +207,14 @@ export class PerfilComponent implements OnInit{
           if (data.respuesta){
             if ($event.checked){
       
-              if (this.servperfil.habilitar(idperfil)) {
-                this.listaperfiles.forEach(element=>{
-                  if (element.idperfil==idperfil){
-                    element.estadoperfil="S";
-                    this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " habilitado correctamente","Mensaje Informativo")
-                    
-                    
-                  }
-                })
-              }
+              this.Habilitar(()=>{localStorage.setItem('perfiles',JSON.stringify(this.listaperfiles));},idperfil,$event);
+                
               
               
             }
             else{
-              if (this.servperfil.deshabilitar(idperfil)) {
-                
-                this.listaperfiles.forEach(element=>{
-                  if (element.idperfil==idperfil){
-                    element.estadoperfil="N";
-                    this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " deshabilitado correctamente","Mensaje Informativo")
-                    
-                    
-                  }
-                })
-              }
+              this.DesHabilitar(()=>{localStorage.setItem('perfiles',JSON.stringify(this.listaperfiles));},idperfil,$event);
+              
             }
             
           }
@@ -236,7 +229,89 @@ export class PerfilComponent implements OnInit{
 
   }
 
+  Habilitar(cbperfiles,id:number,$event) {
+    
+    this.servperfil.habilitar(id)
+      .subscribe(
+        res => {
+          
+            if (res.isOk="S"){
+              this.listaperfiles.forEach(element=>{
+                if (element.idperfil==id){
+                  element.estadoperfil="S";
+                  this.mensajes.success("Perfil "+element.nombreperfil + " habilitado correctamente","Mensaje Informativo")
+                  
+                  
+                }
+              })
+            }
+            else{
+              this.listaperfiles.forEach(element=>{
+                if (element.idperfil==id){
+                  element.estadoperfil="N";
+                  this.mensajes.error("Perfil "+element.nombreperfil + " no ha posido ser habilitado ("+res.dsMens+")","Mensaje Informativo")
+                  let matSlideToggle: MatSlideToggle = $event.source;
+                  matSlideToggle.toggle();
+                }
+              })
+            }
+          
+          cbperfiles();
+        },  
+        err => this.listaperfiles.forEach(element=>{
+                if (element.idperfil==id){
+                  element.estadoperfil="N";
+                  this.mensajes.error(err,"Mensaje Informativo");
+                  let matSlideToggle: MatSlideToggle = $event.source;
+                  matSlideToggle.toggle();
+                }
+        })
+        
+      );
+  }
   
+  DesHabilitar(cbperfiles,id:number,$event) {
+    
+    this.servperfil.deshabilitar(id)
+      .subscribe(
+        res => {
+          
+          if (res.isOk="S"){
+            this.listaperfiles.forEach(element=>{
+              if (element.idperfil==id){
+                element.estadoperfil="N";
+                this.mensajes.success("Perfil "+element.nombreperfil + " deshabilitado correctamente","Mensaje Informativo")
+                
+                
+              }
+            })
+          }
+          else{
+            this.listaperfiles.forEach(element=>{
+              if (element.idperfil==id){
+                element.estadoperfil="S";
+                this.mensajes.error("Perfil "+element.nombreperfil + " no ha posido ser deshabilitado ("+res.dsMens+")","Mensaje Informativo")
+                let matSlideToggle: MatSlideToggle = $event.source;
+                  matSlideToggle.toggle();
+              }
+            })
+          }
+          
+          cbperfiles();
+        },  
+        err => this.listaperfiles.forEach(element=>{
+                if (element.idperfil==id){
+                  element.estadoperfil="S";
+                  this.mensajes.error(err,"Mensaje Informativo");
+                  let matSlideToggle: MatSlideToggle = $event.source;
+                  matSlideToggle.toggle();
+                }
+        })
+        
+      );
+  }
+
+
   openEditarPerfil({idperfil,nombreperfil,descripcionperfil,estadoperfil,
                     fecharegistro,usuarioregistra,fechamodificacion,usuariomodificacion}:modeloperfil) {
     
@@ -262,7 +337,7 @@ export class PerfilComponent implements OnInit{
               if(this.listaperfiles[i].idperfil==this.perfilactual.idperfil)
               this.listaperfiles[i]=this.perfilactual;
             }
-            
+            localStorage.setItem('perfiles',JSON.stringify(this.listaperfiles));
             this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " actualizado correctamente","Mensaje Informativo")
             
           }
@@ -286,21 +361,47 @@ export class PerfilComponent implements OnInit{
         data => {
           
           if (data.respuesta){
-            if (!this.servperfil.borrar(id)){
-              this.mensajes.success("Perfil "+this.perfilactual.nombreperfil + " no se ha podido borrar","Mensaje Informativo")
-              
-
-            }
-            else{
-              this.mensajes.success("Perfil borrado correctamente","Mensaje Informativo")
-              this.getPerfiles(()=>{this.totalreg=this.listaperfiles.length; });
-            }
+            this.Borrar(()=>{localStorage.setItem('perfiles',JSON.stringify(this.listaperfiles));},id);
           }
         }
         
     );    
     
   }  
+
+  Borrar(cbperfiles,id:number) {
+    
+    this.servperfil.borrar(id)
+      .subscribe(
+        res => {
+          if (res.isOk="S"){
+            var i=0;
+            this.listaperfiles.forEach(element=>{
+              if (element.idperfil==id){
+                this.listaperfiles.splice(i,1);
+                this.mensajes.success("Perfil "+element.nombreperfil + " borrado correctamente","Mensaje Informativo")
+              
+              }
+              i=i+1;
+            })
+          }
+          else{
+            this.listaperfiles.forEach(element=>{
+              if (element.idperfil==id){
+                this.mensajes.error("Perfil "+element.nombreperfil + " no ha posido ser borrado ("+res.dsMens+")","Mensaje Error")
+              }
+            })
+          }
+          
+          cbperfiles();
+        },  
+        err => this.listaperfiles.forEach(element=>{
+              if (element.idperfil==id){
+                this.mensajes.error("Perfil "+element.nombreperfil + " no ha posido ser borrado","Mensaje Error")
+              }
+        })
+      );
+  }
 
   abrirpop(popover){
     if (popover.isOpen()) {

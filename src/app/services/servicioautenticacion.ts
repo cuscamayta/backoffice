@@ -157,7 +157,7 @@ export class servicioautenticacion {
         
         this.servpermisos.getpermisos().subscribe(permisos=>{
             this.lista=permisos;
-            
+            localStorage.setItem('permisos',JSON.stringify(this.lista));
             cbOP();
         });
             

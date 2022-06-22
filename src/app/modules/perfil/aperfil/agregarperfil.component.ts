@@ -12,7 +12,7 @@ import { ToastrService } from 'ngx-toastr';
 import { modelousuario } from './../../../model/modusuario';
 import { servicioautenticacion } from './../../../services/servicioautenticacion';
 import { EspaciosValidator } from '../../../shared/soloespacios';
-import { Console } from 'console';
+
 
 @Component({
   selector: 'app-agregarperfil',
@@ -69,15 +69,21 @@ export class APerfilPanelComponent{
   get f() { return this.form.controls; }
 
   getPermisos(cbpermisos){
-    
-    this.servpermisos.getpermisos()
-    .subscribe(
-      res => {
-        this.listapermisos = res;
-        this.listapermisossel=res;
-        cbpermisos();
-        
-      });
+    this.listapermisos=JSON.parse(localStorage.getItem("permisos"));
+    if (this.listapermisos==null){
+      this.servpermisos.getpermisos()
+      .subscribe(
+        res => {
+          this.listapermisos = res;
+          this.listapermisossel=res;
+          cbpermisos();
+          
+        });
+    }
+    else{
+      this.listapermisossel=JSON.parse(localStorage.getItem("permisos"));
+      cbpermisos();
+    }
   }
 
   close(valor):void {

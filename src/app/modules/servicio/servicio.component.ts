@@ -9,6 +9,7 @@ import { serviciorequisito } from '../../../app/services/serviciorequisito';
 import { modelorequisito } from '../../../app/model/modrequisito';
 import { ToastrService } from 'ngx-toastr';
 import { AServicioPanelComponent } from './agservicio/agregarservicio.component';
+import { modelohabilitado } from '../../../app/model/modHabilitado';
 
 @Component({
   selector: 'app-servicio',
@@ -22,11 +23,13 @@ export class ServicioComponent implements OnInit{
   requisitoactual:modelorequisito;
   listaservicio:modelorequisito[]=[];
   load:boolean;
+  opciones:modelohabilitado[]=[];
 
   constructor(private mensajes:ToastrService,private servreq:serviciorequisito,
     
     private dialog: MatDialog, private modalService: NgbModal,private _overlaySidePanelService: SidePanelOverlayService) {
-    
+      this.opciones.push(new modelohabilitado("S","Habilitado"));
+      this.opciones.push(new modelohabilitado("N","DesHabilitado"));
   }
 
   ngOnInit(): void {
@@ -35,6 +38,16 @@ export class ServicioComponent implements OnInit{
       this.getRequisitos(()=>{ this.load=false; });
     }, 1000);
     
+  }
+
+  filtro(id){
+    console.log(id);
+    if(id!=null&&id!=undefined){
+      
+      this.getRequisitosfiltro(()=>{},id)
+    }
+    else
+      this.getRequisitos(()=>{ });
   }
 
   getRequisitos(cbRequisitos) {
@@ -46,13 +59,19 @@ export class ServicioComponent implements OnInit{
       })
       cbRequisitos();
     });  
-       
-        
-    
-    
-    
-    
   }
+
+  getRequisitosfiltro(cbRequisitos,filtro:string) {
+    this.servreq.getrequisitosfiltro(filtro).subscribe(datos =>{
+      
+      this.listaservicio.length=0;
+      console.log(this.listaservicio);
+      datos.forEach(element =>{ this.listaservicio.push(element);
+      })
+      cbRequisitos();
+    });  
+  }
+
   openDialog(idreq:number) {
     const dialogConfig = new MatDialogConfig();
 
@@ -71,24 +90,32 @@ export class ServicioComponent implements OnInit{
         data => { 
           
           if (data.respuesta){
-            if (!this.servreq.borrar(idreq)){
-              this.mensajes.error("El servicio no se ha podido borrar","Mensaje de Advertencia")
-
-            }
-            else{
-              var i=0;
-              this.listaservicio.forEach(elem=>{
-                if(elem.idrequisito==idreq){
-                  this.listaservicio.splice(i,1);
-                }
-                i=i+1;
-              })
-            }
+            this.Borrar(()=>{},idreq);
           }
         }
     );    
   }
-   
+  
+  Borrar(cbRequisitos,id:number) {
+    this.servreq.borrar(id).subscribe(datos =>{
+      if(datos.isOk="S"){
+        var i=0;
+        this.listaservicio.forEach(elem=>{
+          if(elem.idrequisito==id){
+            this.listaservicio.splice(i,1);
+            this.mensajes.success("El servicio ha sido borrado correctamente","Mensaje Informativo")
+          }
+          i=i+1;
+        })
+        
+      }
+      else{
+        this.mensajes.error("El servicio no ha podido ser borrado ("+datos.dsMens+")","Mensaje de Advertencia")
+      }
+      cbRequisitos();
+    });  
+  }
+
   public openagregarservicio():void {
       const dialogConfig = new MatDialogConfig();
   

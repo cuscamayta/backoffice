@@ -26,7 +26,7 @@ export class AServicioPanelComponent implements OnInit{
   public listadetalleimagenrec:modeloimagen[]=[];
   public respaldoimagen:modeloimagen;
   
-  _requisito:modelorequisito=new modelorequisito(0,"",""
+  _requisito:modelorequisito=new modelorequisito(0,"","S"
   ,0,"",0,"",0
   ,"","",0,0);;
   constructor(private mensajes:ToastrService,private servreq:serviciorequisito,
@@ -34,7 +34,7 @@ export class AServicioPanelComponent implements OnInit{
     private fb: FormBuilder,
     private dialogRef: MatDialogRef<AServicioPanelComponent>) { 
       this._usuautenticado=this.servaut.userValue;
-      this._requisito.estadorequisito="1";
+      this._requisito.estadorequisito="S";
       this._requisito.usuariomodifica=this._usuautenticado.id;
       this._requisito.usuarioregistra=this._usuautenticado.id;
       this.form = fb.group({
@@ -137,11 +137,11 @@ export class AServicioPanelComponent implements OnInit{
 
   HabDesEstado($Event){
     if($Event.checked){
-      this._requisito.estadorequisito="1";
+      this._requisito.estadorequisito="S";
     
     }
     else{
-      this._requisito.estadorequisito="0";
+      this._requisito.estadorequisito="N";
     }
   }
 

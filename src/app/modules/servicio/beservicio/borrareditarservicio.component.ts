@@ -134,11 +134,7 @@ export class BEServicioPanelComponent implements OnInit{
               this._requisito.nombreimagen=this.respaldoimagen.nombreimagen;
               this._requisito.alto = this.respaldoimagen.alto;
               this._requisito.ancho = this.respaldoimagen.ancho; 
-              /* this._requisito.idimagen=0;
-              this._requisito.imagenfisica="";
-              this._requisito.nombreimagen="";
-              this._requisito.alto = 0;
-              this._requisito.ancho = 0; */
+              
               this.mensajes.error("El tamaño de la Imagen de portada es demasiado grande","Mensaje de Error");
             }
           }
@@ -195,25 +191,29 @@ export class BEServicioPanelComponent implements OnInit{
           this.servreq.eliminarimagen(_imagencomp.idimagen).subscribe(resultado=>{
             if(resultado.isOk=="S"){
               this.servreq.agregarimagen(_imagencomp).subscribe(resap=>{
-                console.log(this.listadetalleimagenrec);
-                console.log(this.listadetalleimagen);
-                this.listadetalleimagenrec.forEach(elemento=>{
-                  this.servreq.eliminarimagen(elemento.idimagen).subscribe(est=>{});
-                })
-                this.listadetalleimagen.forEach(elemento=>{
-                  if(elemento.idimagen!=0){
-                    _imagencomp=new modeloimagenTotal(elemento.idimagen,elemento.nombreimagen,
-                      elemento.imagenfisica,elemento.ancho,elemento.alto,2,this._requisito.idrequisito);
-                      this.servreq.agregarimagen(_imagencomp).subscribe(resultadoii=>{
-                        console.log(_imagencomp);
-                      });
-                  }
-                  
+                if(resap.isOk="S"){
+                  this._requisito.idimagen=resap.imagen[0].idimagen;
+                  this.listadetalleimagenrec.forEach(elemento=>{
+                    this.servreq.eliminarimagen(elemento.idimagen).subscribe(est=>{});
+                  })
+                  this.listadetalleimagen.forEach(elemento=>{
+                    if(elemento.idimagen!=0){
+                      _imagencomp=new modeloimagenTotal(elemento.idimagen,elemento.nombreimagen,
+                        elemento.imagenfisica,elemento.ancho,elemento.alto,2,this._requisito.idrequisito);
+                        this.servreq.agregarimagen(_imagencomp).subscribe(resultadoii=>{
+                          console.log(_imagencomp);
+                        });
+                    }
                     
-                })
-                callback();
+                      
+                  })
+                  callback();
+                }
               })
               
+            }
+            else{
+              this.mensajes.error('No se pudo eliminar la imagen de portada para actualizarla')
             }
           })
         }
@@ -228,11 +228,11 @@ export class BEServicioPanelComponent implements OnInit{
 
   HabDesEstado($Event){
     if($Event.checked){
-      this._requisito.estadorequisito="1";
+      this._requisito.estadorequisito="S";
     
     }
     else{
-      this._requisito.estadorequisito="0";
+      this._requisito.estadorequisito="N";
     }
     console.log(this._requisito);
   }

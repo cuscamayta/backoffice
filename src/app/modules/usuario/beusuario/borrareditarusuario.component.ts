@@ -121,28 +121,41 @@ export class BEUsuarioPanelComponent {
       cbusuarioperfiles();
     });
   }
+
   getPermisos(cbpermisos){
-    
-    this.servpermisos.getpermisos()
-    .subscribe(
-      res => {
-        this.listapermisos = res;
-        cbpermisos();
-        
-      });
+    this.listapermisos=JSON.parse(localStorage.getItem('permisos'));
+    if(this.listapermisos==null){
+      this.servpermisos.getpermisos()
+      .subscribe(
+        res => {
+          this.listapermisos = res;
+          cbpermisos();
+          
+        });
+    }
+    else{
+      cbpermisos();
+    }
   }
 
   getPerfiles(cbperfiles) {
-    this.servperfil.getperfiles()
-      .subscribe(
-        res => {
-          this.listaperfiles = res;
-          
-          cbperfiles();
-        });
+    this.listaperfiles=JSON.parse(localStorage.getItem('perfiles'));
+    if(this.listaperfiles==null){
+      this.servperfil.getperfiles()
+        .subscribe(
+          res => {
+            this.listaperfiles = res;
+            
+            cbperfiles();
+          });
+    }
+    else{
+      cbperfiles();
+    }
 
     
   }
+  
 
   crealistasel(){
     this.listaperfsel.length=0;
@@ -234,34 +247,10 @@ export class BEUsuarioPanelComponent {
           this.listaperfsel.forEach(elemento=>{
             if(elemento.seleccionado){
               this._usuarioperfiles.usuario.perfiles.push(new actperfil(elemento.id));
-              /* _usuperf=new modelousuarioperfil(this._usuario.id,elemento.id);
-              if (!this.listausuarioperfil.includes(_usuperf))
-                this._servusuperf.agregar(_usuperf).subscribe(datos => {
-              
-                  if(datos.isOk=="N"){
-                    this.mensajes.error(datos.dsMens)
-                    this.mensajes.error("Error al editar los datos del perfil del usuario: "+datos.dsMens)
-                  }
-                  
-              })  */    
+                 
             }
           })
-          /* this.listausuarioperfil.forEach(datos=>{
-            eliminar=true;
-            this.listaperfsel.forEach(persel=>{
-  
-              if(datos.idperfil==persel.id)
-                 eliminar=false;
-            })
-            if(eliminar)
-               this._servusuperf.borrar(this._usuario.id,datos.idperfil).subscribe(datos => {
-            
-                if(datos.isOk=="N"){
-                  this.mensajes.error(datos.dsMens)
-                  this.mensajes.error("Error al borrar los datos del perfil del usuario: "+datos.dsMens)
-                }
-              }) ;
-          }) */
+          
 
           this._servusuperf.actualizarperfiles(this._usuarioperfiles).subscribe(datos => {
             

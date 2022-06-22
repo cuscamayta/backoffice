@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { servicioautenticacion } from '../../../services/servicioautenticacion';
 
 import { modmenu } from '../../../model/modmenu';
+import { serviciopermiso } from '../../../services/serviciopermiso';
+import { servicioperfil } from '../../../services/servicioperfil';
+import { modpermiso } from 'src/app/model/modpermiso';
+import { modeloperfil } from 'src/app/model/modperfil';
 
 @Component({
   selector: 'app-dashboard-default',
@@ -14,6 +18,7 @@ import { modmenu } from '../../../model/modmenu';
 export class DashboardDefaultComponent implements OnInit{
 
   acceso2:modmenu[];
+ 
 
   constructor(private _servicioautenticacion:servicioautenticacion) { 
 
@@ -22,6 +27,8 @@ export class DashboardDefaultComponent implements OnInit{
     this.acceso2=JSON.parse(localStorage.getItem('accesos'));
     this._servicioautenticacion.opcion.subscribe(valor=>{this.acceso2=valor;
     });
+    
+    
   }
 
   

@@ -16,6 +16,7 @@ import { ToastrService } from 'ngx-toastr';
 import { PaginationInstance } from 'ngx-pagination';
 import { modeloperfil } from './../../model/modperfil';
 import { modelohabilitado } from './../../model/modHabilitado';
+import { isError } from 'util';
 
 
 
@@ -51,7 +52,7 @@ export class UsuarioComponent implements OnInit{
     this.config.currentPage=1;
     this.opciones.push(new modelohabilitado("S","Habilitado"));
     this.opciones.push(new modelohabilitado("N","DesHabilitado"));
-    this.getPerfiles(()=>{})
+    
   }
  ngOnInit(): void {
 
@@ -97,17 +98,7 @@ export class UsuarioComponent implements OnInit{
     });  
   }
 
-  getPerfiles(cbperfiles) {
-    this.servperfil.getperfiles()
-      .subscribe(
-        res => {
-          this.listaperfiles = res;
-          
-          cbperfiles();
-        });
-
-    
-  }
+  
 
   filtro(id){
     if(id!=null){
@@ -148,6 +139,7 @@ export class UsuarioComponent implements OnInit{
             this.usuarioactual=data;
             this.listausuarios.push(this.usuarioactual);
             this.mensajes.success("Usuario "+this.usuarioactual.nombre + "agregado correctamente");
+            this.mensajes.success("La Constraseña del usuario creado es 'cre123'","Mensaje Informativo",{disableTimeOut:true})
           }
         }
     );    
@@ -198,19 +190,142 @@ export class UsuarioComponent implements OnInit{
         data => {
           
           if (data.respuesta){
-            if (!this.servusuario.borrar(id)){
-              this.mensajes.error("El usuario no se ha podido borrar","Mensaje de Advertencia")
-
-            }
-            else{
-              this.getUsuarios(()=>{this.totalreg=this.listausuarios.length; });
-            }
+            this.Borrar(()=>{},id);
+              
           }
         }
         
     );    
     
   }
+
+  Borrar(cbusuarios,id:number) {
+    
+    this.servusuario.borrar(id)
+      .subscribe(
+        res => {
+          if (res.isOk="S"){
+            var i=0;
+            this.listausuarios.forEach(element=>{
+              if (element.id==id){
+                this.listausuarios.splice(i,1);
+                this.mensajes.success("Usuario "+element.nombre + " borrado correctamente","Mensaje Informativo")
+                
+                
+              }
+              i=i+1;
+            })
+          }
+          else{
+            this.listausuarios.forEach(element=>{
+              if (element.id==id){
+                this.mensajes.error("Usuario "+element.nombre + " no ha posido ser borrado ("+res.dsMens+")","Mensaje Error")
+              }
+            })
+          }
+          
+          cbusuarios();
+        },  
+        err => this.listausuarios.forEach(element=>{
+              if (element.id==id){
+                this.mensajes.error("Usuario "+element.nombre + " no ha posido ser borrado","Mensaje Error")
+              }
+        })
+      );
+  }
+
+  Habilitar(cbusuarios,id:number,$event) {
+    
+    this.servusuario.habilitar(id)
+      .subscribe(
+        res => {
+          
+          if (res.isOk="S"){
+            this.listausuarios.forEach(element=>{
+              if (element.id==id){
+                this.usuarioactual=element;
+                element.estado="S";
+                this.mensajes.success("Usuario "+element.nombre + " habilitado correctamente","Mensaje Informativo")
+                
+                
+              }
+            })
+            
+          }
+          else{
+            this.listausuarios.forEach(element=>{
+              if (element.id==id){
+                this.usuarioactual=element;
+                element.estado="N";
+                this.mensajes.error("Usuario "+element.nombre + " no ha podido ser habilitado","Mensaje Error")
+                let matSlideToggle: MatSlideToggle = $event.source;
+                  matSlideToggle.toggle();
+                
+              }
+            })
+          }
+          
+          cbusuarios();
+        },  
+        err => this.listausuarios.forEach(element=>{
+                if (element.id==id){
+                  this.usuarioactual=element;
+                  element.estado="N";
+                  this.mensajes.error("Usuario "+element.nombre + " no ha podido ser habilitado","Mensaje Informativo");
+                  let matSlideToggle: MatSlideToggle = $event.source;
+                  matSlideToggle.toggle();
+                }
+        })
+        
+      );
+  }
+  
+  DesHabilitar(cbusuarios,id:number,$event) {
+    
+    this.servusuario.deshabilitar(id)
+      .subscribe(
+        res => {
+          
+          if (res.isOk="S"){
+            this.listausuarios.forEach(element=>{
+              if (element.id==id){
+                this.usuarioactual=element;
+                element.estado="N";
+                this.mensajes.success("Usuario "+element.nombre + " deshabilitado correctamente","Mensaje Informativo")
+                
+                
+              }
+            })
+            
+          }
+          else{
+            this.listausuarios.forEach(element=>{
+              if (element.id==id){
+                this.usuarioactual=element;
+                element.estado="S";
+                this.mensajes.error("Usuario "+element.nombre + " no ha podido ser deshabilitado","Mensaje Error")
+                let matSlideToggle: MatSlideToggle = $event.source;
+                  matSlideToggle.toggle();
+                
+              }
+            })
+          }
+          
+          cbusuarios();
+        },  
+        err => this.listausuarios.forEach(element=>{
+                if (element.id==id){
+                  this.usuarioactual=element;
+                  element.estado="S";
+                  this.mensajes.error("Usuario "+element.nombre + " no ha podido ser deshabilitado","Mensaje Informativo");
+                  let matSlideToggle: MatSlideToggle = $event.source;
+                  matSlideToggle.toggle();
+                }
+        })
+        
+      );
+  }
+
   HabDesUsuario(idusuario:number,$event){
     
     
@@ -234,36 +349,19 @@ export class UsuarioComponent implements OnInit{
 
     dialogRef.afterClosed().subscribe(
       data => {
-          
+        
           if (data.respuesta){
             if ($event.checked){
-      
-              if (this.servusuario.habilitar(idusuario)) {
-                this.listausuarios.forEach(element=>{
-                  if (element.id==idusuario){
-                    this.usuarioactual=element;
-                    element.estado=null;
-                    this.mensajes.success("Usuariol "+this.usuarioactual.nombre + " habilitado correctamente","Mensaje Informativo")
-                    
-                    
-                  }
-                })
-              }
+              
+                this.Habilitar(()=>{},idusuario,$event);
+                  
+              
               
             }
             else{
-              if (this.servusuario.deshabilitar(idusuario)) {
+              this.DesHabilitar(()=>{},idusuario,$event);
                 
-                this.listausuarios.forEach(element=>{
-                  if (element.id==idusuario){
-                    this.usuarioactual=element;
-                    element.estado="1";
-                    this.mensajes.success("Usuariol "+this.usuarioactual.nombre + " deshabilitado correctamente","Mensaje Informativo")
-                    
-                    
-                  }
-                })
-              }
+                
             }
             
           }
@@ -271,7 +369,8 @@ export class UsuarioComponent implements OnInit{
             let matSlideToggle: MatSlideToggle = $event.source;
             matSlideToggle.toggle();
           }
-        }
+        
+      }
         
     );   
     

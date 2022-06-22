@@ -9,6 +9,8 @@ import { serviciopermiso } from '../../../../../app/services/serviciopermiso';
 import { serviciousuarioperfil } from '../../../../../app/services/serviciousuarioperfil';
 import { servicioperfilpermiso } from '../../../../../app/services/servicioperfilpermiso';
 import { ToastrService } from 'ngx-toastr';
+import { servicioperfil } from '../../../../../app/services/servicioperfil';
+import { modeloperfil } from '../../../../model/modperfil';
 
 @Component({
   selector: 'app-basic-login',
@@ -22,13 +24,15 @@ export class BasicLoginComponent  implements OnInit {
   returnUrl: string;
   error = '';
   listapermisos:modpermiso[]=[];
-
+  
+  listaperfiles:modeloperfil[]=[];
   constructor(
       private formBuilder: FormBuilder,
       private route: ActivatedRoute,
       private router: Router,
       private authenticationService: servicioautenticacion,
       private servpermisos:serviciopermiso,
+      private servperfil:servicioperfil,
       private servusuperf:serviciousuarioperfil,
       private servperfpermiso:servicioperfilpermiso,
       private mensaje:ToastrService
@@ -71,7 +75,13 @@ export class BasicLoginComponent  implements OnInit {
         
             
         if (this.authenticationService.userValue!=null){
+            this.servperfil.getperfiles()
+            .subscribe(
+            res => {
+                this.listaperfiles = res;
+                localStorage.setItem('perfiles',JSON.stringify(this.listaperfiles));
             
+            });
             this.router.navigate([this.returnUrl]);
         }
         else{

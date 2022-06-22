@@ -77,51 +77,45 @@ export class servicioperfil{
         
     }
      borrar(id:number){
-         var resp=false;
+         
         this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/EliminarPerfil?IdPerfil="+id
-        return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+        return this.http.post<any>(this.cadenahttp,null)/* .subscribe(datos => {
             if (datos.isOk="S"){
                 resp=true;
             }
             
             
             return resp;
-          });
-        var resp=false;
+          }) */;
         
-        return resp;
      }
 
      habilitar(id:number){
         var resp=false;
        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/HabilitarPerfil?IdPerfil="+id
-       return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+       return this.http.post<any>(this.cadenahttp,null)/* .subscribe(datos => {
            if (datos.isOk="S"){
                resp=true;
            }
            
            
            return resp;
-         });
-       var resp=false;
+         }) */;
        
-       return resp;
     }
 
     deshabilitar(id:number){
-        var resp=false;
+        
        this.cadenahttp=environment.apiURL + "/clwprd/ws_pagosweb/cre.movilapp/DeshabilitarPerfil?IdPerfil="+id
-       return this.http.post<any>(this.cadenahttp,null).subscribe(datos => {
+       return this.http.post<any>(this.cadenahttp,null)/* .subscribe(datos => {
            if (datos.isOk="S"){
                resp=true;
            }
            
            
            return resp;
-         });
-       var resp=false;
+         }) */;
        
-       return resp;
     }
 
 

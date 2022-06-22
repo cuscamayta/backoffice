@@ -67,21 +67,12 @@ export class AUsuarioPanelComponent {
       this.load=true;
       setTimeout(()=>{                           
         this.getPermisos(()=>{this.listapermisos.forEach(element =>{
-           /* if(element.idpadre==0){
-              this.arbolpermisos.push(new hoja(element.idpermiso,element.nombrepermiso,[]))
-           }
-           else{
-             this.arbolpermisos.forEach(arbolhoja=>{
-               if(arbolhoja.value==element.idpadre){
-                 arbolhoja.agregarhijo(element.idpermiso,element.nombrepermiso);
-               }
-             })
-           } */
+           
            this.permisosFormArray.push(new FormControl(element.estado));
           });}); 
-        this.getPerfiles(()=>{this.crealistasel();this.listaperfsel.forEach(element => this.perfilesFormArray.push(new FormControl(element.seleccionado)));this.load=false;});
+        this.getPerfiles(()=>{console.log(this.listaperfiles); this.crealistasel();this.listaperfsel.forEach(element => this.perfilesFormArray.push(new FormControl(element.seleccionado)));this.load=false;});
       }, 1000);  
-     
+      
     
     
   }
@@ -97,23 +88,34 @@ export class AUsuarioPanelComponent {
   get f() { return this.form.controls; }
   
   getPermisos(cbpermisos){
-    
-    this.servpermisos.getpermisos()
-    .subscribe(
-      res => {
-        this.listapermisos = res;
-        cbpermisos();
-        
-      });
-  }
-  getPerfiles(cbperfiles) {
-    this.servperfil.getperfiles()
+    this.listapermisos=JSON.parse(localStorage.getItem('permisos'));
+    if(this.listapermisos==null){
+      this.servpermisos.getpermisos()
       .subscribe(
         res => {
-          this.listaperfiles = res;
+          this.listapermisos = res;
+          cbpermisos();
           
-          cbperfiles();
         });
+    }
+    else{
+      cbpermisos();
+    }
+  }
+  getPerfiles(cbperfiles) {
+    this.listaperfiles=JSON.parse(localStorage.getItem('perfiles'));
+    if(this.listaperfiles==null){
+      this.servperfil.getperfiles()
+        .subscribe(
+          res => {
+            this.listaperfiles = res;
+            
+            cbperfiles();
+          });
+    }
+    else{
+      cbperfiles();
+    }
 
     
   }
