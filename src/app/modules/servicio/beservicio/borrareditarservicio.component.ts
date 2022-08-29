@@ -95,10 +95,10 @@ export class BEServicioPanelComponent implements OnInit{
           Img.onload = (e: any) => {
             this.listadetalleimagen[id].alto = e.path[0].height;
             this.listadetalleimagen[id].ancho = e.path[0].width;
-            if ((this.listadetalleimagen[id].alto>640)||(this.listadetalleimagen[id].ancho>926)){
-              this.listadetalleimagen[id]=this.respaldoimagen;
-              this.mensajes.error("El tamaño de la Imagen es demasiado grande","Mensaje de Error");
-            }
+            // if ((this.listadetalleimagen[id].alto>640)||(this.listadetalleimagen[id].ancho>926)){
+            //   this.listadetalleimagen[id]=this.respaldoimagen;
+            //   this.mensajes.error("El tamaño de la Imagen es demasiado grande","Mensaje de Error");
+            // }
           }
           
     }
@@ -128,15 +128,15 @@ export class BEServicioPanelComponent implements OnInit{
           Img.onload = (e: any) => {
             this._requisito.alto = e.path[0].height;
             this._requisito.ancho = e.path[0].width;
-            if ((this._requisito.alto>640)||(this._requisito.ancho>322)){
-              this._requisito.idimagen=this.respaldoimagen.idimagen;
-              this._requisito.imagenfisica=this.respaldoimagen.imagenfisica;
-              this._requisito.nombreimagen=this.respaldoimagen.nombreimagen;
-              this._requisito.alto = this.respaldoimagen.alto;
-              this._requisito.ancho = this.respaldoimagen.ancho; 
+            // if ((this._requisito.alto>640)||(this._requisito.ancho>322)){
+            //   this._requisito.idimagen=this.respaldoimagen.idimagen;
+            //   this._requisito.imagenfisica=this.respaldoimagen.imagenfisica;
+            //   this._requisito.nombreimagen=this.respaldoimagen.nombreimagen;
+            //   this._requisito.alto = this.respaldoimagen.alto;
+            //   this._requisito.ancho = this.respaldoimagen.ancho; 
               
-              this.mensajes.error("El tamaño de la Imagen de portada es demasiado grande","Mensaje de Error");
-            }
+            //   this.mensajes.error("El tamaño de la Imagen de portada es demasiado grande","Mensaje de Error");
+            // }
           }
     }
 

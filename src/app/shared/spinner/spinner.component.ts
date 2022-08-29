@@ -1,7 +1,8 @@
-import {Component, Input, OnDestroy, Inject, ViewEncapsulation} from '@angular/core';
-import {Spinkit} from './spinkits';
-import {Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError} from '@angular/router';
-import {DOCUMENT} from '@angular/common';
+import { Component, Input, OnDestroy, Inject, ViewEncapsulation } from '@angular/core';
+import { Spinkit } from './spinkits';
+import { Router, NavigationStart, NavigationEnd, NavigationCancel, NavigationError } from '@angular/router';
+import { DOCUMENT } from '@angular/common';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-spinner',
@@ -26,15 +27,27 @@ export class SpinnerComponent implements OnDestroy {
     @Input() public backgroundColor = 'rgba(70, 128, 255, 0.69)';
     @Input() public spinner = Spinkit.skLine;
     constructor(private router: Router, @Inject(DOCUMENT) private document: Document) {
-        this.router.events.subscribe(event => {
+        this.router.events.pipe(
+            filter(event => event instanceof NavigationStart)
+        ).subscribe(() => {
             if (event instanceof NavigationStart) {
                 this.isSpinnerVisible = true;
-            } else if ( event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
+            } else if (event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
                 this.isSpinnerVisible = false;
             }
         }, () => {
             this.isSpinnerVisible = false;
         });
+
+        // this.router.events.subscribe(event => {
+        //     if (event instanceof NavigationStart) {
+        //         this.isSpinnerVisible = true;
+        //     } else if ( event instanceof NavigationEnd || event instanceof NavigationCancel || event instanceof NavigationError) {
+        //         this.isSpinnerVisible = false;
+        //     }
+        // }, () => {
+        //     this.isSpinnerVisible = false;
+        // });
     }
 
     ngOnDestroy(): void {

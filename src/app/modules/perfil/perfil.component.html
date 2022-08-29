@@ -191,10 +191,10 @@
 
 <ng-template #clickImgTemp>
   <ul class="listafiltro">
-    <li style="cursor:pointer;" (click)="filtro(null)" selected >
+    <li style="cursor:pointer;" [class.filter-selected] = "currentFilterSelected === null" (click)="filtro(null)" selected >
       ( Todos )
     </li>
-    <li  *ngFor="let opcion of opciones" (click)="filtro(opcion.id)" style="cursor:pointer;">
+    <li  *ngFor="let opcion of opciones" (click)="filtro(opcion.id)" [class.filter-selected] = "opcion.id === currentFilterSelected">
       {{opcion.nombre}}
     </li>
   </ul>

@@ -2,10 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { servicioautenticacion } from '../../../services/servicioautenticacion';
 
 import { modmenu } from '../../../model/modmenu';
-import { serviciopermiso } from '../../../services/serviciopermiso';
-import { servicioperfil } from '../../../services/servicioperfil';
-import { modpermiso } from 'src/app/model/modpermiso';
-import { modeloperfil } from 'src/app/model/modperfil';
 
 @Component({
   selector: 'app-dashboard-default',

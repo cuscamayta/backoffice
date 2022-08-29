@@ -43,19 +43,19 @@ export class AccordionDirective implements OnInit {
   }
 
   ngOnInit(): any {
-    this._router = this.router.events.filter(event => event instanceof NavigationEnd).subscribe((event: NavigationEnd) => {
-      this.countState = 0;
-      this.navlinks.forEach((link: AccordionLinkDirective) => {
-        if (link.group) {
-          const routeUrl = this.getUrl();
-          const currentUrl = routeUrl.split('/');
-          if (currentUrl.indexOf( link.group ) > 0) {
-            link.open = true;
-            this.closeOtherLinks(link);
-          }
-        }
-      });
-    });
+    // this._router = this.router.events.filter(event => event instanceof NavigationEnd).subscribe((event: NavigationEnd) => {
+    //   this.countState = 0;
+    //   this.navlinks.forEach((link: AccordionLinkDirective) => {
+    //     if (link.group) {
+    //       const routeUrl = this.getUrl();
+    //       const currentUrl = routeUrl.split('/');
+    //       if (currentUrl.indexOf( link.group ) > 0) {
+    //         link.open = true;
+    //         this.closeOtherLinks(link);
+    //       }
+    //     }
+    //   });
+    // });
   }
 
   constructor( private router: Router) {}

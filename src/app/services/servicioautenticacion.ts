@@ -54,9 +54,9 @@ export class servicioautenticacion {
         this.traerusuarios(()=>{});
     }
 
-    traerusuarios(cbusuarios){
+    traerusuarios(cbusuarios){        
         this.servusu.getusuarios().subscribe(datos=>{
-            datos.forEach(element => this.listausuarios.push(element))
+            datos.usuarios.forEach(element => this.listausuarios.push(element))
             cbusuarios();
         })
     }
@@ -67,7 +67,7 @@ export class servicioautenticacion {
 
     public get ListaPermisosValue(): modpermiso[] {
         return this.listapermisosSubject.value;
-    }
+    }    
    
 
     login(usuario: string, password: string,cblogin) {
@@ -77,10 +77,14 @@ export class servicioautenticacion {
         this.servusu.getusuariopassword(usuario,password).subscribe(datos => { 
             
             if(datos.isOk=="S"){
-                usuariotemp= new modelousuario(datos.usuario[0].idusuario,datos.usuario[0].login,
-                    datos.usuario[0].nombre,datos.usuario[0].apellido,datos.usuario[0].telefono
-                    ,datos.usuario[0].correo,datos.usuario[0].habilitado,"","",0
-                    ,"",0); 
+                //TODO refactor
+                usuariotemp = new modelousuario().mapModel(datos.usuario[0]);
+                usuariotemp.id = datos.usuario[0].idusuario;
+                usuariotemp.estado = datos.usuario[0].habilitado;
+                // usuariotemp= new modelousuario(datos.usuario[0].idusuario,datos.usuario[0].login,
+                //     datos.usuario[0].nombre,datos.usuario[0].apellido,datos.usuario[0].telefono
+                //     ,datos.usuario[0].correo,datos.usuario[0].habilitado,"","",0
+                //     ,"",0); 
                 /* this.listausuarios.forEach(element=>{
                     if(datos.usuario[0].login==element.login)
                         usuariotemp= new modelousuario(element.id,element.login,element.nombre,element.apellido,element.telefono
@@ -88,7 +92,7 @@ export class servicioautenticacion {
                         ,element.fechamodificacion,element.usuariomodifica); 
                     
                 }); */
-                
+                debugger;
                 if (usuariotemp!=null){
                     this.menu=modmenu.cargarmenu();
                     this.accesos=modmenu.cargaraccesos();
@@ -165,7 +169,7 @@ export class servicioautenticacion {
       }
 
     private ObtenerPermisosMenuUsuario(cbOPMU,cbOPMU1){
-        
+        debugger;
         if (this.userValue!=null){
             
             this.servusuperf.getusuarioperfiles(this.userValue.id).subscribe(perfil=>{

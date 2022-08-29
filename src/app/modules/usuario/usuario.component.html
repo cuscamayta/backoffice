@@ -43,11 +43,11 @@
     <div class="columns document-list-container" *ngIf="!load">
       <div class="documentTableStyle">
         <div class="tableHeaderStyle columns">
-          <div class="column is-4">Usuario </div>
+          <div class="column is-2">Usuario </div>
           <div class="column is-3">Nombre </div>
           <div class="column is-3">Apellidos</div>
           <div class="column is-2"></div>
-          <div class="column is-hidden-touch"></div>
+          <div class="column is-2"></div>
         </div>
         <div *ngFor="let usuario of listausuarios | searchFilter: query | paginate: config">
           <div class="documentRowStyle columns" *ngIf="usuario.login" (click)="openEditarUsuario(usuario)">
@@ -194,10 +194,10 @@
 </div>
 <ng-template #clickImgTemp>
   <ul class="listafiltro">
-    <li style="cursor:pointer;" (click)="filtro(null)">
+    <li style="cursor:pointer;" [class.filter-selected] = "currentFilterSelected === null" (click)="filtro(null)">
       ( Todos )
     </li>
-    <li  *ngFor="let opcion of opciones" (click)="filtro(opcion.id)" style="cursor:pointer;">
+    <li  *ngFor="let opcion of opciones" (click)="filtro(opcion.id)" [class.filter-selected] = "opcion.id === currentFilterSelected">
       {{opcion.nombre}}
     </li>
   </ul>

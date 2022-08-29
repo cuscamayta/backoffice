@@ -18,9 +18,9 @@ import { ReactiveFormsModule } from '@angular/forms';
     MatDialogModule,
 
   ],
-  declarations: [ChangePassComponent],
-  exports: [ChangePassComponent],
-  entryComponents:[ChangePassComponent],
+  declarations: [],
+  exports: [],
+  entryComponents:[],
   providers:[]
 })
 export class ChangePassModule { }

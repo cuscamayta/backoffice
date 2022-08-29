@@ -25124,3 +25124,19 @@ body.viewport-lg {
 	position:relative;
 	top:1px;
 }
+
+.btn-outline-primary:focus, .btn-outline-primary.focus {
+  box-shadow: none !important;
+}
+
+.btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active, .show > .btn-outline-primary.dropdown-toggle {
+  color: #84bd00;
+  background-color: #f9f7f7;
+  border-color: #f9f2f2;
+}
+
+.filter-selected{
+  background-color: #84bd00 !important;
+  color: white !important;
+  cursor: pointer !important;
+}
